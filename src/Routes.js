@@ -5,10 +5,11 @@ import NotFound from './NotFound.js';
 import About from './About.js';
 import Home from './Home.js';
 
-import WikidataValidate from './WikidataValidate.js';
-import WikidataQuery from './WikidataQuery.js';
-import WikidataSchemaInfo from './WikidataSchemaInfo.js';
-import WikidataExtract from './WikidataExtract.js';
+import WikidataValidate from './WikidataValidate';
+import WikidataQuery from './WikidataQuery';
+import WikidataSchemaInfo from './WikidataSchemaInfo';
+import WikidataSchemaVisual from './WikidataSchemaVisual';
+import WikidataExtract from './WikidataExtract';
 import API from './API.js';
 
 
@@ -18,7 +19,8 @@ function Routes() {
       <Router>
       <Switch>
       <Route path="/" exact component={Home} />
-      <Route path={API.wikidataSchemaInfo} component={WikidataSchemaInfo} />
+      <Route path={API.wikidataSchemaInfoRoute} component={WikidataSchemaInfo} />
+      <Route path={API.wikidataSchemaVisualRoute} component={WikidataSchemaVisual} />
       <Route path={API.wikidataQueryRoute} component={WikidataQuery} />
       <Route path={API.wikidataValidateRoute} component={WikidataValidate} />
       <Route path={API.wikidataExtractRoute} component={WikidataExtract} />

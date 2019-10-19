@@ -30,13 +30,13 @@ function InputEntity(props) {
               }
          },)
             .then (response => response.data)
-            .then((data) => {
+            .then(data => {
                 console.log(data);
                 const label = data.entities[entity].labels[language].value
                 console.log(label);
                 dispatch({type: 'setLabel', value: label})
             })
-            .catch(function (error) {
+            .catch(error => {
                 console.log('Error doing server request');
                 console.log(error);
             });

@@ -16,10 +16,11 @@ class WikishapeNavbar extends React.Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav>
                         <NavDropdown title="Wikidata" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/wikidataQuery">Query Wikidata endpoint</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataSchemaInfo">Info about Wikidata schema entities</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataValidate">Validate Wikidata entities</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataExtract">Extract ShEx from Wikidata entities</NavDropdown.Item>
+                            <NavDropdown.Item href="/wikidataSchemaInfo">Info about schema entities</NavDropdown.Item>
+                            <NavDropdown.Item href="/wikidataSchemaVisual">Visualize schema entities</NavDropdown.Item>
+                            <NavDropdown.Item href="/wikidataValidate">Validate entities</NavDropdown.Item>
+                            <NavDropdown.Item href="/wikidataQuery">Query endpoint</NavDropdown.Item>
+                            <NavDropdown.Item href="/wikidataExtract">Extract schema from entity</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     <Nav>

@@ -40,7 +40,8 @@ function InputSchemaEntityByText(props) {
                 label: labelRecord.label,
                 descr: labelRecord.descr,
                 conceptUri : e.conceptUri,
-                webUri: e.webUri
+                webUri: e.webUri,
+                lang: lang
             }
         });
         console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
@@ -76,7 +77,7 @@ function InputSchemaEntityByText(props) {
                 maxResults = {10}
                 minLength={2}
                 renderToken={customRenderToken}
-                placeholder="Search schema entity..."
+                placeholder="E.. or label"
                 renderMenuItemChildren={(option, props) => (
                     <MenuItem key={option.id} item={option}/>
                 )}

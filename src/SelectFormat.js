@@ -11,7 +11,10 @@ function SelectFormat(props) {
 
     useEffect(() => {
         const url = props.urlFormats;
-        axios.get(url).then(response => response.data)
+        axios.get(url, {
+            headers: { 'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+            }}).then(response => response.data)
             .then((data) => {
                 setFormats(data)
                 console.log(`Formats: ${formats}`)

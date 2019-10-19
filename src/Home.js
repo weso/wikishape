@@ -5,17 +5,17 @@ class Home extends React.Component {
  render() {
      return (
        <Container>
-         <h1>RDFShape</h1>
-           <p>RDFShape is an RDF service where you can play:</p>
+           <p>Wikishape is Shape Expressions playground customized for Wikidata</p>
+           <p>If you want a more general RDF playground you can visit <a href="http://rdfshape.weso.es">RDFShape</a></p>
+           <p>With Wikishape, you can do the following:</p>
            <ul>
-               <li><a href="https://www.w3.org/TR/rdf11-concepts/">RDF</a> conversion between different formats
-                   like <a href="http://www.w3.org/TR/turtle/">Turtle</a> and <a href="http://www.w3.org/TR/json-ld/">JSON-LD</a></li>
-               <li>RDF validation using <a href="http://shex.io/">ShEx</a> (Shape Expressions) and
-                   {' '}
-                   <a href="https://www.w3.org/TR/shacl/">SHACL</a> (Shapes Constraint Language)</li>
-               <li>RDF querying with <a href="http://www.w3.org/TR/sparql11-query/">SPARQL</a></li>
-               <li><a href="http://www.w3.org/TR/rdf-schema/">RDFS</a> and <a href="https://www.w3.org/TR/owl2-primer/">OWL</a> inference</li>
+               <li>Validate Wikidata entities with wikidata schemas</li>
+               <li>Get information about Wikidata schemas</li>
+               <li>Visualize Wikidata schemas</li>
+               <li>Query Wikidata entities</li>
            </ul>
+           <p>You can provide feedback or suggestions through <a href="https://github.com/weso/wikishape/issues"></a></p>
+           <p>The source code is available <a href="https://github.com/weso/wikishape">here</a></p>
        </Container>
      );
  }

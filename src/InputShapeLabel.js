@@ -1,6 +1,6 @@
 import React, {useReducer, useEffect} from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
+import Form from 'react-bootstrap/Form';
 import PropTypes from "prop-types";
 
 function InputShapeLabel(props) {
@@ -9,22 +9,30 @@ function InputShapeLabel(props) {
         <div>
            <InputGroup className="mb-3">
                 <InputGroup.Prepend><InputGroup.Text id="shapeLabel">Shape</InputGroup.Text></InputGroup.Prepend>
-                <FormControl placeholder={props.placeholder} aria-label="Shape" aria-describedby="shapeLabel"
-                   value={props.value} onChange={(e) => props.onChange(e.target.value)}
-                />
+                <Form.Control as="select"
+                              aria-label="Shape"
+                              aria-describedby="shapeLabel"
+                              defaultValue={props.value}
+                              onChange={(e) => {
+                                  console.log(`InputShapeLabel change...${JSON.stringify(e.target.value)}`)
+                                  props.onChange(e.target.value)
+                              }} >
+                    { props.shapeList.map((shape,idx) =>
+                      <option key={idx}>{shape}</option>
+                    )}
+                </Form.Control>
             </InputGroup>
         </div>
     );
 }
 
 InputShapeLabel.propTypes = {
-    placeholder: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired
+    value: PropTypes.string.isRequired,
+    shapeList: PropTypes.array.isRequired
 };
 
 InputShapeLabel.defaultProps = {
-    placeholder: 'Shape label'
 };
 
 export default InputShapeLabel;

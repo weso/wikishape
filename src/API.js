@@ -27,30 +27,8 @@ class API {
     static wikidataSchemaContent = API.rootApi + "wikidata/schemaContent";
 
     // Routes in client
-    static dataInfoRoute = "/dataInfo";
-    static dataConvertRoute = "/dataConvert";
-    static dataVisualizeRoute = "/dataVisualize";
-    static cytoVisualizeRoute = "/cytoVisualize";
-    static dataExtractRoute = "/dataExtract";
-    static dataQueryRoute = "/dataQuery";
-
-    static endpointInfoRoute = "/endpointInfo";
-    static endpointExtractRoute = "/endpointExtract";
-    static endpointQueryRoute = "/endpointQuery";
-
-    static shExInfoRoute = "/shExInfo";
-    static shExConvertRoute = "/shExConvert";
-    static shExVisualizeRoute = "/shExVisualize";
-    static shExVisualizeCytoscapeRoute = "/shExVisualizeCytoscape";
-    static shEx2ShaclRoute = "/shEx2Shacl";
-    static shExValidateRoute = "/shExValidate";
-    static shExValidateEndpointRoute = "/shExValidateEndpoint";
-
-    static shaclInfoRoute = "/shaclInfo";
-    static shaclConvertRoute = "/shaclConvert";
-    static shacl2ShExRoute = "/shacl2ShEx";
-    static shaclValidateRoute = "/shaclValidate";
-
+    static wikidataSchemaInfoRoute = "/wikidataSchemaInfo"
+    static wikidataSchemaVisualRoute = "/wikidataSchemaVisual"
     static wikidataQueryRoute = "/wikidataQuery";
     static wikidataValidateRoute = "/wikidataValidate";
     static wikidataExtractRoute = "/wikidataExtract";

@@ -77,7 +77,7 @@ function InputEntitiesByText(props) {
                 minLength={2}
                 onSearch={handleSearch}
                 renderToken={customRenderToken}
-                placeholder="Search wikidata entity..."
+                placeholder="Q.. or label"
                 renderMenuItemChildren={(option, props) => (
                     <MenuItem key={option.id} item={option}/>
                 )}
