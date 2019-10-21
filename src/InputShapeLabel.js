@@ -8,7 +8,9 @@ function InputShapeLabel(props) {
     return (
         <div>
            <InputGroup className="mb-3">
-                <InputGroup.Prepend><InputGroup.Text id="shapeLabel">Shape</InputGroup.Text></InputGroup.Prepend>
+                <InputGroup.Prepend>
+                    <InputGroup.Text id="shapeLabel">Shape</InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control as="select"
                               aria-label="Shape"
                               aria-describedby="shapeLabel"

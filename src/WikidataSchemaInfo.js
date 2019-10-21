@@ -21,6 +21,7 @@ function WikidataSchemaInfo(props) {
     const [schemaLabel, setSchemaLabel] = useState('');
     const [schemaDescr, setSchemaDescr] = useState('')
     const [schemaWebUri, setSchemaWebUri] = useState('');
+    const [schemaConceptUri, setSchemaConceptUri] = useState('');
     const [error,setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [schemaEntity,setSchemaEntity] = useState([]);
@@ -39,6 +40,7 @@ function WikidataSchemaInfo(props) {
                     setSchemaLabel(entity.label);
                     setSchemaDescr(entity.descr);
                     setSchemaWebUri(entity.webUri);
+                    setSchemaConceptUri(entity.conceptUri);
                     setShExContent(result)
                 })
                 .catch((error) => {
@@ -64,6 +66,7 @@ function WikidataSchemaInfo(props) {
                   <h1>{schemaId} - {schemaLabel}</h1>
                   <p>{schemaDescr}</p>
                   <p><code><a href={schemaWebUri}>{schemaWebUri}</a></code></p>
+                  <p>Raw schema uri: <code><a href={schemaConceptUri}>{schemaConceptUri}</a></code></p>
               <ShExForm onChange={()=>null} placeholder={''} readonly={true} value={shExContent} />
               </div>
               : null

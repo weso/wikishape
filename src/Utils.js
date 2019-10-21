@@ -1,6 +1,7 @@
 // import React from 'react';
 import Viz from 'viz.js/viz.js';
 import API from "./API";
+import React from "react";
 
 const { Module, render } = require('viz.js/full.render.js');
 
@@ -49,6 +50,93 @@ export function mkMode(format) {
 export function maybeAdd(maybe,name,obj) {
     if (maybe) obj[name] = maybe ;
     return obj;
+}
+
+export function showQualify(node, prefixMap) {
+    const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
+    const matchBase = relativeBaseRegex.exec(node);
+    if (matchBase) {
+        const rawNode = matchBase[1];
+        return {
+            type: 'RelativeIRI',
+            uri: rawNode,
+            value: <p>&lt;{rawNode}&gt;</p> ,
+            str: `<${rawNode}>`,
+            prefix: '',
+            localName: '',
+            node: node
+        };
+    } else {
+        const iriRegexp = /^<(.*)>$/g;
+        const matchIri = iriRegexp.exec(node);
+        if (matchIri) {
+            const rawNode = matchIri[1];
+            for (const key in prefixMap) {
+                if (rawNode.startsWith(prefixMap[key])) {
+                    const localName = rawNode.slice(prefixMap[key].length);
+                    return {
+                        type: 'QualifiedName',
+                        uri: rawNode,
+                        prefix: key,
+                        localName: localName,
+                        str: `${key}:${localName}`,
+                        node: node
+                    };
+                }
+            }
+            return {
+                type: 'FullIRI',
+                uri: rawNode,
+                prefix: '',
+                localName: '',
+                str: `<${rawNode}>`,
+                node: node
+            };
+        }
+        // const matchString =
+        const datatypeLiteralRegex = /\"(.*)\"\^\^(.*)/g
+        const matchDatatypeLiteral = datatypeLiteralRegex.exec(node);
+        if (matchDatatypeLiteral) {
+            const literal = matchDatatypeLiteral[1]
+            const datatype = matchDatatypeLiteral[2]
+            const datatypeQualified = showQualify(datatype,prefixMap)
+            return {
+                type: 'Literal',
+                prefix: '',
+                localName: '',
+                str: `"${literal}"^^<${datatypeQualified.str}>`,
+                node: node
+            }
+        }
+        const langLiteralRegex = /\"(.*)\"@(.*)/g
+        const matchLangLiteral = langLiteralRegex.exec(node)
+        if (matchLangLiteral) {
+            const literal = matchLangLiteral[1]
+            const lang = matchLangLiteral[2]
+            return {
+                type: 'LangLiteral',
+                prefix: '',
+                localName: '',
+                str: `"${literal}"@${lang}`,
+                node: node
+            }
+        }
+        if (node.match(/^[0-9\"\'\_]/)) return {
+            type: 'Literal',
+            prefix: '',
+            localName: '',
+            str: node,
+            node: node
+        };
+        console.log("Unknown format for node: " + node);
+        return {
+            type: 'Unknown',
+            prefix: '',
+            localName: '',
+            str: node,
+            node: node
+        } ;
+    }
 }
 
 export function dataParamsFromQueryParams(params) {

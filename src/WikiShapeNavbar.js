@@ -19,8 +19,10 @@ class WikishapeNavbar extends React.Component {
                             <NavDropdown.Item href="/wikidataSchemaInfo">Info about schema entities</NavDropdown.Item>
                             <NavDropdown.Item href="/wikidataSchemaVisual">Visualize schema entities</NavDropdown.Item>
                             <NavDropdown.Item href="/wikidataValidate">Validate entities</NavDropdown.Item>
+                            <NavDropdown.Item href="/wikidataValidateSPARQL">Validate entities obtained from SPARQL queries</NavDropdown.Item>
                             <NavDropdown.Item href="/wikidataQuery">Query endpoint</NavDropdown.Item>
                             <NavDropdown.Item href="/wikidataExtract">Extract schema from entity</NavDropdown.Item>
+                            <NavDropdown.Item href="/wikidataOutgoing">Outgoing arcs of entity</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     <Nav>

@@ -30,11 +30,11 @@ function WikidataExtract(props) {
         const url = API.dataExtract;
         let params={}
         params['endpoint'] = API.wikidataUrl ;
-        if (entities.length > 0 && entities[0].uri ) {
+        if (entities && entities.length > 0 && entities[0].uri ) {
             const nodeSelector = entities[0].uri
             params['nodeSelector'] = "<" + nodeSelector + ">";
             console.log(`Node selector: ${nodeSelector}`);
-            setPermalink(mkPermalink(API.dataExtractRoute, params));
+            setPermalink(mkPermalink(API.wikidataExtractRoute, params));
             let formData = params2Form(params);
             postConvert(url,formData);
         } else {
@@ -53,7 +53,7 @@ function WikidataExtract(props) {
             .catch(function (error) {
                 console.log(`Error doing server request: ${error}`)
                 setLoading(false);
-                setError(error);
+                setError(error.message);
             });
 
     }

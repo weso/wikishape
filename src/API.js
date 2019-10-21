@@ -4,6 +4,7 @@ class API {
     static rootApi = process.env.REACT_APP_RDFSHAPE_HOST + "/api/"; // "http://localhost:8080/api/";
 
     static dataInfo = API.rootApi + "data/info";
+    static dataOutgoing = API.rootApi + "endpoint/outgoing";
     static dataConvert = API.rootApi + "data/convert";
     static dataVisualize = API.rootApi + "data/visualize";
     static dataFormats = API.rootApi + "data/formats";
@@ -25,6 +26,7 @@ class API {
     static wikidataSearchEntity = API.rootApi + "wikidata/searchEntity";
     static wikidataLanguages = API.rootApi + "wikidata/languages";
     static wikidataSchemaContent = API.rootApi + "wikidata/schemaContent";
+    static wikidataQuery = API.rootApi + "wikidata/query";
 
     // Routes in client
     static wikidataSchemaInfoRoute = "/wikidataSchemaInfo"
@@ -32,6 +34,8 @@ class API {
     static wikidataQueryRoute = "/wikidataQuery";
     static wikidataValidateRoute = "/wikidataValidate";
     static wikidataExtractRoute = "/wikidataExtract";
+    static wikidataOutgoingRoute = "/wikidataOutgoing";
+    static wikidataValidateSPARQLRoute = "/wikidataValidateSPARQL";
 
     static aboutRoute = "/about";
 

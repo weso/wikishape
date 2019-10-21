@@ -14,12 +14,11 @@ import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "./InputShapeLabel";
 import Tabs from "react-bootstrap/Tabs";
-import InputEntitiesByText from "./InputEntitiesByText";
+import InputEntitiesBySPARQL from "./InputEntitiesBySPARQL";
 import ResultValidate from "./results/ResultValidate";
-import InputWikidataSchema from "./InputWikidataSchema";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
 
-function WikidataValidate(props) {
+function WikidataValidateSPARQL(props) {
 
     const initialStatus = {
         loading: false,
@@ -196,7 +195,7 @@ function WikidataValidate(props) {
 
     return (
        <Container>
-         <h1>Validate Wikidata entities</h1>
+         <h1>Validate Wikidata entities obtained from SPARQL queries</h1>
                    { status.result || status.loading || status.error ?
                        <Row>
                            {status.loading ? <Pace color="#27ae60"/> :
@@ -209,7 +208,7 @@ function WikidataValidate(props) {
                    }
                    <Row>
                        <Form onSubmit={handleSubmit}>
-                           <InputEntitiesByText onChange={handleChange} entities={entities} />
+                           <InputEntitiesBySPARQL onChange={handleChange} entities={entities} />
                            <Tabs activeKey={schemaActiveTab}
                                  transition={false}
                                  id="SchemaTabs"
@@ -246,4 +245,4 @@ function WikidataValidate(props) {
    );
 }
 
-export default WikidataValidate;
+export default WikidataValidateSPARQL;

@@ -2,45 +2,14 @@ import React from 'react';
 // import Table from "react-bootstrap/Table";
 import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from "react-bootstrap/Alert";
-
-function showQualify(node, prefix) {
-    console.log("showQualify node)");
-    console.log(node);
-    const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
-    const matchBase = relativeBaseRegex.exec(node);
-    if (matchBase) {
-        const rawNode = matchBase[1];
-        return "<" + rawNode + ">";
-    } else {
-        const iriRegexp = /^<(.*)>$/g;
-        const matchIri = iriRegexp.exec(node);
-        if (matchIri) {
-            const rawNode = matchIri[1];
-            for (const key in prefix) {
-                if (rawNode.startsWith(prefix[key])) {
-                    const localName = rawNode.slice(prefix[key].length);
-                    console.log("qualifying " + localName)
-                    /*       if (localName.indexOf("/") > -1) {
-                            return "&lt;" + rawNode + "&gt;" ;
-                           } else */
-                    const longNode = "<" + rawNode + ">";
-                    return <abbr title={longNode + key}>{":" + localName}</abbr> ;
-                }
-            }
-            return <a href={rawNode}>{"<" + rawNode + ">"}</a>;
-        }
-        if (node.match(/^[0-9\"\'\_]/)) return node;
-        console.log("Unknown format for node: " + node);
-        return node;
-    }
-}
+import { showQualify } from './Utils';
 
 function shapeMap2Table(shapeMap, nodesPrefixMap, shapesPrefixMap) {
    console.log("ShapeMap: " + shapeMap)
    return shapeMap.map((assoc,key) => ({
       'id': key,
-      'node': showQualify(assoc.node, nodesPrefixMap),
-      'shape': showQualify(assoc.shape, shapesPrefixMap),
+      'node': showQualify(assoc.node, nodesPrefixMap).value,
+      'shape': showQualify(assoc.shape, shapesPrefixMap).value,
       'status': assoc.status,
       'details': assoc.reason
     }))

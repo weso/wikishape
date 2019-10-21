@@ -69,7 +69,7 @@ function InputEntitiesByText(props) {
             <AsyncTypeahead
                 filterBy={['id','label','descr']}
                 labelKey="id"
-                multiple
+                multiple={props.multiple}
                 isLoading={isLoading}
                 options={options}
                 maxResults = {10}
@@ -105,7 +105,12 @@ function InputEntitiesByText(props) {
 
 InputEntitiesByText.propTypes = {
     entities: PropTypes.array,
+    multiple: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
 };
+
+InputEntitiesByText.defaultProps = {
+    multiple: true
+}
 
 export default InputEntitiesByText;
