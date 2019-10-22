@@ -8,8 +8,8 @@ function shapeMap2Table(shapeMap, nodesPrefixMap, shapesPrefixMap) {
    console.log("ShapeMap: " + shapeMap)
    return shapeMap.map((assoc,key) => ({
       'id': key,
-      'node': showQualify(assoc.node, nodesPrefixMap).value,
-      'shape': showQualify(assoc.shape, shapesPrefixMap).value,
+      'node': showQualify(assoc.node, nodesPrefixMap).str,
+      'shape': showQualify(assoc.shape, shapesPrefixMap).str,
       'status': assoc.status,
       'details': assoc.reason
     }))
@@ -21,6 +21,14 @@ function shapeFormatter(cell, row) {
     } else
         return (<span style={ {color: 'red'}}>!{cell}</span> );
 }
+
+function nodeFormatter(cell, row) {
+    if (row.status ==='conformant') {
+        return (<span style={ { color:'green'} }>{cell}</span> );
+    } else
+        return (<span style={ {color: 'red'}}>{cell}</span> );
+}
+
 
 function detailsFormatter(cell, row) {
     console.log("DetailsFormatter, cell: " + cell + " Row: " + row)
@@ -47,7 +55,8 @@ function ShowShapeMap(props) {
             {
                 dataField: 'node',
                 text: "Node",
-                sort: true
+                sort: true,
+                formatter: nodeFormatter
             },
             {
                 dataField: 'shape',
@@ -72,7 +81,7 @@ function ShowShapeMap(props) {
             columns={columns}
             striped
             hover
-            condensed/>
+            condensed />
     }
 }
 

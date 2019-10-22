@@ -16,7 +16,6 @@ import InputShapeLabel from "./InputShapeLabel";
 import Tabs from "react-bootstrap/Tabs";
 import InputEntitiesByText from "./InputEntitiesByText";
 import ResultValidate from "./results/ResultValidate";
-import InputWikidataSchema from "./InputWikidataSchema";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
 
 function WikidataValidate(props) {

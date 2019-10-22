@@ -1,41 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from "prop-types";
 import Yasqe from 'yasgui-yasqe/dist/yasqe.bundled.min';
 import 'yasgui-yasqe/dist/yasqe.min.css';
 import 'codemirror/addon/display/placeholder';
 
 function QueryForm(props) {
+    const { value, onChange, placeholder, readonly } = props;
     const [yasqe,setYasqe] = useState(null);
+    // const textAreaRef = useRef(null)
 
     useEffect(() => {
         if (!yasqe) {
-            const y = Yasqe.fromTextArea(document.getElementById(props.id), {
-                sparql: {
-                    showQueryButton: false
-                },
+            const options = {
+                sparql: { showQueryButton: false },
                 createShareLink: null,
-                placeholder: props.placeholder
-            });
+                placeholder: placeholder,
+                readonly: readonly
+            };
+//            const y = Yasqe.fromTextArea(textAreaRef, options);
+            const y = Yasqe.fromTextArea(document.getElementById('SPARQL-TextArea'), options);
             y.on('change', (cm,change) => {
-                // setQuery(cm.getValue())
-                props.onChange(cm.getValue())
+                onChange(cm.getValue())
             });
-            y.setValue(props.value);
+            y.setValue(value);
             y.refresh();
             setYasqe(y);
         }
-    }, [yasqe, props]);
+    }, [
+        yasqe,
+        placeholder,
+        value
+    ]);
 
     return (
-        <textarea id={props.id}/>
+       <div>
+        <textarea id="SPARQL-TextArea"/>
+      { /*  For some reason, it doesn't work with references as Yashe  <textarea ref={textAreaRef}/>*/  }
+       </div>
     );
 }
 
 QueryForm.propTypes = {
-    id: PropTypes.string.isRequired,
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    readonly: PropTypes.bool
 };
 
 QueryForm.defaultProps = {

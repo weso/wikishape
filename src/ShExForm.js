@@ -2,33 +2,33 @@ import React, {useState, useEffect, useRef} from 'react';
 import 'yashe/dist/yashe.min.css'
 import Yashe from 'yashe/dist/yashe.bundled.min';
 import PropTypes from "prop-types";
+import 'codemirror/addon/display/placeholder';
 
 function ShExForm(props) {
+    const { value, onChange, placeholder, readonly } = props
     const [yashe,setYashe] = useState(null)
-    const textAreaRef=useRef(null)
+    const textAreaRef = useRef(null)
 
     useEffect(() => {
         if (!yashe) {
-//            const y = Yashe.fromTextArea(document.getElementById(props.id))
-            const options = { 
-                placeholder: props.placeholder,
-                readonly: props.readonly
+            const options = {
+                placeholder: placeholder,
+                readonly: readonly
             }
             const y = Yashe.fromTextArea(
                 textAreaRef.current, 
                 options)
             y.on('change', (cm,change) => {
-                // setQuery(cm.getValue())
-                props.onChange(cm.getValue())
+                onChange(cm.getValue())
             });
-            y.setValue(props.value)
+            y.setValue(value)
             y.refresh();
             setYashe(y);
         }
-    }, [yashe,
-        props.onChange,
-        props.placeholder,
-        props.value]
+    }, [
+        yashe,
+        placeholder,
+        value]
     );
 
     return (

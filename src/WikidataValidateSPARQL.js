@@ -14,9 +14,9 @@ import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "./InputShapeLabel";
 import Tabs from "react-bootstrap/Tabs";
-import InputEntitiesBySPARQL from "./InputEntitiesBySPARQL";
 import ResultValidate from "./results/ResultValidate";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
+import QueryForm from "./QueryForm";
 
 function WikidataValidateSPARQL(props) {
 
@@ -25,8 +25,10 @@ function WikidataValidateSPARQL(props) {
         error: false,
         result: null,
         permalink: null,
+        entities: [],
         shapeList: [],
         shapeLabel: '',
+        shapeMap: '',
         nodesPrefixMap: [],
         shapesPrefixMap: []
     };
@@ -39,17 +41,12 @@ function WikidataValidateSPARQL(props) {
     };
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
-    const [entities,setEntities] = useState([]);
-
+    const [query, setQuery] = useState('');
     const [schemaEntity,setSchemaEntity] = useState('');
-    const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema')
+    const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema');
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
-    const urlServer = API.schemaValidate
+    const urlServer = API.schemaValidate;
     const [permalink, setPermalink] = useState(null);
-
-    function handleChange(es) {
-        setEntities(es);
-    }
 
     function handleShapeLabelChange(label) {
         console.log(`handleShapeLabelChange: ${label}`)
@@ -127,21 +124,25 @@ function WikidataValidateSPARQL(props) {
             case 'set-loading':
               return { ...status, loading: true, error: false, result: null};
             case 'set-result':
-              console.log(`statusReducer: set-result: ${JSON.stringify(action.value)}`)
+              console.log(`statusReducer: set-result: ${JSON.stringify(action.value)}`);
               return { ...status, loading: false, error: false, result: action.value};
             case 'set-shapeLabel':
-                return { ...status, shapeLabel: action.value }
+                return { ...status, shapeLabel: action.value };
+            case 'set-shapeMap':
+                return { ...status, shapeMap: action.value };
+            case 'set-entities':
+                return { ...status, entities: action.value };
             case 'set-shapeList':
-                const shapesPrefixMap = action.value.shapesPrefixMap
-                const shapeList = action.value.shapeList.map(sl => showQualify(sl,shapesPrefixMap).str)
-                const shapeLabel = shapeList && shapeList.length? shapeList[0] :  ''
+                const shapesPrefixMap = action.value.shapesPrefixMap;
+                const shapeList = action.value.shapeList.map(sl => showQualify(sl,shapesPrefixMap).str);
+                const shapeLabel = shapeList && shapeList.length? shapeList[0] :  '';
                 return { ...status,
                     loading: false,
                     error: false,
                     shapeList: shapeList,
                     shapeLabel: shapeLabel,
                     shapesPrefixMap: shapesPrefixMap
-                }
+                };
             case 'set-error':
               return { ...status, loading: false, error: action.value, result: null};
             default: throw new Error(`Unknown action type for statusReducer: ${action.type}`)
@@ -149,23 +150,73 @@ function WikidataValidateSPARQL(props) {
     }
 
     function shapeMapFromEntities(entities,shapeLabel) {
-        const shapeMap = entities.map(e => `<${e.uri}>@${shapeLabel}`).join(',')
+        console.log(`ShapeMap from Entities: ${entities}`)
+        const shapeMap = entities.map(e => {
+            return `${e}@${shapeLabel}`}
+        ).join(',')
+        console.log(`ShapeMap: ${shapeMap}`)
         return shapeMap;
     }
 
+    function parseData(data) {
+        if (data.head && data.head.vars && data.head.vars.length) {
+            const varName = data.head.vars[0];
+            console.log(`varName: ${varName}`)
+            return data.results.bindings.map(binding => {
+                const v = binding[varName]
+                const converted = cnvValue(v)
+                console.log(`Binding: ${JSON.stringify(binding)}, v: ${JSON.stringify(v)}, converted: ${converted}`)
+                return converted
+            })
+        } else {
+            return [];
+        }
+    }
+
+    function cnvValue(value) {
+        switch (value.type) {
+            case 'uri': return `<${value.value}>`;
+            case 'literal':
+                if (value.datatype) return `"${value.value}"^^<${value.datatype}>`;
+                if (value['xml:lang']) return `"${value.value}"@${value['xml:lang']}`
+                return `"${value.value}"`
+            default:
+                console.error(`cnvValue: Unknown value type for ${value}`)
+                return value
+        }
+    }
+
+
+
     function handleSubmit(event) {
         event.preventDefault();
-        const paramsShEx = paramsFromShEx(shEx)
-        const shapeMap = shapeMapFromEntities(entities, status.shapeLabel)
-        const paramsEndpoint = { endpoint: API.wikidataUrl };
-        let params = {...paramsEndpoint,...paramsShEx};
-        params['schemaEngine']='ShEx';
-        params['triggerMode']='shapeMap';
-        params['shapeMap']=shapeMap;
-        params['shapeMapFormat']='Compact';
-        const formData = params2Form(params);
-        setPermalink(mkPermalink(API.wikidataValidateRoute,params));
-        postValidate(urlServer,formData);
+        let params = {};
+        params['query']=query;
+        const formDataQuery = params2Form(params);
+        dispatch({type: 'set-loading', value: true});
+        axios.post(API.wikidataQuery,formDataQuery)
+            .then(response => response.data)
+            .then(data => {
+                const entities = parseData(data);
+                dispatch({type: 'set-loading', value: true});
+                dispatch({ type: 'set-entities', value: entities});
+                const paramsShEx = paramsFromShEx(shEx);
+                const shapeMap = shapeMapFromEntities(entities, status.shapeLabel)
+                dispatch({ type: 'set-shapeMap', value: shapeMap});
+                const paramsEndpoint = { endpoint: API.wikidataUrl };
+                params = {...paramsEndpoint,...paramsShEx};
+                params['schemaEngine']='ShEx';
+                params['triggerMode']='shapeMap';
+                params['shapeMap'] = shapeMap;
+                params['shapeMapFormat']='Compact';
+                params['query']=query;
+                const formData = params2Form(params);
+                setPermalink(mkPermalink(API.wikidataValidateSPARQLRoute,params));
+                postValidate(urlServer,formData);
+            }).catch(error => {
+            dispatch({type: 'set-error', value: error.message});
+        })
+
     }
 
     function postValidate(url, formData, cb) {
@@ -208,7 +259,11 @@ function WikidataValidateSPARQL(props) {
                    }
                    <Row>
                        <Form onSubmit={handleSubmit}>
-                           <InputEntitiesBySPARQL onChange={handleChange} entities={entities} />
+                           <QueryForm
+                               onChange={setQuery}
+                               placeholder="select ?id ..."
+                               value={query}
+                           />
                            <Tabs activeKey={schemaActiveTab}
                                  transition={false}
                                  id="SchemaTabs"

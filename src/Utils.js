@@ -60,7 +60,6 @@ export function showQualify(node, prefixMap) {
         return {
             type: 'RelativeIRI',
             uri: rawNode,
-            value: <p>&lt;{rawNode}&gt;</p> ,
             str: `<${rawNode}>`,
             prefix: '',
             localName: '',
