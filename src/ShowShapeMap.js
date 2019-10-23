@@ -79,6 +79,7 @@ function ShowShapeMap(props) {
             keyField='id'
             data={table}
             columns={columns}
+            bootstrap4
             striped
             hover
             condensed />
