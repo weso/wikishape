@@ -181,7 +181,6 @@ function WikidataValidateSPARQL(props) {
                     params['triggerMode']='shapeMap';
                     params['shapeMap'] = `${e}@${status.shapeLabel}`;
                     params['shapeMapFormat']='Compact';
-                    params['query']=query;
                     const formData = params2Form(params);
                     postValidate(urlServer,formData,e);
                 });
@@ -203,8 +202,6 @@ function WikidataValidateSPARQL(props) {
             })
     }
 
-
-
     function handleShExTabChange(value) { dispatchShEx({ type: 'changeTab', value: value } ); }
     function handleShExFormatChange(value) {  dispatchShEx({type: 'setFormat', value: value }); }
     function handleShExByTextChange(value) { dispatchShEx({type: 'setText', value: value}) }
@@ -214,8 +211,6 @@ function WikidataValidateSPARQL(props) {
     function handleTabChange(e) {
         setSchemaActiveTab(e)
     }
-
-
 
     return (
        <Container>
