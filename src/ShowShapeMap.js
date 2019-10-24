@@ -2,10 +2,12 @@ import React from 'react';
 // import Table from "react-bootstrap/Table";
 import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 import { showQualify } from './Utils';
+import PropTypes from "prop-types";
+import InputEntitiesBySPARQL from "./InputEntitiesBySPARQL";
 
 function shapeMap2Table(shapeMap, nodesPrefixMap, shapesPrefixMap) {
-   console.log("ShapeMap: " + shapeMap)
    return shapeMap.map((assoc,key) => ({
       'id': key,
       'node': showQualify(assoc.node, nodesPrefixMap).str,
@@ -22,6 +24,19 @@ function shapeFormatter(cell, row) {
         return (<span style={ {color: 'red'}}>!{cell}</span> );
 }
 
+function statusFormatter(cell) {
+    switch (cell) {
+        case 'conformant':
+            return (<span style={{color: 'green'}}>{cell}</span>);
+        case 'nonconformant':
+            return (<span style={{color: 'red'}}>{cell}</span>);
+        case '?':
+            return (<span><Spinner animation="border" variant="primary" /></span>);
+        default:
+            return (<span>{cell}</span>);
+    }
+}
+
 function nodeFormatter(cell, row) {
     if (row.status ==='conformant') {
         return (<span style={ { color:'green'} }>{cell}</span> );
@@ -31,7 +46,6 @@ function nodeFormatter(cell, row) {
 
 
 function detailsFormatter(cell, row) {
-    console.log("DetailsFormatter, cell: " + cell + " Row: " + row)
     return (
         <details>
          <pre>{row.details}</pre>
@@ -40,12 +54,10 @@ function detailsFormatter(cell, row) {
 
 function ShowShapeMap(props) {
     const shapeMap = props.shapeMap
-    console.log(`ShapeMap: ${shapeMap} isString? ${typeof shapeMap}`)
     if (typeof shapeMap === 'string') {
        return <Alert variant="info">{shapeMap}</Alert>
     } else {
         const table = shapeMap2Table(shapeMap, props.nodesPrefixMap, props.shapesPrefixMap)
-        console.log("Table data: " + table)
         const columns = [
             {
                 dataField: 'id',
@@ -66,7 +78,9 @@ function ShowShapeMap(props) {
             },
             {
                 dataField: 'status',
-                hidden: true
+                text: "Status",
+                sort: true,
+                formatter: statusFormatter
             },
             {
                 dataField: 'evidence',
@@ -85,5 +99,14 @@ function ShowShapeMap(props) {
             condensed />
     }
 }
+
+ShowShapeMap.propTypes = {
+    shapeMap: PropTypes.array
+};
+
+ShowShapeMap.defaultProps = {
+    shapeMap: []
+};
+
 
 export default ShowShapeMap;

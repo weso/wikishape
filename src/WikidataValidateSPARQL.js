@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "./ShExTabs";
 import API from "./API"
-import {convertTabSchema, showQualify} from "./Utils";
+import { showQualify } from "./Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "./InputShapeLabel";
@@ -17,6 +17,9 @@ import Tabs from "react-bootstrap/Tabs";
 import ResultValidate from "./results/ResultValidate";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
 import QueryForm from "./QueryForm";
+import { paramsFromShEx, initialShExStatus, shExReducer} from './ShEx'
+import {wikidataPrefixes} from "./resources/wikidataPrefixes";
+import {mergeResult, showResult} from "./Results";
 
 function WikidataValidateSPARQL(props) {
 
@@ -28,16 +31,8 @@ function WikidataValidateSPARQL(props) {
         entities: [],
         shapeList: [],
         shapeLabel: '',
-        shapeMap: '',
-        nodesPrefixMap: [],
-        shapesPrefixMap: []
-    };
-
-    const initialShExStatus = {
-        shExActiveTab: API.defaultTab,
-        shExTextArea: '',
-        shExUrl: '',
-        shExFormat: API.defaultShExFormat
+        nodesPrefixMap: wikidataPrefixes,
+        shapesPrefixMap: wikidataPrefixes
     };
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
@@ -54,7 +49,6 @@ function WikidataValidateSPARQL(props) {
     }
 
     function handleSchemaEntityChange(e) {
-        console.log(`Change schema entity: ${JSON.stringify(e)}`)
         if (e && e.length) {
             const schemaEntity = e[0]
             dispatch({type: 'set-loading'})
@@ -78,58 +72,21 @@ function WikidataValidateSPARQL(props) {
         }
     }
 
-    function paramsFromShEx(shExStatus) {
-        let params = {};
-        params['activeSchemaTab'] = convertTabSchema(shExStatus.shExActiveTab);
-        params['schemaEmbedded'] = false;
-        params['schemaFormat'] = shExStatus.shExFormat;
-        switch (shExStatus.shExActiveTab) {
-            case API.byTextTab:
-                params['schema'] = shExStatus.shExTextArea;
-                params['schemaFormatTextArea'] = shExStatus.shExFormat;
-                break;
-            case API.byUrlTab:
-                params['schemaURL'] = shExStatus.shExUrl;
-                params['schemaFormatUrl'] = shExStatus.shExFormat;
-                break;
-            case API.byFileTab:
-                params['schemaFile'] = shExStatus.shExFile;
-                params['schemaFormatFile'] = shExStatus.shExFormat;
-                break;
-            default:
-        }
-        console.log(`paramsShEx: ${JSON.stringify(params)}`)
-        return params;
-    }
-
-    function shExReducer(status,action) {
-        switch (action.type) {
-            case 'changeTab':
-                return { ...status, shExActiveTab: action.value }
-            case 'setText':
-                return { ...status, shExActiveTab: API.byTextTab, shExTextArea: action.value }
-            case 'setUrl':
-                return { ...status, shExActiveTab: API.byUrlTab, shExUrl: action.value }
-            case 'setFile':
-                return { ...status, shExActiveTab: API.byFileTab, shExFile: action.value }
-            case 'setFormat':
-                return { ...status, shExFormat: action.value }
-            default:
-                return new Error(`shExReducer: unknown action type: ${action.type}`)
-        }
-    }
-
     function statusReducer(status,action) {
         switch (action.type) {
             case 'set-loading':
-              return { ...status, loading: true, error: false, result: null};
+              return { ...status, loading: true, error: false};
             case 'set-result':
-              console.log(`statusReducer: set-result: ${JSON.stringify(action.value)}`);
-              return { ...status, loading: false, error: false, result: action.value};
+              console.log(`statusReducer: set-result: ${showResult(action.value,'reducer')}`);
+              return { ...status,
+                  loading: false,
+                  error: false,
+                  result: mergeResult(status.result, action.value, status.shapesPrefixMap)};
+            case 'unset-result':
+                console.log(`unset-result to null!!`)
+                return { ...status, result: null };
             case 'set-shapeLabel':
                 return { ...status, shapeLabel: action.value };
-            case 'set-shapeMap':
-                return { ...status, shapeMap: action.value };
             case 'set-entities':
                 return { ...status, entities: action.value };
             case 'set-shapeList':
@@ -144,18 +101,32 @@ function WikidataValidateSPARQL(props) {
                     shapesPrefixMap: shapesPrefixMap
                 };
             case 'set-error':
-              return { ...status, loading: false, error: action.value, result: null};
+              return { ...status,
+                  loading: false,
+                  error: action.value
+              };
             default: throw new Error(`Unknown action type for statusReducer: ${action.type}`)
         }
     }
 
-    function shapeMapFromEntities(entities,shapeLabel) {
-        console.log(`ShapeMap from Entities: ${entities}`)
-        const shapeMap = entities.map(e => {
-            return `${e}@${shapeLabel}`}
-        ).join(',')
-        console.log(`ShapeMap: ${shapeMap}`)
-        return shapeMap;
+    function resultFromEntities(entities, shapeLabel) {
+       const resultMap = entities.map(e => {
+           return {
+               node: e,
+               shape: shapeLabel,
+               status: '?',
+               reason: 'validating'
+           }
+       });
+       return {
+           valid: false,
+           type: 'Result',
+           message: 'Validating...',
+           shapeMap: resultMap,
+           errors: [],
+           nodesPrefixMap: wikidataPrefixes, // The prefix map for nodes is wikidata endpoint
+           shapesPrefixMap: status.shapesPrefixMap // the prefix map for shapes can be changed by the ShEx author
+       };
     }
 
     function parseData(data) {
@@ -186,50 +157,52 @@ function WikidataValidateSPARQL(props) {
         }
     }
 
-
-
     function handleSubmit(event) {
         event.preventDefault();
         let params = {};
         params['query']=query;
         const formDataQuery = params2Form(params);
         dispatch({type: 'set-loading', value: true});
+        dispatch({type: 'unset-result'});
         axios.post(API.wikidataQuery,formDataQuery)
             .then(response => response.data)
             .then(data => {
                 const entities = parseData(data);
-                dispatch({type: 'set-loading', value: true});
+                dispatch({type: 'set-loading', value: false});
                 dispatch({ type: 'set-entities', value: entities});
                 const paramsShEx = paramsFromShEx(shEx);
-                const shapeMap = shapeMapFromEntities(entities, status.shapeLabel)
-                dispatch({ type: 'set-shapeMap', value: shapeMap});
-                const paramsEndpoint = { endpoint: API.wikidataUrl };
-                params = {...paramsEndpoint,...paramsShEx};
-                params['schemaEngine']='ShEx';
-                params['triggerMode']='shapeMap';
-                params['shapeMap'] = shapeMap;
-                params['shapeMapFormat']='Compact';
-                params['query']=query;
-                const formData = params2Form(params);
-                setPermalink(mkPermalink(API.wikidataValidateSPARQLRoute,params));
-                postValidate(urlServer,formData);
+                const initialResult = resultFromEntities(entities, status.shapeLabel);
+                dispatch({type: 'set-result', value: initialResult});
+// TODO:                setPermalink(mkPermalink(API.wikidataValidateSPARQLRoute,params));
+                entities.forEach(e => {
+                    const paramsEndpoint = { endpoint: API.wikidataUrl };
+                    params = {...paramsEndpoint,...paramsShEx};
+                    params['schemaEngine']='ShEx';
+                    params['triggerMode']='shapeMap';
+                    params['shapeMap'] = `${e}@${status.shapeLabel}`;
+                    params['shapeMapFormat']='Compact';
+                    params['query']=query;
+                    const formData = params2Form(params);
+                    postValidate(urlServer,formData,e);
+                });
             }).catch(error => {
             dispatch({type: 'set-error', value: error.message});
         })
 
     }
 
-    function postValidate(url, formData, cb) {
-        dispatch({type: 'set-loading'} );
+    function postValidate(url, formData, e) {
+//        dispatch({type: 'set-loading'} );
         axios.post(url,formData).then (response => response.data)
             .then((data) => {
+                console.log(`Return from ${e}`)
                 dispatch({type: 'set-result', value: data})
-                if (cb) cb()
             })
             .catch(function (error) {
-                dispatch({type: 'set-error', value: `Error: ${error}` })
-            });
+                dispatch({type: 'set-error', value: `Error validating ${e} ${url} ${JSON.stringify(formData)}: ${error}` })
+            })
     }
+
 
 
     function handleShExTabChange(value) { dispatchShEx({ type: 'changeTab', value: value } ); }
@@ -263,6 +236,7 @@ function WikidataValidateSPARQL(props) {
                                onChange={setQuery}
                                placeholder="select ?id ..."
                                value={query}
+                               prefixes={ wikidataPrefixes }
                            />
                            <Tabs activeKey={schemaActiveTab}
                                  transition={false}

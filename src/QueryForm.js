@@ -5,8 +5,8 @@ import 'yasgui-yasqe/dist/yasqe.min.css';
 import 'codemirror/addon/display/placeholder';
 
 function QueryForm(props) {
-    const { value, onChange, placeholder, readonly } = props;
-    const [yasqe,setYasqe] = useState(null);
+    const { value, onChange, placeholder, readonly, prefixes } = props;
+    const [ yasqe, setYasqe] = useState(null);
     // const textAreaRef = useRef(null)
 
     useEffect(() => {
@@ -22,6 +22,8 @@ function QueryForm(props) {
             y.on('change', (cm,change) => {
                 onChange(cm.getValue())
             });
+
+//             y.addPrefixes(prefixes);
             y.setValue(value);
             y.refresh();
             setYasqe(y);
@@ -44,7 +46,8 @@ QueryForm.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
-    readonly: PropTypes.bool
+    readonly: PropTypes.bool,
+    prefixes: PropTypes.object
 };
 
 QueryForm.defaultProps = {

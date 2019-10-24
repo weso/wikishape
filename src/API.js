@@ -24,6 +24,7 @@ class API {
 
     static wikidataEntityLabel = API.rootApi + "wikidata/entityLabel";
     static wikidataSearchEntity = API.rootApi + "wikidata/searchEntity";
+    static wikidataSearchProperty = API.rootApi + "wikidata/searchProperty";
     static wikidataLanguages = API.rootApi + "wikidata/languages";
     static wikidataSchemaContent = API.rootApi + "wikidata/schemaContent";
     static wikidataQuery = API.rootApi + "wikidata/query";
@@ -35,6 +36,7 @@ class API {
     static wikidataValidateRoute = "/wikidataValidate";
     static wikidataExtractRoute = "/wikidataExtract";
     static wikidataOutgoingRoute = "/wikidataOutgoing";
+    static wikidataPropertyInfoRoute = "/wikidataPropertyInfo";
     static wikidataValidateSPARQLRoute = "/wikidataValidateSPARQL";
 
     static aboutRoute = "/about";

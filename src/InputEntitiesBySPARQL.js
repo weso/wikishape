@@ -10,6 +10,8 @@ import Pace from "react-pace-progress";
 import axios from "axios";
 import QueryForm from "./QueryForm";
 import Form from "react-bootstrap/Form";
+import {wikidataPrefixes} from "./resources/wikidataPrefixes";
+import {cnvValueFromSPARQL} from "./Utils";
 
 
 const QUERY_URI = API.wikidataQuery ;
@@ -20,25 +22,12 @@ function parseData(data) {
       console.log(`varName: ${varName}`)
       return data.results.bindings.map(binding => {
         const v = binding[varName]
-        const converted = cnvValue(v)
+        const converted = cnvValueFromSPARQL(v)
         console.log(`Binding: ${JSON.stringify(binding)}, v: ${JSON.stringify(v)}, converted: ${converted}`)
         return converted
       })
     } else {
         return [];
-    }
-}
-
-function cnvValue(value) {
-    switch (value.type) {
-        case 'uri': return `<${value.value}>`;
-        case 'literal':
-            if (value.datatype) return `"${value.value}"^^<${value.datatype}>`;
-            if (value['xml:lang']) return `"${value.value}"@${value['xml:lang']}`
-            return `"${value.value}"`
-        default:
-            console.error(`cnvValue: Unknown value type for ${value}`)
-            return value
     }
 }
 
@@ -83,6 +72,7 @@ function InputEntitiesBySPARQL(props) {
                 onChange={setQuery}
                 placeholder="select ?id ..."
                 value={query}
+                prefixes = { wikidataPrefixes }
                />
             <Button variant="primary"
                     type="submit">Resolve</Button>

@@ -14,7 +14,7 @@ class Home extends React.Component {
                <li>Visualize Wikidata schemas</li>
                <li>Query Wikidata entities</li>
            </ul>
-           <p>You can provide feedback or suggestions through <a href="https://github.com/weso/wikishape/issues"></a>Github issues</p>
+           <p>You can provide feedback or suggestions through <a href="https://github.com/weso/wikishape/issues">Github issues</a></p>
            <p>The source code is available <a href="https://github.com/weso/wikishape">here</a></p>
        </Container>
      );

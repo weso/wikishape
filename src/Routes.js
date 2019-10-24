@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import NotFound from './NotFound.js';
 import About from './About.js';
 import Home from './Home.js';
@@ -12,28 +12,27 @@ import WikidataSchemaInfo from './WikidataSchemaInfo';
 import WikidataSchemaVisual from './WikidataSchemaVisual';
 import WikidataExtract from './WikidataExtract';
 import WikidataOutgoing from './WikidataOutgoing';
-import API from './API.js';
-
+import WikidataProperty from "./WikidataProperty";
 
 function Routes() {
 
-  return (
-      <Router>
-      <Switch>
-      <Route path="/" exact component={Home} />
-      <Route path={API.wikidataSchemaInfoRoute} component={WikidataSchemaInfo} />
-      <Route path={API.wikidataSchemaVisualRoute} component={WikidataSchemaVisual} />
-      <Route path={API.wikidataQueryRoute} component={WikidataQuery} />
-      <Route path={API.wikidataValidateRoute} component={WikidataValidate} />
-      <Route path={API.wikidataExtractRoute} component={WikidataExtract} />
-      <Route path={API.wikidataOutgoingRoute} component={WikidataOutgoing} />
-      <Route path={API.aboutRoute} component={About} />
-      <Route path={API.wikidataValidateSPARQLRoute} component={WikidataValidateSPARQL} />
-
-          <Route component={NotFound} />
-      </Switch>
-     </Router>
-  );
+    return (
+        <Router>
+            <Switch>
+                <Route path="/" exact component={Home}/>
+                <Route path="/wikidataSchemaInfo" component={WikidataSchemaInfo}/>
+                <Route path="/wikidataSchemaVisual" component={WikidataSchemaVisual}/>
+                <Route path="/wikidataQuery" component={WikidataQuery}/>
+                <Route path="/wikidataValidate" component={WikidataValidate}/>
+                <Route path="/wikidataExtract" component={WikidataExtract}/>
+                <Route path="/wikidataOutgoing" component={WikidataOutgoing}/>
+                <Route path="/wikidataPropertyInfo" component={WikidataProperty}/>
+                <Route path="/about" component={About}/>
+                <Route path="/wikidataValidateSPARQL" component={WikidataValidateSPARQL}/>
+                <Route component={NotFound}/>
+            </Switch>
+        </Router>
+    );
 }
 
 export default Routes;

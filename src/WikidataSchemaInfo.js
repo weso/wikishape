@@ -2,15 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
-import Table from "react-bootstrap/Table";
-import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import DataTabs from "./DataTabs";
 import Button from "react-bootstrap/Button";
-import API from "./API";
-import {mkPermalink, params2Form, Permalink} from "./Permalink";
+import { Permalink } from "./Permalink";
 import axios from "axios";
-import ResultShExInfo from "./results/ResultShExInfo";
 import Pace from "react-pace-progress";
 import ShExForm from "./ShExForm";
 
@@ -25,6 +20,8 @@ function WikidataSchemaInfo(props) {
     const [error,setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [schemaEntity,setSchemaEntity] = useState([]);
+
+
 
     function handleSubmit(e) {
         e.preventDefault();

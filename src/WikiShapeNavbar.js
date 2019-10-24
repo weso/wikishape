@@ -15,14 +15,29 @@ class WikishapeNavbar extends React.Component {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav>
-                        <NavDropdown title="Wikidata" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/wikidataSchemaInfo">Info about schema entities</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataSchemaVisual">Visualize schema entities</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataValidate">Validate entities</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataValidateSPARQL">Validate entities obtained from SPARQL queries</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataQuery">Query endpoint</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataExtract">Extract schema from entity</NavDropdown.Item>
-                            <NavDropdown.Item href="/wikidataOutgoing">Outgoing arcs of entity</NavDropdown.Item>
+                        <NavDropdown title="Entity" id="basic-nav-dropdown">
+                            <NavDropdown.Item href={API.wikidataOutgoingRoute}>Info about entity (outgoing arcs)</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataValidateRoute} >Validate entities</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataValidateSPARQLRoute}>Validate entities obtained from SPARQL queries</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataExtractRoute}>Extract schema from entity</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>
+                    <Nav>
+                        <NavDropdown title="Schema" id="basic-nav-dropdown">
+                            <NavDropdown.Item href={API.wikidataSchemaInfoRoute}>Info about schema</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataSchemaVisualRoute}>Visualize schema</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataValidateRoute} >Validate entities</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataValidateSPARQLRoute}>Validate entities obtained from SPARQL queries</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>
+                    <Nav>
+                        <NavDropdown title="Property" id="basic-nav-dropdown">
+                            <NavDropdown.Item href={API.wikidataPropertyInfoRoute}>Info about property</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>
+                    <Nav>
+                        <NavDropdown title="Query" id="basic-nav-dropdown">
+                            <NavDropdown.Item href={API.wikidataQueryRoute}>Query SPARQL endpoint</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     <Nav>

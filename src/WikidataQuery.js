@@ -6,122 +6,77 @@ import Alert from "react-bootstrap/Alert";
 import { mkPermalink, params2Form, Permalink } from "./Permalink";
 import API from "./API";
 import Pace from "react-pace-progress";
-import ResultValidate from "./results/ResultValidate";
 import Form from "react-bootstrap/Form";
 import QueryTabs from "./QueryTabs";
 import Button from "react-bootstrap/Button";
 import {convertTabQuery} from "./Utils";
 import axios from "axios";
 import ResultEndpointQuery from "./results/ResultEndpointQuery";
+import QueryForm from "./QueryForm";
+import {wikidataPrefixes} from "./resources/wikidataPrefixes";
+
+const QUERY_URI = API.wikidataQuery ;
 
 function WikidataQuery(props) {
-    const [result, setResult] = useState('');
     const [permalink, setPermalink] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [error,setError] = useState(null);
-
-    const [queryTextArea, setQueryTextArea] = useState('');
-    const [queryUrl, setQueryUrl] = useState('');
-    const [queryFile, setQueryFile] = useState('');
-    const [queryActiveTab, setQueryActiveTab] = useState('ByText');
-    const serverUrl = API.endpointQuery ;
-
-    function queryParams() {
-        let params = {} ;
-        params['activeTab'] = convertTabQuery(queryActiveTab);
-        switch (queryActiveTab) {
-            case API.byTextTab:
-                params['query'] = queryTextArea;
-                break;
-            case API.byUrlTab:
-                params['queryURL'] = queryUrl;
-                break;
-            case API.byFileTab:
-                params['queryFile'] = queryFile;
-                break;
-            default:
-                console.log(`Unknown value queryActiveTab: ${queryActiveTab}`)
-        }
-        return params ;
-    }
-
-    function formParams() {
-        let params = {} ;
-        return params ;
-    }
+    const [query, setQuery] = useState('')
+    const [result, setResult] = useState(null)
+    const [table, setTable] = useState(null);
 
     function handleSubmit(event) {
         event.preventDefault();
-        const permalinkParams = queryParams();
-        let serviceParams = permalinkParams ;
-        serviceParams['endpoint'] = API.wikidataUrl ;
-        let permalink = mkPermalink(API.wikidataQueryRoute, permalinkParams);
-        setLoading(true);
-        postProcess(serverUrl, serviceParams, permalink);
+        let params = {};
+        params['query']=query;
+        const formData = params2Form(params);
+        resolveQuery(QUERY_URI,formData);
     }
 
-    function postProcess(url, params, permalink) {
-        axios.post(url, params)
+    function resolveQuery(url,formData) {
+        setIsLoading(true);
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+            }
+        };
+        axios.post(url,formData,axiosConfig)
             .then(response => response.data)
-            .then((data) => {
+            .then(data => {
+                setIsLoading(false)
                 setResult(data);
-                setPermalink(permalink)
-            })
-            .catch(function (error) {
-                const msg = `Error doing server request at ${serverUrl}: ${error}`;
-                console.log(msg);
-                setLoading(false);
-                setError(msg);
-            })
-        ;
+            }).catch(error => {
+            setError(`Error on request: ${url}:  ${error.message}`)
+        })
     }
 
-    function handleTabChangeQuery(value) {
-        setQueryActiveTab(value)
-    }
-
-    function handleByTextChangeQuery(value) {
-        setQueryTextArea(value)
-    }
-
-    function handleUrlChangeQuery(value) {
-        setQueryUrl(value)
-    }
-
-    function handleFileUploadQuery(value) {
-        setQueryFile(value)
-    }
 
     return (
-       <Container>
+       <Container fluid={true}>
          <h1>Query Wikidata</h1>
          <Row>
-             { result || loading || error ?
              <Col>
-                 {loading ? <Pace color="#27ae60"/> :
+             { result || isLoading || error ?
+             <div>
+                 {isLoading ? <Pace color="#27ae60"/> :
                      error? <Alert variant="danger">{error}</Alert> :
                      result ?
                          <ResultEndpointQuery result={result} /> : null
                  }
                  { permalink &&  <Permalink url={permalink} /> }
-             </Col> : null
+             </div> : null
              }
-             <Col>
-                 <Form onSubmit={handleSubmit}>
-                     <QueryTabs activeTab={queryActiveTab}
-                                handleTabChange={handleTabChangeQuery}
-
-                                textAreaValue={queryTextArea}
-                                handleByTextChange={handleByTextChangeQuery}
-
-                                urlValue={queryUrl}
-                                handleDataUrlChange={handleUrlChangeQuery}
-
-                                handleFileUpload={handleFileUploadQuery}
-                     />
-                     <Button variant="primary"
-                             type="submit">Query wikidata</Button>
-                 </Form>
+             <Form onSubmit={handleSubmit}>
+               <QueryForm
+                         onChange={setQuery}
+                         placeholder="select ?id ..."
+                         value={query}
+                         prefixes = { wikidataPrefixes }
+             />
+             <Button variant="primary"
+                             type="submit">Resolve</Button>
+             </Form>
              </Col>
          </Row>
        </Container>

@@ -17,6 +17,8 @@ import Tabs from "react-bootstrap/Tabs";
 import InputEntitiesByText from "./InputEntitiesByText";
 import ResultValidate from "./results/ResultValidate";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
+import { paramsFromShEx, initialShExStatus, shExReducer} from './ShEx'
+import {showResult} from "./Results";
 
 function WikidataValidate(props) {
 
@@ -29,13 +31,6 @@ function WikidataValidate(props) {
         shapeLabel: '',
         nodesPrefixMap: [],
         shapesPrefixMap: []
-    };
-
-    const initialShExStatus = {
-        shExActiveTab: API.defaultTab,
-        shExTextArea: '',
-        shExUrl: '',
-        shExFormat: API.defaultShExFormat
     };
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
@@ -81,53 +76,12 @@ function WikidataValidate(props) {
         }
     }
 
-    function paramsFromShEx(shExStatus) {
-        let params = {};
-        params['activeSchemaTab'] = convertTabSchema(shExStatus.shExActiveTab);
-        params['schemaEmbedded'] = false;
-        params['schemaFormat'] = shExStatus.shExFormat;
-        switch (shExStatus.shExActiveTab) {
-            case API.byTextTab:
-                params['schema'] = shExStatus.shExTextArea;
-                params['schemaFormatTextArea'] = shExStatus.shExFormat;
-                break;
-            case API.byUrlTab:
-                params['schemaURL'] = shExStatus.shExUrl;
-                params['schemaFormatUrl'] = shExStatus.shExFormat;
-                break;
-            case API.byFileTab:
-                params['schemaFile'] = shExStatus.shExFile;
-                params['schemaFormatFile'] = shExStatus.shExFormat;
-                break;
-            default:
-        }
-        console.log(`paramsShEx: ${JSON.stringify(params)}`)
-        return params;
-    }
-
-    function shExReducer(status,action) {
-        switch (action.type) {
-            case 'changeTab':
-                return { ...status, shExActiveTab: action.value }
-            case 'setText':
-                return { ...status, shExActiveTab: API.byTextTab, shExTextArea: action.value }
-            case 'setUrl':
-                return { ...status, shExActiveTab: API.byUrlTab, shExUrl: action.value }
-            case 'setFile':
-                return { ...status, shExActiveTab: API.byFileTab, shExFile: action.value }
-            case 'setFormat':
-                return { ...status, shExFormat: action.value }
-            default:
-                return new Error(`shExReducer: unknown action type: ${action.type}`)
-        }
-    }
-
     function statusReducer(status,action) {
         switch (action.type) {
             case 'set-loading':
               return { ...status, loading: true, error: false, result: null};
             case 'set-result':
-              console.log(`statusReducer: set-result: ${JSON.stringify(action.value)}`)
+              console.log(`statusReducer: set-result: ${showResult(action.value, 'statusReducer')}`)
               return { ...status, loading: false, error: false, result: action.value};
             case 'set-shapeLabel':
                 return { ...status, shapeLabel: action.value }
@@ -190,8 +144,6 @@ function WikidataValidate(props) {
     function handleTabChange(e) {
         setSchemaActiveTab(e)
     }
-
-
 
     return (
        <Container>

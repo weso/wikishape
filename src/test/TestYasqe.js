@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import QueryForm from '../QueryForm'
+import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 
 function TestYasqe()  {
     const [query,setQuery] = useState('');
@@ -14,6 +15,7 @@ function TestYasqe()  {
                        value={query}
                        onChange={(value) => setQuery(value)}
                        placeholder="select ..."
+                       prefixes={wikidataPrefixes}
             />
             <br/>
             <Button variant="primary"

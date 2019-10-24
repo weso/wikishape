@@ -6,7 +6,6 @@ import EndpointInput from "../EndpointInput";
 class ResultQuery extends React.Component {
  render() {
      const result = this.props.result;
-     console.log("ResultQuery" + JSON.stringify(result));
      let msg ;
      if (result === "") {
          msg = null

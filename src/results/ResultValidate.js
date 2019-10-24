@@ -1,13 +1,13 @@
 import React from 'react';
 import Alert from "react-bootstrap/Alert";
 import ShowShapeMap from "../ShowShapeMap";
+import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 
 class ResultValidate extends React.Component {
  render() {
      const result = this.props.result
-     console.log("ResultQuery" + JSON.stringify(result));
      let msg ;
-     if (result === "") {
+     if (!result) {
          msg = null
      } else
      if (result.error) {
@@ -22,7 +22,7 @@ class ResultValidate extends React.Component {
              }
              { result.shapeMap && <ShowShapeMap
                  shapeMap={result.shapeMap}
-                 nodesPrefixMap={result.nodesPrefixMap}
+                 nodesPrefixMap= { wikidataPrefixes }
                  shapesPrefixMap={result.shapesPrefixMap}
              /> }
              <details><pre>{JSON.stringify(result)}</pre></details>
