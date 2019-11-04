@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, {useState, useReducer, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "./ShExTabs";
 import API from "./API"
-import {convertTabSchema, showQualify} from "./Utils";
+import {showQualify} from "./Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "./InputShapeLabel";
@@ -17,9 +17,10 @@ import Tabs from "react-bootstrap/Tabs";
 import InputEntitiesByText from "./InputEntitiesByText";
 import ResultValidate from "./results/ResultValidate";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
-import { paramsFromShEx, initialShExStatus, shExReducer} from './ShEx'
+import { paramsFromShEx, initialShExStatus, shExReducer, shExParamsFromQueryParams,} from './ShEx'
 import {mergeResult, showResult} from "./Results";
 import {wikidataPrefixes} from "./resources/wikidataPrefixes";
+import qs from "query-string";
 
 function WikidataValidate(props) {
 
@@ -32,19 +33,34 @@ function WikidataValidate(props) {
         shapeList: [],
         shapeLabel: '',
         nodesPrefixMap: [],
-        shapesPrefixMap: []
+        shapesPrefixMap: [],
+        schemaEntity: '',
+        schemaActiveTab: 'BySchema',
     };
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
-
-    const [schemaEntity,setSchemaEntity] = useState('');
-    const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema')
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
-    const urlServer = API.schemaValidate
-    const [permalink, setPermalink] = useState(null);
+    const urlServer = API.schemaValidate;
+
+    useEffect(() => {
+        if (props.location.search) {
+          try {
+              const params = qs.parse(props.location.search);
+              const shExParams = shExParamsFromQueryParams(params);
+              dispatchShEx({type: 'set-params', value: shExParams});
+              dispatch({type: 'set-params', value: params});
+              console.log(`Entities: ${status.entities} Shape-label: ${status.shapeLabel}`)
+              validate();
+          } catch(error) {
+              dispatch({type: 'set-error', value: error.message})
+          }
+        }
+    },
+        [props.location.search]
+    );
 
     function handleChange(es) {
-        console.log(`#### handleChange: ${JSON.stringify(es)}`)
+        console.log(`#### handleChange: ${JSON.stringify(es)}`);
         dispatch({type: 'set-entities', value: es.map(e => `<${e.uri}>`)});
     }
 
@@ -68,14 +84,18 @@ function WikidataValidate(props) {
             })
                 .then(response => response.data)
                 .then(result => {
-                    console.log(`Result of schema info: ${JSON.stringify(result)}`)
-                    dispatch({type: 'set-shapeList', value: { shapeList: result.shapes, shapesPrefixMap: result.prefixMap} })
-                    dispatchShEx({type:'setUrl', value: schemaEntity.conceptUri})
+                    console.log(`Result of schema info: ${JSON.stringify(result)}`);
+                    dispatch({
+                        type: 'set-shapeList',
+                        value: {
+                            shapeList: result.shapes,
+                            shapesPrefixMap: result.prefixMap},
+                    });
                 })
                 .catch(error => {
                     dispatch({type: 'set-error', value: error.message})
                 })
-            setSchemaEntity(e)
+            dispatch({type: 'set-schemaEntity', value: e});
         }
     }
 
@@ -83,6 +103,15 @@ function WikidataValidate(props) {
         switch (action.type) {
             case 'set-loading':
               return { ...status, loading: true, error: false};
+            case 'set-permalink':
+                return {...status, permalink: action.value }
+            case 'set-params':
+                const params = action.value;
+                const es = params.node? params.node.split(',').map(node => {return {uri: node}}) : [];
+                const shape = params.shape ;
+                return { ...status, entities: es, shapeLabel: shape }
+            case 'set-schemaEntity':
+                return { ...status, schemaEntity: action.value }
             case 'set-result':
                 console.log(`statusReducer: set-result: ${showResult(action.value,'reducer')}`);
                 return { ...status,
@@ -112,6 +141,8 @@ function WikidataValidate(props) {
                   loading: false,
                   error: action.value
               };
+            case 'set-schemaActiveTab':
+                return { ...status, schemaActiveTab: action.value }
             default: throw new Error(`Unknown action type for statusReducer: ${action.type}`)
         }
     }
@@ -136,22 +167,32 @@ function WikidataValidate(props) {
         };
     }
 
+    function validate() {
+        console.log(`Validate: entities: ${JSON.stringify(status.entities)}, shape: ${JSON.stringify(status.shapeLabel)}`)
+        const initialResult = resultFromEntities(status.entities, status.shapeLabel);
+        const paramsShEx = paramsFromShEx(shEx);
+        console.log(`Validate: paramsShEx: ${JSON.stringify(paramsShEx)}`);
+
+        const paramsPermalink = {...paramsShEx,
+            nodes: status.entities,
+            shape: status.shapeLabel};
+        dispatch({type: 'set-permalink', value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
+        dispatch({type: 'set-result', value: initialResult});
+        status.entities.forEach(e => {
+            const paramsEndpoint = { endpoint: API.wikidataUrl };
+            let params = {...paramsEndpoint,...paramsShEx};
+            params['schemaEngine']='ShEx';
+            params['triggerMode']='shapeMap';
+            params['shapeMap'] = `${e}@${status.shapeLabel}`;
+            params['shapeMapFormat']='Compact';
+            const formData = params2Form(params);
+            postValidate(urlServer,formData,e);
+        });
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
-        const paramsShEx = paramsFromShEx(shEx);
-        const initialResult = resultFromEntities(status.entities, status.shapeLabel);
-        dispatch({type: 'set-result', value: initialResult});
-// TODO:                setPermalink(mkPermalink(API.wikidataValidateSPARQLRoute,params));
-        status.entities.forEach(e => {
-           const paramsEndpoint = { endpoint: API.wikidataUrl };
-           let params = {...paramsEndpoint,...paramsShEx};
-           params['schemaEngine']='ShEx';
-           params['triggerMode']='shapeMap';
-           params['shapeMap'] = `${e}@${status.shapeLabel}`;
-           params['shapeMapFormat']='Compact';
-           const formData = params2Form(params);
-           postValidate(urlServer,formData,e);
-           });
+        validate();
     }
 
     function postValidate(url, formData, e) {
@@ -176,7 +217,7 @@ function WikidataValidate(props) {
     function handleShExFileUpload(value) { dispatchShEx({type: 'setFile', value: value}) }
 
     function handleTabChange(e) {
-        setSchemaActiveTab(e)
+        dispatch({type: 'set-schemaActiveTab', value: e});
     }
 
     return (
@@ -189,19 +230,19 @@ function WikidataValidate(props) {
                                status.result ?
                                    <ResultValidate result={status.result} /> : null
                            }
-                           { permalink &&  <Col><Permalink url={permalink} /> </Col>}
+                           { status.permalink &&  <Col><Permalink url={status.permalink} /> </Col>}
                        </Row> : null
                    }
                    <Row>
                        <Form onSubmit={handleSubmit}>
                            <InputEntitiesByText onChange={handleChange} entities={status.entities} />
-                           <Tabs activeKey={schemaActiveTab}
+                           <Tabs activeKey={status.schemaActiveTab}
                                  transition={false}
                                  id="SchemaTabs"
                                  onSelect={handleTabChange}
                            >
                            <Tab eventKey="BySchema" title="Wikidata schema">
-                               <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={schemaEntity} />
+                               <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={status.schemaEntity} />
                             </Tab>
                             <Tab eventKey="ByShExTab" title="ShEx">
                                <ShExTabs activeTab={shEx.shExActiveTab}

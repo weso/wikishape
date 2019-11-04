@@ -188,20 +188,11 @@ export function showQualified(qualified) {
     }
 }
 
-
 export function dataParamsFromQueryParams(params) {
     let newParams = {};
     if (params.data) newParams["data"] = params.data ;
     if (params.dataFormat) newParams["dataFormat"] = params.dataFormat ;
     if (params.dataUrl) newParams["dataUrl"] = params.dataUrl ;
-    return newParams;
-}
-
-export function shExParamsFromQueryParams(params) {
-    let newParams = {};
-    if (params.schema) newParams["schema"] = params.schema ;
-    if (params.schemaFormat) newParams["schemaFormat"] = params.schemaFormat ;
-    if (params.schemaUrl) newParams["schemaUrl"] = params.schemaUrl ;
     return newParams;
 }
 

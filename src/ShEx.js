@@ -8,8 +8,26 @@ export const initialShExStatus = {
     shExFormat: API.defaultShExFormat
 };
 
+// Params for wikishape
+export function shExParamsFromQueryParams(params) {
+    let newParams = {};
+    if (params.schema) newParams["schema"] = params.schema ;
+    if (params.schemaFormat) newParams["schemaFormat"] = params.schemaFormat ;
+    if (params.schemaUrl) newParams["schemaUrl"] = params.schemaUrl ;
+    return newParams;
+}
+
 export function shExReducer(status,action) {
     switch (action.type) {
+        case 'set-params':
+            const value = action.value;
+            if (value) {
+                const activeTab = value.schema ? API.byTextTab : API.value.schemaUrl ? API.byUrlTab : status.shExActiveTab;
+                const textArea = value.schema ? value.schema : status.shExTextArea;
+                const url = value.schemaUrl? value.schemaUrl: status.shExUrl ;
+                const format = value.schemaFormat? value.schemaFormat: status.shExFormat;
+                return {...status, shExActiveTab: activeTab, shExTextArea: textArea, shExUrl: url, shExFormat: format};
+            } else return status;
         case 'changeTab':
             return { ...status, shExActiveTab: action.value }
         case 'setText':

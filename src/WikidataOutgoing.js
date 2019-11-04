@@ -40,7 +40,7 @@ function WikidataOutgoing(props) {
     }
 
     function fetchOutgoing(node) {
-        let params={}
+        let params={};
         params['endpoint'] = API.wikidataUrl ;
         params['node'] = node ;
         console.log(`Node: ${node}`);
