@@ -67,7 +67,7 @@ export function cnvValueFromSPARQL(value) {
 }
 
 export function showQualify(node, prefixMap) {
-    console.log(`node: ${JSON.stringify(node)}`)
+    console.log(`showQualify. node: ${JSON.stringify(node)}`)
     if (node) {
         const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
         const matchBase = relativeBaseRegex.exec(node);
@@ -136,6 +136,7 @@ export function showQualify(node, prefixMap) {
                     node: node
                 }
             }
+            // TODO!!!!
             if (node.match(/^[0-9\"\'\_]/)) return {
                 type: 'Literal',
                 prefix: '',
