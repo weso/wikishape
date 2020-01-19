@@ -40,7 +40,8 @@ ShExForm.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func,
     placeholder: PropTypes.string,
-    readonly: PropTypes.bool
+    readonly: PropTypes.bool,
+    setCodeMirror: PropTypes.func
 }
 
 ShExForm.defaultProps = {
