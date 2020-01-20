@@ -29,6 +29,8 @@ class API {
     static wikidataSchemaContent = API.rootApi + "wikidata/schemaContent";
     static wikidataQuery = API.rootApi + "wikidata/query";
 
+    static ChangeWikibaseURL = API.rootApi + "changeBase/" ;
+
     // Routes in client
     static wikidataSchemaInfoRoute = "/wikidataSchemaInfo"
     static wikidataSchemaVisualRoute = "/wikidataSchemaVisual"
@@ -38,6 +40,7 @@ class API {
     static wikidataOutgoingRoute = "/wikidataOutgoing";
     static wikidataPropertyInfoRoute = "/wikidataPropertyInfo";
     static wikidataValidateSPARQLRoute = "/wikidataValidateSPARQL";
+    static changeWikibaseURLRoute = "/changeWikibaseURLRoute"
 
     static aboutRoute = "/about";
 
@@ -51,7 +54,7 @@ class API {
     static defaultShapeMapFormat = "Compact";
 
     static wikidataUrl =  "https://query.wikidata.org/sparql" ;
-    static dbpediaUrl = "https://dbpedia.org/sparql" ;
+    static localWikibaseUrl = "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql" ;
 
 }
 

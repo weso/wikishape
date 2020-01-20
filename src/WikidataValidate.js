@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "./ShExTabs";
 import API from "./API"
-import {showQualify} from "./Utils";
+import {convertTabSchema, showQualify} from "./Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "./InputShapeLabel";
@@ -18,7 +18,7 @@ import InputEntitiesByText from "./InputEntitiesByText";
 import ResultValidate from "./results/ResultValidate";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
 import { paramsFromShEx, initialShExStatus, shExReducer, shExParamsFromQueryParams,} from './ShEx'
-import {mergeResult, showResult} from "./Results";
+import { mergeResult } from "./results/ResultValidate";
 import {wikidataPrefixes} from "./resources/wikidataPrefixes";
 import qs from "query-string";
 
@@ -111,9 +111,10 @@ function WikidataValidate(props) {
                 const shape = params.shape ;
                 return { ...status, entities: es, shapeLabel: shape }
             case 'set-schemaEntity':
+                console.log(`statusReducer: set-schemaEntity: ${JSON.stringify(action.value)}`);
                 return { ...status, schemaEntity: action.value }
             case 'set-result':
-                console.log(`statusReducer: set-result: ${showResult(action.value,'reducer')}`);
+                console.log(`statusReducer: set-result: ${JSON.stringify(action.value)}`);
                 return { ...status,
                     loading: false,
                     error: false,
@@ -167,10 +168,26 @@ function WikidataValidate(props) {
         };
     }
 
+    function paramsFromSchema(schemaEntities) {
+        console.log(`paramsFromSchema: ${JSON.stringify(schemaEntities)}`)
+        let params = {};
+        params['schemaEmbedded'] = false;
+        params['schemaFormat'] = 'ShExC';
+        params['schemaURL'] = schemaEntities[0].conceptUri;
+        params['schemaFormatUrl'] = 'ShExC';
+        console.log(`paramsShEx: ${JSON.stringify(params)}`)
+        return params;
+    }
+
     function validate() {
         console.log(`Validate: entities: ${JSON.stringify(status.entities)}, shape: ${JSON.stringify(status.shapeLabel)}`)
         const initialResult = resultFromEntities(status.entities, status.shapeLabel);
-        const paramsShEx = paramsFromShEx(shEx);
+        console.log(`schemaActiveTab: ${status.schemaActiveTab}`);
+        let paramsShEx = null;
+        if (status.schemaActiveTab === 'BySchema')
+             paramsShEx = paramsFromSchema(status.schemaEntity);
+            else
+             paramsShEx = paramsFromShEx(shEx);
         console.log(`Validate: paramsShEx: ${JSON.stringify(paramsShEx)}`);
 
         const paramsPermalink = {...paramsShEx,
@@ -199,14 +216,14 @@ function WikidataValidate(props) {
 //        dispatch({type: 'set-loading'} );
         axios.post(url,formData).then (response => response.data)
             .then((data) => {
-                console.log(`Return from ${e}`)
-                dispatch({type: 'set-result', value: data})
+                console.log(`Return from ${e}`);
+                dispatch({type: 'set-result', value: data});
             })
             .catch(function (error) {
                 dispatch({
                     type: 'set-error',
                     value: `Error validating ${e} ${url} ${JSON.stringify(formData)}: ${error}`
-                })
+                });
             })
     }
 
@@ -226,9 +243,9 @@ function WikidataValidate(props) {
                    { status.result || status.loading || status.error ?
                        <Row>
                            {status.loading ? <Pace color="#27ae60"/> :
-                               status.error? <Alert variant="danger">{status.error}</Alert> :
-                               status.result ?
-                                   <ResultValidate result={status.result} /> : null
+                            status.error? <Alert variant="danger">{status.error}</Alert> :
+                            status.result ?
+                              <ResultValidate result={status.result} /> : null
                            }
                            { status.permalink &&  <Col><Permalink url={status.permalink} /> </Col>}
                        </Row> : null

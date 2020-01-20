@@ -41,6 +41,11 @@ class WikishapeNavbar extends React.Component {
                         </NavDropdown>
                     </Nav>
                     <Nav>
+                        <NavDropdown title="Options" id="basic-nav-dropdown">
+                            <NavDropdown.Item href={API.wikidataQueryRoute}>Change wikibase URL</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>
+                    <Nav>
                         <NavDropdown title="Help" id="basic-nav-dropdown" className="mr-sm-2">
                             <NavDropdown.Item href="https://app.swaggerhub.com/apis-docs/labra/rdfshape/1.0.1">API
                                 Docs</NavDropdown.Item>

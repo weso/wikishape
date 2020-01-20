@@ -18,8 +18,8 @@ import ResultValidate from "./results/ResultValidate";
 import InputSchemaEntityByText from "./InputSchemaEntityByText";
 import QueryForm from "./QueryForm";
 import { paramsFromShEx, initialShExStatus, shExReducer} from './ShEx'
+import { mergeResult, showResult } from "./results/ResultValidate";
 import {wikidataPrefixes} from "./resources/wikidataPrefixes";
-import {mergeResult, showResult} from "./Results";
 
 function WikidataValidateSPARQL(props) {
 
