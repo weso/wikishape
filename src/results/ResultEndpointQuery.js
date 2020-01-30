@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import BootstrapTable from "react-bootstrap-table-next";
 import {cnvValueFromSPARQL, showQualified, showQualify} from "../Utils";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
@@ -18,14 +18,13 @@ function ResultEndpointInfo(props) {
             const rows = data.results.bindings.map((binding,idx) => {
                 let row = {_id: idx};
                 vars.map(v => {
-                    const b = binding[v]
+                    const b = binding[v];
                     const converted = cnvValueFromSPARQL(b);
                     const qualify = showQualify(converted,wikidataPrefixes);
-                    const value = showQualified(qualify)
-                    row[v] = value
+                    row[v] = showQualified(qualify)
                 });
                 return row;
-            })
+            });
             return {
                 columns: columns,
                 rows: rows

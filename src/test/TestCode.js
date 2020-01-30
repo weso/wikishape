@@ -20,7 +20,7 @@ function TestCode(props) {
         theme: 'default',
         lineNumbers: true,
         readonly: false
-    }
+    };
 
     return (
         <Container>
