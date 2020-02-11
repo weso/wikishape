@@ -13,6 +13,7 @@ import WikidataSchemaVisual from './WikidataSchemaVisual';
 import WikidataExtract from './WikidataExtract';
 import WikidataOutgoing from './WikidataOutgoing';
 import WikidataProperty from "./WikidataProperty";
+import WikibaseURL from "./WikibaseURL";
 
 function Routes() {
 
@@ -29,6 +30,7 @@ function Routes() {
                 <Route path={API.wikidataOutgoingRoute} component={WikidataOutgoing}/>
                 <Route path={API.wikidataPropertyInfoRoute} component={WikidataProperty}/>
                 <Route path={API.wikidataValidateSPARQLRoute} component={WikidataValidateSPARQL}/>
+                <Route path={API.changeWikibaseURLRoute} component={WikibaseURL()}/>
                 <Route component={NotFound}/>
             </Switch>
         </Router>

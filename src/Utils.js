@@ -58,16 +58,16 @@ export function cnvValueFromSPARQL(value) {
         case 'uri': return `<${value.value}>`;
         case 'literal':
             if (value.datatype) return `"${value.value}"^^<${value.datatype}>`;
-            if (value['xml:lang']) return `"${value.value}"@${value['xml:lang']}`
-            return `"${value.value}"`
+            if (value['xml:lang']) return `"${value.value}"@${value['xml:lang']}`;
+            return `"${value.value}"`;
         default:
-            console.error(`cnvValue: Unknown value type for ${value}`)
+            console.error(`cnvValue: Unknown value type for ${value}`);
             return value
     }
 }
 
 export function showQualify(node, prefixMap) {
-    console.log(`showQualify. node: ${JSON.stringify(node)}`)
+    console.log(`showQualify. node: ${JSON.stringify(node)}`);
     if (node) {
         const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
         const matchBase = relativeBaseRegex.exec(node);
@@ -86,6 +86,7 @@ export function showQualify(node, prefixMap) {
             const matchIri = iriRegexp.exec(node);
             if (matchIri) {
                 const rawNode = matchIri[1];
+                // eslint-disable-next-line no-unused-vars
                 for (const key in prefixMap) {
                     if (rawNode.startsWith(prefixMap[key])) {
                         const localName = rawNode.slice(prefixMap[key].length);
@@ -109,12 +110,12 @@ export function showQualify(node, prefixMap) {
                 };
             }
             // const matchString =
-            const datatypeLiteralRegex = /\"(.*)\"\^\^(.*)/g
+            const datatypeLiteralRegex = /"(.*)"\^\^(.*)/g;
             const matchDatatypeLiteral = datatypeLiteralRegex.exec(node);
             if (matchDatatypeLiteral) {
-                const literal = matchDatatypeLiteral[1]
-                const datatype = matchDatatypeLiteral[2]
-                const datatypeQualified = showQualify(datatype, prefixMap)
+                const literal = matchDatatypeLiteral[1];
+                const datatype = matchDatatypeLiteral[2];
+                const datatypeQualified = showQualify(datatype, prefixMap);
                 return {
                     type: 'Literal',
                     prefix: '',
@@ -123,11 +124,11 @@ export function showQualify(node, prefixMap) {
                     node: node
                 }
             }
-            const langLiteralRegex = /\"(.*)\"@(.*)/g
-            const matchLangLiteral = langLiteralRegex.exec(node)
+            const langLiteralRegex = /"(.*)"@(.*)/g;
+            const matchLangLiteral = langLiteralRegex.exec(node);
             if (matchLangLiteral) {
-                const literal = matchLangLiteral[1]
-                const lang = matchLangLiteral[2]
+                const literal = matchLangLiteral[1];
+                const lang = matchLangLiteral[2];
                 return {
                     type: 'LangLiteral',
                     prefix: '',
@@ -137,7 +138,7 @@ export function showQualify(node, prefixMap) {
                 }
             }
             // TODO!!!!
-            if (node.match(/^[0-9\"\'\_]/)) return {
+            if (node.match(/^[0-9"'_]/)) return {
                 type: 'Literal',
                 prefix: '',
                 localName: '',
@@ -167,11 +168,11 @@ export function showQualify(node, prefixMap) {
 export const internalPrefixes = ["prn", "prv", "pqv", "pq", "pr", "psn", "psv", "ps", "wdata", "wdno", "wdref", "wds", "wdt", "wdtn", "wdv", "wd", "p"];
 
 export function showQualified(qualified) {
-    console.log(`showQualified`)
+    console.log(`showQualified`);
     switch (qualified.type) {
-        case 'RelativeIRI': return <span>{qualified.str}</span>
+        case 'RelativeIRI': return <span>{qualified.str}</span>;
         case 'QualifiedName':
-            console.log(`QualifiedName: ${qualified.prefix}`)
+            console.log(`QualifiedName: ${qualified.prefix}`);
             if (internalPrefixes.includes(qualified.prefix)) {
                 return <Fragment>
                     <a href={API.wikidataOutgoingRoute + "?node=" + encodeURIComponent(qualified.uri)}>{qualified.str}</a>
@@ -180,11 +181,11 @@ export function showQualified(qualified) {
             } else {
                 return <fragment>{qualified.str} <a href={qualified.uri}><ExternalLinkIcon/></a></fragment>
             }
-        case 'FullIRI': return <a href={qualified.uri}>{qualified.str}</a>
-        case 'Literal' : return <span>{qualified.str}</span>
-        case 'LangLiteral' : return <span>{qualified.str}</span>
+        case 'FullIRI': return <a href={qualified.uri}>{qualified.str}</a>;
+        case 'Literal' : return <span>{qualified.str}</span>;
+        case 'LangLiteral' : return <span>{qualified.str}</span>;
         default:
-            console.log(`Unknown type for qualified value`)
+            console.log(`Unknown type for qualified value`);
             return <span>qualified.str</span>
     }
 }

@@ -5,6 +5,8 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
 import Form from 'react-bootstrap/Form';
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import API from "./API";
+
 
 
 function ChangeWikibaseURL(props) {
@@ -12,6 +14,14 @@ function ChangeWikibaseURL(props) {
         {name: "wikidata", url: API.wikidataUrl },
         {name: "local (default)", url: API.localWikibaseUrl },
     ];
+
+    function handleOnChange(e) {
+        props.handleOnChange(e.target.value)
+    }
+
+    function handleOnSelect(e) {
+        props.handleOnChange(e);
+    }
 
     const dropDownItems = wikibaseURLs.map((entry,index) =>
         <Dropdown.Item key={index} eventKey={entry.url}>{entry.name}</Dropdown.Item>
@@ -44,4 +54,4 @@ ChangeWikibaseURL.propTypes = {
     handleOnChange: PropTypes.func.isRequired,
 };
 
-export default SelectLanguage;
+export default ChangeWikibaseURL;
