@@ -5,7 +5,6 @@ import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import { showQualify } from './Utils';
 import PropTypes from "prop-types";
-import InputEntitiesBySPARQL from "./InputEntitiesBySPARQL";
 
 function shapeMap2Table(shapeMap, nodesPrefixMap, shapesPrefixMap) {
    return shapeMap.map((assoc,key) => ({
