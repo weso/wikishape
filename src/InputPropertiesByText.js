@@ -62,7 +62,7 @@ function InputPropertiesByText(props) {
     }
 
     return (
-        <Container fuild={true}>
+        <Container fluid={true}>
         {/*<Row>{JSON.stringify(language)}</Row>*/}
         <Row>
             <Col>

@@ -43,7 +43,6 @@ function WikidataValidate(props) {
     const urlServer = API.schemaValidate;
 
     useEffect(() => {
-        console.warn(API.customWikidataUrl)
         if (props.location.search) {
           try {
               const params = qs.parse(props.location.search);
@@ -197,7 +196,7 @@ function WikidataValidate(props) {
         dispatch({type: 'set-permalink', value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
         dispatch({type: 'set-result', value: initialResult});
         status.entities.forEach(e => {
-            const paramsEndpoint = { endpoint: API.customWikidataUrl };
+            const paramsEndpoint = { endpoint: window.name || API.wikidataUrl };
             let params = {...paramsEndpoint,...paramsShEx};
             params['schemaEngine']='ShEx';
             params['triggerMode']='shapeMap';

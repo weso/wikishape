@@ -14,5 +14,4 @@ function App() {
       </Container>
   );
 }
-// window.endpoint = API.wikidataUrl;
 export default App;

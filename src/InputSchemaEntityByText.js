@@ -67,7 +67,7 @@ function InputSchemaEntityByText(props) {
     }
 
     return (
-        <Container fuild={true}>
+        <Container fluid={true}>
         <Row>
             <Col>
             <Typeahead

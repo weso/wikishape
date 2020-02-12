@@ -56,10 +56,6 @@ class API {
     static wikidataUrl =  "https://query.wikidata.org/sparql";
     static dbpediaUrl =  "http://dbpedia.org/sparql";
     static localWikibaseUrl = "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql";
-
-    // By default, query wikidataUrl
-    static customWikidataUrl = "https://query.wikidata.org/sparql";
-
 }
 
 export default API;
