@@ -54,6 +54,8 @@ class API {
     static defaultShapeMapFormat = "Compact";
 
     static wikidataUrl =  "https://query.wikidata.org/sparql";
+    // static wikidataUrlFetch =  "https://www.wikidata.org/sparql";
+
     static dbpediaUrl =  "http://dbpedia.org/sparql";
     static localWikibaseUrl = "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql";
 }

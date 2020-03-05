@@ -98,7 +98,6 @@ function ChangeWikibaseURL(props) {
         if (!isCommonUrl(endpoint))
             processUrl(endpoint);
 
-        console.error(window.name)
     }
 
     function handleOnSelect(e) {
