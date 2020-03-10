@@ -6,39 +6,43 @@ import Form from 'react-bootstrap/Form';
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import API from "./API";
-import Spinner from "react-bootstrap/Spinner";
 
 function ChangeWikibaseURL(props) {
 
-    const [url, setUrl] = useState(window.name || API.wikidataUrl);
-    const [spinnerStyle, setSpinnerStyle] = useState(
-        {
-        display: "none"
-        }
-    );
+    const [url, setUrl] = useState(localStorage.getItem('url') || API.wikidataContact.url);
+    const [endpoint, setEndpoint] = useState(localStorage.getItem('endpoint') || API.wikidataContact.endpoint);
 
-    const okMessage = "Valid endpoint URL. Endpoint updated.";
-    const errorMessage = "Invalid endpoint URL.";
+    const okMessageUrl = "Valid wikibase URL. URL updated.";
+    const errorMessageUrl = "Invalid wikibase URL.";
 
-    const [message, setMessage] = useState(okMessage);
+    const okMessageEndpoint = "Valid endpoint URL. Endpoint updated.";
+    const errorMessageEndpoint = "Invalid endpoint URL.";
+
+    const [messageUrl, setMessageUrl] = useState(okMessageUrl);
+    const [messageEndpoint, setMessageEndpoint] = useState(okMessageEndpoint);
 
     const okMessageStyle = {
-        display: "inline",
+        display: "block",
         color: "green"
     };
 
     const errorMessageStyle = {
-        display: "inline",
+        display: "block",
         color: "red"
     };
 
-    const [messageStyle, setMessageStyle] = useState({
+    const [messageUrlStyle, setMessageUrlStyle] = useState({
+        display: "none",
+    });
+
+    const [messageEndpointStyle, setMessageEndpointStyle] = useState({
         display: "none",
     });
 
     const wikibaseURLs = [
-        {name: "wikidata", url: API.wikidataUrl },
-        {name: "local (default)", url: API.localWikibaseUrl },
+        {name: "Wikidata", data: API.wikidataContact },
+        {name: "Example wikibase", data: API.exampleWikibaseContact },
+        {name: "Local wikibase (default)", data: API.localWikibaseContact },
     ];
 
     const regexUrl = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -52,91 +56,150 @@ function ChangeWikibaseURL(props) {
         return !!regexUrl.test(receivedUrl);
     }
 
+    function processData (receivedData) {
+
+        processUrl(receivedData.url);
+        processEndpoint(receivedData.endpoint);
+
+    }
+
     function processUrl (receivedUrl) {
 
-
-        // Set spinner
-        setSpinnerStyle({
-            display: "inline-block"
-        });
-
-        // Validate url
+        // Validate base url
         if (validateURL(receivedUrl) === true) {
-            setMessageStyle(okMessageStyle);
-            setMessage(okMessage);
+            setMessageUrlStyle(okMessageStyle);
+            setMessageUrl(okMessageUrl);
             // Set new custom endpoint
             setUrl(receivedUrl);
-            window.name = receivedUrl;
+            localStorage.setItem('url', receivedUrl);
+        } else {
+            // Show error and keep old url
+            setMessageUrlStyle(errorMessageStyle);
+            setMessageUrl(errorMessageUrl);
+        }
+
+    }
+
+    function processEndpoint (receivedEndpoint) {
+
+        // Validate endpoint
+        if (validateURL(receivedEndpoint) === true) {
+            setMessageEndpointStyle(okMessageStyle);
+            setMessageEndpoint(okMessageEndpoint);
+            // Set new custom endpoint
+            setEndpoint(receivedEndpoint);
+            localStorage.setItem('endpoint', receivedEndpoint);
         } else {
             // Show error and keep old endpoint
-            setMessageStyle(errorMessageStyle);
-            setMessage(errorMessage);
+            setMessageEndpointStyle(errorMessageStyle);
+            setMessageEndpoint(errorMessageEndpoint);
         }
-        setSpinnerStyle({
-            display: "none"
-        });
+
+    }
+
+    function isCommonData (receivedData) {
+
+        return (isCommonUrl(receivedData.url) && isCommonEndpoint(receivedData.endpoint));
     }
 
     function isCommonUrl (receivedUrl) {
         // The URL is one of the common endpoints...
         wikibaseURLs.forEach( baseUrl => {
-            if (baseUrl.url.localeCompare(receivedUrl) === 0){
-                setMessageStyle(okMessageStyle);
-                setMessage(okMessage);
+            if (baseUrl.data.url.localeCompare(receivedUrl) === 0){
+                setMessageUrlStyle(okMessageStyle);
+                setMessageUrl(okMessageUrl);
+
                 // Set new custom endpoint
-                setUrl(baseUrl.url);
-                window.name = baseUrl.url;
+                setUrl(baseUrl.data.url);
+                localStorage.setItem('url', baseUrl.data.url);
+
                 return true;
             }
         });
         return false;
     }
 
-    function handleOnChange(e) {
-        let endpoint = e.target.value.trim();
-        setUrl(endpoint);
-        if (!isCommonUrl(endpoint))
-            processUrl(endpoint);
+    function isCommonEndpoint (receivedEndpoint) {
+        // The URL is one of the common endpoints...
+        wikibaseURLs.forEach( baseUrl => {
+            if (baseUrl.data.endpoint.localeCompare(receivedEndpoint) === 0){
+                setMessageEndpointStyle(okMessageStyle);
+                setMessageEndpoint(okMessageEndpoint);
+                // Set new custom endpoint
+                setEndpoint(baseUrl.data.endpoint);
+                localStorage.setItem('endpoint', baseUrl.data.endpoint);
+                return true;
+            }
+        });
+        return false;
+    }
 
+    function handleOnChangeUrl(e) {
+        let url = e.target.value.trim();
+        setUrl(url);
+        if (!isCommonUrl(url))
+            processUrl(url);
+    }
+
+    function handleOnChangeEndpoint(e) {
+        let endpoint = e.target.value.trim();
+        setEndpoint(endpoint);
+        if (!isCommonEndpoint(endpoint))
+            processEndpoint(endpoint);
     }
 
     function handleOnSelect(e) {
-        let endpoint = e.trim();
-        setUrl(endpoint);
-        if (!isCommonUrl(endpoint))
-            processUrl(endpoint);
+        let data = e.split(',');
+        let url = data[0].trim();
+        let endpoint = data[1].trim();
+        setUrl(url);
+        setEndpoint(endpoint);
+        if (!isCommonData(e))
+            processData({url: url, endpoint: endpoint});
     }
 
     const dropDownItems = wikibaseURLs.map((entry,index) =>
-        <Dropdown.Item key={index} eventKey={entry.url}>{entry.name}</Dropdown.Item>
+        <Dropdown.Item key={index} eventKey={entry.data.url + "," + entry.data.endpoint}>{entry.name}</Dropdown.Item>
     );
 
     return (
         <Form.Group>
+
             <Form.Label>Custom Wikibase URL</Form.Label>
             <Form.Control as="input"
                           type="url"
-                          placeholder="http://..."
+                          placeholder="https://..."
                           value={url}
-                          onChange={handleOnChange}
+                          onChange={handleOnChangeUrl}
             />
-            <Spinner animation="border" variant="primary" style={spinnerStyle} />
-            <span style={messageStyle}>{message}</span>
+            <span style={messageUrlStyle}>{messageUrl}</span><br/>
+
+
+            <Form.Label>Custom Wikibase Endpoint</Form.Label>
+            <Form.Control as="input"
+                          type="url"
+                          placeholder="https://..."
+                          value={endpoint}
+                          onChange={handleOnChangeEndpoint}
+            />
+            <span style={messageEndpointStyle}>{messageEndpoint}</span>
+
+            <hr/>
             <Dropdown onSelect={handleOnSelect}>
                 <DropdownButton alignRight
-                                title="Common Wikibase URLs"
+                                title="Common Wikibase Instances"
                                 id="select-endpoint"
                 >
                     {dropDownItems}
                 </DropdownButton>
             </Dropdown>
         </Form.Group>
-
     );
 }
 
 ChangeWikibaseURL.propTypes = {
     wikibaseUrl: PropTypes.string,
+    wikibaseEndpoint: PropTypes.string,
     handleOnChange: PropTypes.func,
 };
 export default ChangeWikibaseURL;

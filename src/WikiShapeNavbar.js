@@ -42,7 +42,7 @@ class WikishapeNavbar extends React.Component {
                     </Nav>
                     <Nav>
                         <NavDropdown title="Options" id="basic-nav-dropdown">
-                            <NavDropdown.Item href={API.changeWikibaseURLRoute}>Change wikibase URL</NavDropdown.Item>
+                            <NavDropdown.Item href={API.changeWikibaseURLRoute}>Change wikibase URL/endpoint</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     <Nav>

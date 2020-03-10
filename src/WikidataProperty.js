@@ -40,7 +40,7 @@ function WikidataProperty(props) {
 
     function fetchOutgoing(node) {
         let params={};
-        params['endpoint'] = window.name || API.wikidataUrl ;
+        params['endpoint'] = localStorage.getItem('endpoint') || API.wikidataContact.endpoint ;
         params['node'] = node ;
         console.log(`Node: ${node}`);
         setPermalink(mkPermalink(API.wikidataOutgoingRoute, params));

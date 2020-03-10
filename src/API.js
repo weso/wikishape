@@ -58,6 +58,21 @@ class API {
 
     static dbpediaUrl =  "http://dbpedia.org/sparql";
     static localWikibaseUrl = "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql";
+
+    static wikidataContact = {
+        url: "https://www.wikidata.org",
+        endpoint: "https://query.wikidata.org/sparql"
+    };
+
+    static exampleWikibaseContact = {
+        url: "https://cursoslabra.wiki.opencura.com",
+        endpoint: "https://cursoslabra.wiki.opencura.com/query/sparql"
+    };
+
+    static localWikibaseContact = {
+        url: "http://localhost:8282",
+        endpoint: "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql"
+    }
 }
 
 export default API;

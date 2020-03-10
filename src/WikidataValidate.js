@@ -196,7 +196,7 @@ function WikidataValidate(props) {
         dispatch({type: 'set-permalink', value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
         dispatch({type: 'set-result', value: initialResult});
         status.entities.forEach(e => {
-            const paramsEndpoint = { endpoint: window.name || API.wikidataUrl };
+            const paramsEndpoint = { endpoint: localStorage.getItem('url') || API.wikidataContact.url };
             let params = {...paramsEndpoint,...paramsShEx};
             params['schemaEngine']='ShEx';
             params['triggerMode']='shapeMap';
