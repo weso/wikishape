@@ -37,7 +37,7 @@ function WikidataQuery() {
         event.preventDefault();
         let params = {};
         params['query'] = query;
-        params['endpoint']= localStorage.getItem('endpoint') || API.wikidataContact.endpoint;
+        params['endpoint']= localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
         const formData = params2Form(params);
         resolveQuery(QUERY_URI,formData);
     }
@@ -64,7 +64,7 @@ function WikidataQuery() {
     return (
        <Container fluid={true}>
          <h1>Query current endpoint:</h1>
-         <h4>{localStorage.getItem('endpoint')}</h4>
+         <h4>{localStorage.getItem("endpoint")}</h4>
          <Row>
              <Col>
              { result || isLoading || error ?

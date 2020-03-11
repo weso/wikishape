@@ -86,11 +86,11 @@ function SelectFormat(props) {
 
 function cnvMode(format) {
     switch (format.toLowerCase()) {
-        case 'turtle': return 'turtle';
-        case 'rdf/xml': return 'xml';
-        case 'rdf/json': return 'javascript'
-        case 'json-ld': return 'javascript'
-        default: return 'xml'
+        case "turtle": return "turtle";
+        case "rdf/xml": return "xml";
+        case "rdf/json": return "javascript";
+        case "json-ld": return "javascript";
+        default: return "xml"
     }
 }
 

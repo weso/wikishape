@@ -55,8 +55,8 @@ export function maybeAdd(maybe,name,obj) {
 
 export function cnvValueFromSPARQL(value) {
     switch (value.type) {
-        case 'uri': return `<${value.value}>`;
-        case 'literal':
+        case "uri": return `<${value.value}>`;
+        case "literal":
             if (value.datatype) return `"${value.value}"^^<${value.datatype}>`;
             if (value['xml:lang']) return `"${value.value}"@${value['xml:lang']}`;
             return `"${value.value}"`;
@@ -138,13 +138,15 @@ export function showQualify(node, prefixMap) {
                 }
             }
             // TODO!!!!
-            if (node.match(/^[0-9"'_]/)) return {
-                type: 'Literal',
-                prefix: '',
-                localName: '',
-                str: node,
-                node: node
-            };
+            if (node.match(/^[0-9"'_]/)) {
+                return {
+                    type: 'Literal',
+                    prefix: '',
+                    localName: '',
+                    str: node,
+                    node: node
+                };
+            }
             console.log("Unknown format for node: " + node);
             return {
                 type: 'Unknown',
@@ -168,10 +170,10 @@ export function showQualify(node, prefixMap) {
 export const internalPrefixes = ["prn", "prv", "pqv", "pq", "pr", "psn", "psv", "ps", "wdata", "wdno", "wdref", "wds", "wdt", "wdtn", "wdv", "wd", "p"];
 
 export function showQualified(qualified) {
-    console.log(`showQualified`);
+    console.log("showQualified");
     switch (qualified.type) {
-        case 'RelativeIRI': return <span>{qualified.str}</span>;
-        case 'QualifiedName':
+        case "RelativeIRI": return <span>{qualified.str}</span>;
+        case "QualifiedName":
             console.log(`QualifiedName: ${qualified.prefix}`);
             if (internalPrefixes.includes(qualified.prefix)) {
                 return <Fragment>
@@ -181,9 +183,9 @@ export function showQualified(qualified) {
             } else {
                 return <fragment>{qualified.str} <a href={qualified.uri}><ExternalLinkIcon/></a></fragment>
             }
-        case 'FullIRI': return <a href={qualified.uri}>{qualified.str}</a>;
-        case 'Literal' : return <span>{qualified.str}</span>;
-        case 'LangLiteral' : return <span>{qualified.str}</span>;
+        case "FullIRI": return <a href={qualified.uri}>{qualified.str}</a>;
+        case "Literal" : return <span>{qualified.str}</span>;
+        case "LangLiteral" : return <span>{qualified.str}</span>;
         default:
             console.log(`Unknown type for qualified value`);
             return <span>qualified.str</span>
@@ -365,24 +367,24 @@ export function convertTabQuery(key) {
 export function format2mode(format) {
     if (format) {
         switch (format.toUpperCase()) {
-            case 'TURTLE':
-                return 'turtle';
-            case 'RDF/XML':
+            case "TURTLE":
+                return "turtle";
+            case "RDF/XML":
                 return 'xml';
-            case 'SPARQL':
-                return 'sparql';
-            case 'HTML':
-                return 'xml';
-            case 'JSON-LD':
-                return 'javascript';
-            case 'RDF/JSON':
-                return 'javascript';
-            case 'TRIG':
-                return 'xml';
-            case 'SHEXC':
-                return 'shex';
+            case "SPARQL":
+                return "sparql";
+            case "HTML":
+                return "xml";
+            case "JSON-LD":
+                return "javascript";
+            case "RDF/JSON":
+                return "javascript";
+            case "TRIG":
+                return "xml";
+            case "SHEXC":
+                return "shex";
             default:
-                return 'turtle'
+                return "turtle"
         }
-    } else return 'turtle'
+    } else return "turtle"
 }

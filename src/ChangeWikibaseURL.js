@@ -9,8 +9,8 @@ import API from "./API";
 
 function ChangeWikibaseURL(props) {
 
-    const [url, setUrl] = useState(localStorage.getItem('url') || API.wikidataContact.url);
-    const [endpoint, setEndpoint] = useState(localStorage.getItem('endpoint') || API.wikidataContact.endpoint);
+    const [url, setUrl] = useState(localStorage.getItem("url") || API.wikidataContact.url);
+    const [endpoint, setEndpoint] = useState(localStorage.getItem("endpoint") || API.wikidataContact.endpoint);
 
     const okMessageUrl = "Valid wikibase URL. URL updated.";
     const errorMessageUrl = "Invalid wikibase URL.";
@@ -45,15 +45,45 @@ function ChangeWikibaseURL(props) {
         {name: "Local wikibase (default)", data: API.localWikibaseContact },
     ];
 
-    const regexUrl = new RegExp('^(https?:\\/\\/)?'+ // protocol
-        '((((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,})|localhost)|'+ // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-        '(\\#[-a-z\\d_]*)?$','i');
+    const regexUrl = new RegExp("^(https?:\\/\\/)?"+ // protocol
+        "((((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,})|localhost)|"+ // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))"+ // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*"+ // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?"+ // query string
+        "(\\#[-a-z\\d_]*)?$","i");
 
     function validateURL (receivedUrl) {
         return !!regexUrl.test(receivedUrl);
+    }
+
+    function processUrl (receivedUrl) {
+        // Validate base url
+        if (validateURL(receivedUrl) === true) {
+            setMessageUrlStyle(okMessageStyle);
+            setMessageUrl(okMessageUrl);
+            // Set new custom endpoint
+            setUrl(receivedUrl);
+            localStorage.setItem("url", receivedUrl);
+        } else {
+            // Show error and keep old url
+            setMessageUrlStyle(errorMessageStyle);
+            setMessageUrl(errorMessageUrl);
+        }
+    }
+
+    function processEndpoint (receivedEndpoint) {
+        // Validate endpoint
+        if (validateURL(receivedEndpoint) === true) {
+            setMessageEndpointStyle(okMessageStyle);
+            setMessageEndpoint(okMessageEndpoint);
+            // Set new custom endpoint
+            setEndpoint(receivedEndpoint);
+            localStorage.setItem("endpoint", receivedEndpoint);
+        } else {
+            // Show error and keep old endpoint
+            setMessageEndpointStyle(errorMessageStyle);
+            setMessageEndpoint(errorMessageEndpoint);
+        }
     }
 
     function processData (receivedData) {
@@ -63,55 +93,16 @@ function ChangeWikibaseURL(props) {
 
     }
 
-    function processUrl (receivedUrl) {
-
-        // Validate base url
-        if (validateURL(receivedUrl) === true) {
-            setMessageUrlStyle(okMessageStyle);
-            setMessageUrl(okMessageUrl);
-            // Set new custom endpoint
-            setUrl(receivedUrl);
-            localStorage.setItem('url', receivedUrl);
-        } else {
-            // Show error and keep old url
-            setMessageUrlStyle(errorMessageStyle);
-            setMessageUrl(errorMessageUrl);
-        }
-
-    }
-
-    function processEndpoint (receivedEndpoint) {
-
-        // Validate endpoint
-        if (validateURL(receivedEndpoint) === true) {
-            setMessageEndpointStyle(okMessageStyle);
-            setMessageEndpoint(okMessageEndpoint);
-            // Set new custom endpoint
-            setEndpoint(receivedEndpoint);
-            localStorage.setItem('endpoint', receivedEndpoint);
-        } else {
-            // Show error and keep old endpoint
-            setMessageEndpointStyle(errorMessageStyle);
-            setMessageEndpoint(errorMessageEndpoint);
-        }
-
-    }
-
-    function isCommonData (receivedData) {
-
-        return (isCommonUrl(receivedData.url) && isCommonEndpoint(receivedData.endpoint));
-    }
-
     function isCommonUrl (receivedUrl) {
         // The URL is one of the common endpoints...
-        wikibaseURLs.forEach( baseUrl => {
+        wikibaseURLs.forEach( (baseUrl) => {
             if (baseUrl.data.url.localeCompare(receivedUrl) === 0){
                 setMessageUrlStyle(okMessageStyle);
                 setMessageUrl(okMessageUrl);
 
                 // Set new custom endpoint
                 setUrl(baseUrl.data.url);
-                localStorage.setItem('url', baseUrl.data.url);
+                localStorage.setItem("url", baseUrl.data.url);
 
                 return true;
             }
@@ -121,41 +112,49 @@ function ChangeWikibaseURL(props) {
 
     function isCommonEndpoint (receivedEndpoint) {
         // The URL is one of the common endpoints...
-        wikibaseURLs.forEach( baseUrl => {
+        wikibaseURLs.forEach( (baseUrl) => {
             if (baseUrl.data.endpoint.localeCompare(receivedEndpoint) === 0){
                 setMessageEndpointStyle(okMessageStyle);
                 setMessageEndpoint(okMessageEndpoint);
                 // Set new custom endpoint
                 setEndpoint(baseUrl.data.endpoint);
-                localStorage.setItem('endpoint', baseUrl.data.endpoint);
+                localStorage.setItem("endpoint", baseUrl.data.endpoint);
                 return true;
             }
         });
         return false;
     }
 
+    function isCommonData (receivedData) {
+
+        return (isCommonUrl(receivedData.url) && isCommonEndpoint(receivedData.endpoint));
+    }
+
     function handleOnChangeUrl(e) {
         let url = e.target.value.trim();
         setUrl(url);
-        if (!isCommonUrl(url))
+        if (!isCommonUrl(url)){
             processUrl(url);
+        }
     }
 
     function handleOnChangeEndpoint(e) {
         let endpoint = e.target.value.trim();
         setEndpoint(endpoint);
-        if (!isCommonEndpoint(endpoint))
+        if (!isCommonEndpoint(endpoint)){
             processEndpoint(endpoint);
+        }
     }
 
     function handleOnSelect(e) {
-        let data = e.split(',');
+        let data = e.split(",");
         let url = data[0].trim();
         let endpoint = data[1].trim();
         setUrl(url);
         setEndpoint(endpoint);
-        if (!isCommonData(e))
-            processData({url: url, endpoint: endpoint});
+        if (!isCommonData(e)){
+            processData({url, endpoint});
+        }
     }
 
     const dropDownItems = wikibaseURLs.map((entry,index) =>

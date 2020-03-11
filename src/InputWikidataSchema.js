@@ -35,7 +35,7 @@ function InputWikidataSchema(props) {
 
     function reducer(status,action) {
         switch (action.type) {
-            case 'setNumber':
+            case "setNumber":
                 const number = action.value ;
                 return {
                     ...status,
@@ -44,11 +44,11 @@ function InputWikidataSchema(props) {
                     url: props.stem + number,
                     content: null
                 };
-            case 'setLoading':
+            case "setLoading":
                 return { ...status, loading: true, error: null }
-            case 'setError':
+            case "setError":
                 return { ...status, error: action.value, loading: false }
-            case 'setContent':
+            case "setContent":
                 return {
                     ...status,
                     content: action.value,

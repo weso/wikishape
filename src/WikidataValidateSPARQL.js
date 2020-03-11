@@ -74,22 +74,22 @@ function WikidataValidateSPARQL(props) {
 
     function statusReducer(status,action) {
         switch (action.type) {
-            case 'set-loading':
+            case "set-loading":
               return { ...status, loading: true, error: false};
-            case 'set-result':
+            case "set-result":
               console.log(`statusReducer: set-result: ${showResult(action.value,'reducer')}`);
               return { ...status,
                   loading: false,
                   error: false,
                   result: mergeResult(status.result, action.value, status.shapesPrefixMap)};
-            case 'unset-result':
-                console.log(`unset-result to null!!`)
+            case "unset-result":
+                console.log("unset-result to null!!");
                 return { ...status, result: null };
-            case 'set-shapeLabel':
+            case "set-shapeLabel":
                 return { ...status, shapeLabel: action.value };
-            case 'set-entities':
+            case "set-entities":
                 return { ...status, entities: action.value };
-            case 'set-shapeList':
+            case "set-shapeList":
                 const shapesPrefixMap = action.value.shapesPrefixMap;
                 const shapeList = action.value.shapeList.map(sl => showQualify(sl,shapesPrefixMap).str);
                 const shapeLabel = shapeList && shapeList.length? shapeList[0] :  '';
@@ -100,7 +100,7 @@ function WikidataValidateSPARQL(props) {
                     shapeLabel: shapeLabel,
                     shapesPrefixMap: shapesPrefixMap
                 };
-            case 'set-error':
+            case "set-error":
               return { ...status,
                   loading: false,
                   error: action.value
@@ -146,13 +146,13 @@ function WikidataValidateSPARQL(props) {
 
     function cnvValue(value) {
         switch (value.type) {
-            case 'uri': return `<${value.value}>`;
-            case 'literal':
+            case "uri": return `<${value.value}>`;
+            case "literal":
                 if (value.datatype) return `"${value.value}"^^<${value.datatype}>`;
-                if (value['xml:lang']) return `"${value.value}"@${value['xml:lang']}`
-                return `"${value.value}"`
+                if (value["xml:lang"]) return `"${value.value}"@${value['xml:lang']}`;
+                return `"${value.value}"`;
             default:
-                console.error(`cnvValue: Unknown value type for ${value}`)
+                console.error(`cnvValue: Unknown value type for ${value}`);
                 return value
         }
     }
@@ -172,15 +172,15 @@ function WikidataValidateSPARQL(props) {
                 dispatch({ type: 'set-entities', value: entities});
                 const paramsShEx = paramsFromShEx(shEx);
                 const initialResult = resultFromEntities(entities, status.shapeLabel);
-                dispatch({type: 'set-result', value: initialResult});
+                dispatch({type: "set-result", value: initialResult});
 // TODO:                setPermalink(mkPermalink(API.wikidataValidateSPARQLRoute,params));
                 entities.forEach(e => {
-                    const paramsEndpoint = { endpoint: localStorage.getItem('url') || API.wikidataContact.url };
+                    const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
                     params = {...paramsEndpoint,...paramsShEx};
-                    params['schemaEngine']='ShEx';
-                    params['triggerMode']='shapeMap';
+                    params['schemaEngine']="ShEx";
+                    params['triggerMode']="shapeMap";
                     params['shapeMap'] = `${e}@${status.shapeLabel}`;
-                    params['shapeMapFormat']='Compact';
+                    params['shapeMapFormat']="Compact";
                     const formData = params2Form(params);
                     postValidate(urlServer,formData,e);
                 });

@@ -19,7 +19,7 @@ export function shExParamsFromQueryParams(params) {
 
 export function shExReducer(status,action) {
     switch (action.type) {
-        case 'set-params':
+        case "set-params":
             const value = action.value;
             if (value) {
                 const activeTab = value.schema ? API.byTextTab : API.value.schemaUrl ? API.byUrlTab : status.shExActiveTab;
@@ -28,15 +28,15 @@ export function shExReducer(status,action) {
                 const format = value.schemaFormat? value.schemaFormat: status.shExFormat;
                 return {...status, shExActiveTab: activeTab, shExTextArea: textArea, shExUrl: url, shExFormat: format};
             } else return status;
-        case 'changeTab':
+        case "changeTab":
             return { ...status, shExActiveTab: action.value }
-        case 'setText':
+        case "setText":
             return { ...status, shExActiveTab: API.byTextTab, shExTextArea: action.value }
-        case 'setUrl':
+        case "setUrl":
             return { ...status, shExActiveTab: API.byUrlTab, shExUrl: action.value }
-        case 'setFile':
+        case "setFile":
             return { ...status, shExActiveTab: API.byFileTab, shExFile: action.value }
-        case 'setFormat':
+        case "setFormat":
             return { ...status, shExFormat: action.value }
         default:
             return new Error(`shExReducer: unknown action type: ${action.type}`)

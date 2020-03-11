@@ -25,11 +25,11 @@ function shapeFormatter(cell, row) {
 
 function statusFormatter(cell) {
     switch (cell) {
-        case 'conformant':
+        case "conformant":
             return (<span style={{color: 'green'}}>{cell}</span>);
-        case 'nonconformant':
+        case "nonconformant":
             return (<span style={{color: 'red'}}>{cell}</span>);
-        case '?':
+        case "?":
             return (<span><Spinner animation="border" variant="primary" /></span>);
         default:
             return (<span>{cell}</span>);

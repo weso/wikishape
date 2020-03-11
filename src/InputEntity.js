@@ -37,7 +37,7 @@ function InputEntity(props) {
                 dispatch({type: 'setLabel', value: label})
             })
             .catch(error => {
-                console.log('Error doing server request');
+                console.log("Error doing server request");
                 console.log(error);
             });
     }
@@ -45,7 +45,7 @@ function InputEntity(props) {
 
     function reducer(status,action) {
         switch (action.type) {
-            case 'setNumber':
+            case "setNumber":
                 const number = action.value ;
                 return {
                     ...status,
@@ -53,7 +53,7 @@ function InputEntity(props) {
                     rawUrl: (props.raw? props.raw:props.stem) + number,
                     url: props.stem + number
                 };
-            case 'setLabel':
+            case "setLabel":
                 return {
                     ...status,
                     label: action.value
