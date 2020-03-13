@@ -6,9 +6,9 @@ import {showQualify} from "../Utils";
 
 function showStatus(status) {
     switch (status) {
-        case 'conformant': return ''
-        case 'nonconformant': return '!'
-        case '?': return '? '
+        case "conformant": return "";
+        case "nonconformant": return "!";
+        case "?": return "?";
         default: return status
     }
 }
@@ -56,12 +56,16 @@ function rowIn(row, shapeMap) {
 
 function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
  if (shapeMap2.length && Array.isArray(shapeMap2)) {
-    const qualifiedShapeMap = shapeMap2.map(sm => {
+    const qualifiedShapeMap2 = shapeMap2.map(sm => {
         return { ...sm,
             shape: showQualify(sm.shape,shapesPrefixMap).str }
     });
-    const mergedValues = shapeMap1.map(row => mergeRow(row, qualifiedShapeMap, shapesPrefixMap))
-    const newValues = qualifiedShapeMap.filter(row => !rowIn(row, shapeMap1))
+     const qualifiedShapeMap1 = shapeMap1.map(sm => {
+         return { ...sm,
+             shape: showQualify(sm.shape,shapesPrefixMap).str }
+     });
+    const mergedValues = qualifiedShapeMap1.map((row) => mergeRow(row, qualifiedShapeMap2, shapesPrefixMap));
+    const newValues = qualifiedShapeMap2.filter((row) => !rowIn(row, qualifiedShapeMap1));
     return mergedValues.concat(newValues);
  } else
       return shapeMap1

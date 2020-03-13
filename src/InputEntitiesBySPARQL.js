@@ -60,7 +60,7 @@ function InputEntitiesBySPARQL(props) {
     }
 
     return (
-        <Container fuild={true}>
+        <Container fluid={true}>
             { isLoading ? <Pace color="#27ae60"/> : null }
             { error ? <Alert variant="danger">{error}</Alert>: null }
             { entities ? <details><Table>

@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import PropTypes from "prop-types";
-import {AsyncTypeahead, Typeahead, Token} from 'react-bootstrap-typeahead';
+import {AsyncTypeahead, Token} from 'react-bootstrap-typeahead';
 import API from "./API";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
@@ -22,11 +22,11 @@ function InputEntitiesByText(props) {
     const [language,setLanguage] = useState(defaultLanguage);
 
     function makeAndHandleRequest(label, language, page = 0) {
-        const lang = language[0] ? language[0].label : 'en' ;
-        return fetch(`${SEARCH_URI}?label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
+        const lang = language[0] ? language[0].label : "en" ;
+        return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
-                console.log(`Response for ${label}: ${JSON.stringify(json)}`)
+                console.log(`Response for ${label}: ${JSON.stringify(json)}`);
                 return json;
             });
     }
@@ -34,10 +34,10 @@ function InputEntitiesByText(props) {
 
     function handleSearch(query) {
         setIsLoading(true);
-        console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`)
+        console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`);
         makeAndHandleRequest(query, language, 0)
             .then((resp) => {
-                console.log(`handleSearch, Response: ${JSON.stringify(resp)}`)
+                console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
                 setIsLoading(false);
                 setOptions(resp);
             });
@@ -62,7 +62,7 @@ function InputEntitiesByText(props) {
     }
 
     return (
-        <Container fuild={true}>
+        <Container fluid={true}>
         {/*<Row>{JSON.stringify(language)}</Row>*/}
         <Row>
             <Col>
@@ -84,8 +84,8 @@ function InputEntitiesByText(props) {
                 useCache={false}
                 selected={selected}
                 onChange={(selected) => {
-                    console.log(`Selected: ${JSON.stringify(selected)}`)
-                    props.onChange(selected)
+                    console.log(`Selected: ${JSON.stringify(selected)}`);
+                    props.onChange(selected);
                     setSelected(selected)
                 }}
             />
@@ -111,6 +111,6 @@ InputEntitiesByText.propTypes = {
 
 InputEntitiesByText.defaultProps = {
     multiple: true
-}
+};
 
 export default InputEntitiesByText;

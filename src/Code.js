@@ -24,7 +24,7 @@ function Code(props) {
 
     let code = null ;
     switch (props.mode.toLowerCase()) {
-        case 'shexc': code = <ShExForm value={props.value}
+        case "shexc": code = <ShExForm value={props.value}
                                        theme={props.theme}
                                        onChange={()=> null}
                                        options={options} />

@@ -22,11 +22,11 @@ function InputPropertiesByText(props) {
     const [language,setLanguage] = useState(defaultLanguage);
 
     function makeAndHandleRequest(label, language, page = 0) {
-        const lang = language[0] ? language[0].label : 'en' ;
-        return fetch(`${SEARCH_URI}?label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
+        const lang = language[0] ? language[0].label : "en" ;
+        return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
-                console.log(`Response for ${label}: ${JSON.stringify(json)}`)
+                console.log(`Response for ${label}: ${JSON.stringify(json)}`);
                 return json;
             });
     }
@@ -34,10 +34,10 @@ function InputPropertiesByText(props) {
 
     function handleSearch(query) {
         setIsLoading(true);
-        console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`)
+        console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`);
         makeAndHandleRequest(query, language, 0)
             .then((resp) => {
-                console.log(`handleSearch, Response: ${JSON.stringify(resp)}`)
+                console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
                 setIsLoading(false);
                 setOptions(resp);
             });
@@ -62,7 +62,7 @@ function InputPropertiesByText(props) {
     }
 
     return (
-        <Container fuild={true}>
+        <Container fluid={true}>
         {/*<Row>{JSON.stringify(language)}</Row>*/}
         <Row>
             <Col>
@@ -84,8 +84,8 @@ function InputPropertiesByText(props) {
                 useCache={false}
                 selected={selected}
                 onChange={(selected) => {
-                    console.log(`Selected: ${JSON.stringify(selected)}`)
-                    props.onChange(selected)
+                    console.log(`Selected: ${JSON.stringify(selected)}`);
+                    props.onChange(selected);
                     setSelected(selected)
                 }}
             />
@@ -113,6 +113,6 @@ InputPropertiesByText.propTypes = {
 
 InputPropertiesByText.defaultProps = {
     multiple: true
-}
+};
 
 export default InputPropertiesByText;

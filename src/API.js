@@ -32,15 +32,15 @@ class API {
     static ChangeWikibaseURL = API.rootApi + "changeBase/" ;
 
     // Routes in client
-    static wikidataSchemaInfoRoute = "/wikidataSchemaInfo"
-    static wikidataSchemaVisualRoute = "/wikidataSchemaVisual"
+    static wikidataSchemaInfoRoute = "/wikidataSchemaInfo";
+    static wikidataSchemaVisualRoute = "/wikidataSchemaVisual";
     static wikidataQueryRoute = "/wikidataQuery";
     static wikidataValidateRoute = "/wikidataValidate";
     static wikidataExtractRoute = "/wikidataExtract";
     static wikidataOutgoingRoute = "/wikidataOutgoing";
     static wikidataPropertyInfoRoute = "/wikidataPropertyInfo";
     static wikidataValidateSPARQLRoute = "/wikidataValidateSPARQL";
-    static changeWikibaseURLRoute = "/changeWikibaseURLRoute"
+    static changeWikibaseURLRoute = "/changeWikibaseURLRoute";
 
     static aboutRoute = "/about";
 
@@ -53,9 +53,26 @@ class API {
     static defaultSHACLFormat = "TURTLE";
     static defaultShapeMapFormat = "Compact";
 
-    static wikidataUrl =  "https://query.wikidata.org/sparql" ;
-    static localWikibaseUrl = "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql" ;
+    static wikidataUrl =  "https://query.wikidata.org/sparql";
+    // static wikidataUrlFetch =  "https://www.wikidata.org/sparql";
 
+    static dbpediaUrl =  "http://dbpedia.org/sparql";
+    static localWikibaseUrl = "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql";
+
+    static wikidataContact = {
+        url: "https://www.wikidata.org",
+        endpoint: "https://query.wikidata.org/sparql"
+    };
+
+    static exampleWikibaseContact = {
+        url: "https://cursoslabra.wiki.opencura.com",
+        endpoint: "https://cursoslabra.wiki.opencura.com/query/sparql"
+    };
+
+    static localWikibaseContact = {
+        url: "http://localhost:8282",
+        endpoint: "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql"
+    }
 }
 
 export default API;

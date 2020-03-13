@@ -101,32 +101,32 @@ function WikidataValidate(props) {
 
     function statusReducer(status,action) {
         switch (action.type) {
-            case 'set-loading':
+            case "set-loading":
               return { ...status, loading: true, error: false};
-            case 'set-permalink':
+            case "set-permalink":
                 return {...status, permalink: action.value }
-            case 'set-params':
+            case "set-params":
                 const params = action.value;
                 const es = params.node? params.node.split(',').map(node => {return {uri: node}}) : [];
                 const shape = params.shape ;
                 return { ...status, entities: es, shapeLabel: shape }
-            case 'set-schemaEntity':
+            case "set-schemaEntity":
                 console.log(`statusReducer: set-schemaEntity: ${JSON.stringify(action.value)}`);
                 return { ...status, schemaEntity: action.value }
-            case 'set-result':
+            case "set-result":
                 console.log(`statusReducer: set-result: ${JSON.stringify(action.value)}`);
                 return { ...status,
                     loading: false,
                     error: false,
                     result: mergeResult(status.result, action.value, status.shapesPrefixMap)};
-            case 'unset-result':
+            case "unset-result":
                 console.log(`unset-result to null!!`);
                 return { ...status, result: null };
-            case 'set-shapeLabel':
+            case "set-shapeLabel":
                 return { ...status, shapeLabel: action.value }
-            case 'set-entities':
+            case "set-entities":
                 return { ...status, entities: action.value }
-            case 'set-shapeList':
+            case "set-shapeList":
                 const shapesPrefixMap = action.value.shapesPrefixMap
                 const shapeList = action.value.shapeList.map(sl => showQualify(sl,shapesPrefixMap).str)
                 const shapeLabel = shapeList && shapeList.length? shapeList[0] :  ''
@@ -136,14 +136,14 @@ function WikidataValidate(props) {
                     shapeList: shapeList,
                     shapeLabel: shapeLabel,
                     shapesPrefixMap: shapesPrefixMap
-                }
-            case 'set-error':
+                };
+            case "set-error":
               return { ...status,
                   loading: false,
                   error: action.value
               };
-            case 'set-schemaActiveTab':
-                return { ...status, schemaActiveTab: action.value }
+            case "set-schemaActiveTab":
+                return { ...status, schemaActiveTab: action.value };
             default: throw new Error(`Unknown action type for statusReducer: ${action.type}`)
         }
     }
@@ -153,8 +153,8 @@ function WikidataValidate(props) {
             return {
                 node: e,
                 shape: shapeLabel,
-                status: '?',
-                reason: 'validating'
+                status: "?",
+                reason: "validating"
             }
         });
         return {
@@ -193,10 +193,10 @@ function WikidataValidate(props) {
         const paramsPermalink = {...paramsShEx,
             nodes: status.entities,
             shape: status.shapeLabel};
-        dispatch({type: 'set-permalink', value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
-        dispatch({type: 'set-result', value: initialResult});
+        dispatch({type: "set-permalink", value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
+        dispatch({type: "set-result", value: initialResult});
         status.entities.forEach(e => {
-            const paramsEndpoint = { endpoint: API.wikidataUrl };
+            const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
             let params = {...paramsEndpoint,...paramsShEx};
             params['schemaEngine']='ShEx';
             params['triggerMode']='shapeMap';

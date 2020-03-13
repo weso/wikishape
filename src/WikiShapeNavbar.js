@@ -42,7 +42,7 @@ class WikishapeNavbar extends React.Component {
                     </Nav>
                     <Nav>
                         <NavDropdown title="Options" id="basic-nav-dropdown">
-                            <NavDropdown.Item href={API.wikidataQueryRoute}>Change wikibase URL</NavDropdown.Item>
+                            <NavDropdown.Item href={API.changeWikibaseURLRoute}>Change Wikibase URL / SPARQL endpoint</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     <Nav>

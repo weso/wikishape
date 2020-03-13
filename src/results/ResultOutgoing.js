@@ -4,8 +4,6 @@ import {showQualified, showQualify} from "../Utils";
 import { wikidataPrefixes} from "../resources/wikidataPrefixes";
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
-import API from "../API";
-import { ExternalLinkIcon } from 'react-open-iconic-svg';
 
 function ResultOutgoing(props) {
      const result = props.result;

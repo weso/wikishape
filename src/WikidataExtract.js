@@ -29,7 +29,7 @@ function WikidataExtract(props) {
         event.preventDefault();
         const url = API.dataExtract;
         let params={}
-        params['endpoint'] = API.wikidataUrl ;
+        params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
         if (entities && entities.length > 0 && entities[0].uri ) {
             const nodeSelector = entities[0].uri
             params['nodeSelector'] = "<" + nodeSelector + ">";

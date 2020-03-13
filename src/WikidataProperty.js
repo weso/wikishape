@@ -24,7 +24,7 @@ function WikidataProperty(props) {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
                 if (params.node) {
-                    setEntities([{uri: params.node}])
+                    setEntities([{uri: params.node}]);
                     fetchOutgoing(params.node);
                 } else {
                     setError(`No value for parameter node`)
@@ -39,8 +39,8 @@ function WikidataProperty(props) {
     }
 
     function fetchOutgoing(node) {
-        let params={}
-        params['endpoint'] = API.wikidataUrl ;
+        let params={};
+        params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
         params['node'] = node ;
         console.log(`Node: ${node}`);
         setPermalink(mkPermalink(API.wikidataOutgoingRoute, params));
@@ -50,7 +50,7 @@ function WikidataProperty(props) {
     function handleSubmit(event) {
         event.preventDefault();
         if (entities && entities.length > 0 && entities[0].uri) {
-            const node = entities[0].uri
+            const node = entities[0].uri;
             fetchOutgoing(node)
         } else {
             setError(`No entity selected`)
@@ -71,7 +71,7 @@ function WikidataProperty(props) {
                 if (cb) cb()
             })
             .catch((error) => {
-                console.log(`Error processing request: ${url}: ${error.message}`)
+                console.log(`Error processing request: ${url}: ${error.message}`);
                 setLoading(false);
                 setError(`Error processing ${url}: ${error.message}`);
             });

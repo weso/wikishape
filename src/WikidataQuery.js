@@ -1,34 +1,43 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
-import { mkPermalink, params2Form, Permalink } from "./Permalink";
+import {params2Form, Permalink } from "./Permalink";
 import API from "./API";
 import Pace from "react-pace-progress";
 import Form from "react-bootstrap/Form";
-import QueryTabs from "./QueryTabs";
 import Button from "react-bootstrap/Button";
-import {convertTabQuery} from "./Utils";
 import axios from "axios";
 import ResultEndpointQuery from "./results/ResultEndpointQuery";
 import QueryForm from "./QueryForm";
 import {wikidataPrefixes} from "./resources/wikidataPrefixes";
+import Spinner from "react-bootstrap/Spinner";
 
 const QUERY_URI = API.wikidataQuery ;
 
-function WikidataQuery(props) {
-    const [permalink, setPermalink] = useState(null);
+function WikidataQuery() {
+    const [permalink] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error,setError] = useState(null);
-    const [query, setQuery] = useState('')
-    const [result, setResult] = useState(null)
-    const [table, setTable] = useState(null);
+    const [query, setQuery] = useState('');
+    const [result, setResult] = useState(null);
+
+
+    const divStyle = {
+        display: 'flex',
+        marginTop: '10px'
+    };
+    const spinnerStyle = {
+        marginLeft: '10px',
+        visibility: isLoading?'visible':'hidden'
+    };
 
     function handleSubmit(event) {
         event.preventDefault();
         let params = {};
-        params['query']=query;
+        params['query'] = query;
+        params['endpoint']= localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
         const formData = params2Form(params);
         resolveQuery(QUERY_URI,formData);
     }
@@ -54,7 +63,8 @@ function WikidataQuery(props) {
 
     return (
        <Container fluid={true}>
-         <h1>Query Wikidata</h1>
+         <h1>Query current endpoint:</h1>
+         <h4>{localStorage.getItem("endpoint")}</h4>
          <Row>
              <Col>
              { result || isLoading || error ?
@@ -74,8 +84,10 @@ function WikidataQuery(props) {
                          value={query}
                          prefixes = { wikidataPrefixes }
              />
+             <div style={divStyle}>
              <Button variant="primary"
                              type="submit">Resolve</Button>
+             <Spinner style={spinnerStyle} animation="border" variant="primary" /></div>
              </Form>
              </Col>
          </Row>

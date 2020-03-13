@@ -9,7 +9,7 @@ function TestSearch(props) {
     const [entities, setEntities] = useState([]);
 
     return (
-        <Container fuild={true}>
+        <Container fluid={true}>
             <h1>Select wikidata item</h1>
             <Row>
                 <Col>

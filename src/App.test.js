@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import {mergeResult} from "./Results.delete";
+import {mergeResult} from "./results/ResultValidate.js";
 
 it('merges 2 results', () => {
   const result1 = {
@@ -48,7 +48,7 @@ it('merges 2 results', () => {
             "status":"nonconformant",
             "appInfo":"Shaclex",
             "reason":"Error 3"
-          }
+        },
         ],
     "errors":[],
     "nodesPrefixMap":{},
