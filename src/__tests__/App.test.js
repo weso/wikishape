@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import {mergeResult} from "./results/ResultValidate.js";
+import App from '../App';
+import {mergeResult} from "../results/ResultValidate.js";
 
 it('merges 2 results', () => {
   const result1 = {
