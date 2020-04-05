@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "./ShExTabs";
 import API from "./API"
-import {convertTabSchema, showQualify} from "./Utils";
+import {showQualify} from "./Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "./InputShapeLabel";
@@ -22,7 +22,7 @@ import { mergeResult } from "./results/ResultValidate";
 import {wikidataPrefixes} from "./resources/wikidataPrefixes";
 import qs from "query-string";
 
-function WikidataValidate(props) {
+function WikidataValidateDeref(props) {
 
     const initialStatus = {
         loading: false,
@@ -40,7 +40,7 @@ function WikidataValidate(props) {
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
-    const urlServer = API.schemaValidate;
+    const urlServer = API.wikidataValidateDeref;
 
     useEffect(() => {
         if (props.location.search) {
@@ -195,16 +195,21 @@ function WikidataValidate(props) {
             shape: status.shapeLabel};
         dispatch({type: "set-permalink", value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
         dispatch({type: "set-result", value: initialResult});
-        status.entities.forEach(e => {
-            const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
-            let params = {...paramsEndpoint,...paramsShEx};
-            params['schemaEngine']='ShEx';
-            params['triggerMode']='shapeMap';
-            params['shapeMap'] = `${e}@${status.shapeLabel}`;
-            params['shapeMapFormat']='Compact';
-            const formData = params2Form(params);
-            postValidate(urlServer,formData,e);
-        });
+        if (status.schemaEntity) {
+            console.log(`schemaEntity: ${JSON.stringify(status.schemaEntity)}`);
+            status.entities.forEach(e => {
+                const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
+                let params = {...paramsEndpoint,...paramsShEx};
+                // params['schemaEngine']='ShEx';
+                // params['triggerMode']='shapeMap';
+                // params['shapeMap'] = `${e}@${status.shapeLabel}`;
+                // params['shapeMapFormat']='Compact';
+                params['item'] = e ;
+                params['entitySchema'] = status.schemaEntity[0].id;
+                const formData = params2Form(params);
+                postValidate(urlServer,formData,e);
+            });
+        }
     }
 
     function handleSubmit(event) {
@@ -239,7 +244,7 @@ function WikidataValidate(props) {
 
     return (
        <Container>
-         <h1>Validate Wikidata entities (through SPARQL endpoint)</h1>
+         <h1>Validate Wikidata entities (by Dererentiation)</h1>
                    { status.result || status.loading || status.error ?
                        <Row>
                            {status.loading ? <Pace color="#27ae60"/> :
@@ -276,7 +281,7 @@ function WikidataValidate(props) {
                                      dataFormat={shEx.shExFormat}
                                      handleShExFormatChange={handleShExFormatChange} />
                                 </Tab>
-                           </Tabs>
+                           </Tabs> -
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={status.shapeLabel}
                                             shapeList={status.shapeList}/>
@@ -289,4 +294,4 @@ function WikidataValidate(props) {
    );
 }
 
-export default WikidataValidate;
+export default WikidataValidateDeref;

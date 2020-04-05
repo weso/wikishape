@@ -11,9 +11,11 @@ import WikidataQuery from './WikidataQuery';
 import WikidataSchemaInfo from './WikidataSchemaInfo';
 import WikidataSchemaVisual from './WikidataSchemaVisual';
 import WikidataExtract from './WikidataExtract';
+import WikidataSheXer from './WikidataSheXer';
 import WikidataOutgoing from './WikidataOutgoing';
 import WikidataProperty from "./WikidataProperty";
 import ChangeWikibaseURL from "./ChangeWikibaseURL";
+import WikidataValidateDeref from "./WikidataValidateDeref";
 
 function Routes() {
 
@@ -26,7 +28,9 @@ function Routes() {
                 <Route path={API.wikidataSchemaVisualRoute} component={WikidataSchemaVisual}/>
                 <Route path={API.wikidataQueryRoute} component={WikidataQuery}/>
                 <Route path={API.wikidataValidateRoute} component={WikidataValidate}/>
+                <Route path={API.wikidataValidateDerefRoute} component={WikidataValidateDeref}/>
                 <Route path={API.wikidataExtractRoute} component={WikidataExtract}/>
+                <Route path={API.wikidataSheXerRoute} component={WikidataSheXer}/>
                 <Route path={API.wikidataOutgoingRoute} component={WikidataOutgoing}/>
                 <Route path={API.wikidataPropertyInfoRoute} component={WikidataProperty}/>
                 <Route path={API.wikidataValidateSPARQLRoute} component={WikidataValidateSPARQL}/>

@@ -25,7 +25,7 @@ export function showShapeMap(shapeMap) {
 }
 
 export function showResult(result, msg) {
-    return `${msg? msg: ''}, ${result? `ShapeMap:\n ${showShapeMap(result.shapeMap)}`: 'null'}`;
+    return `${msg? msg: ''}\n ${result? `Result: ${JSON.stringify(result)}\n}`: 'null'}`;
 }
 
 export function showRow(row) {
@@ -55,7 +55,7 @@ function rowIn(row, shapeMap) {
 }
 
 function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
- if (shapeMap2.length && Array.isArray(shapeMap2)) {
+ if (shapeMap2 && shapeMap2.length && Array.isArray(shapeMap2)) {
     const qualifiedShapeMap2 = shapeMap2.map(sm => {
         return { ...sm,
             shape: showQualify(sm.shape,shapesPrefixMap).str }
@@ -79,13 +79,22 @@ export function mergeResult(result, newResult, shapesPrefixMap) {
     }
     if (newResult) {
         console.log(`Merging. ${showResult(result, 'Previous')}\nNew: \n${showResult(newResult, 'New')}`)
-        const mergedShapeMap = mergeShapeMap(result.shapeMap, newResult.shapeMap, shapesPrefixMap)
+        const mergedShapeMap = mergeShapeMap(result.shapeMap, newResult.shapeMap, shapesPrefixMap);
+        console.log(`newResult error ${newResult}`)
+        let newErrors;
+        if (newResult.error) {
+          newErrors = [newResult.error];
+        } else if (newResult.errors) {
+          newErrors = newResult.errors ;
+        } else {
+          newErrors = [];
+        }
         const mergedResult = {
             valid: newResult.valid,
             type: 'Result',
             message: newResult.message,
             shapeMap: mergedShapeMap,
-            errors: result.errors.concat(newResult.errors),
+            errors: newErrors.concat(result.errors),
             nodesPrefixMap: wikidataPrefixes,
             shapesPrefixMap: newResult.shapesPrefixMap
         };
@@ -114,7 +123,20 @@ function ResultValidate(props) {
     } else {
         msg = <div>
             { result.message && <Alert variant="success">{result.message} </Alert> }
-            { result.errors && <div> { result.errors.map((e,idx) => <Alert id={idx} variant="danger">{e.type}: {e.error}</Alert> )}</div>
+            { result.errors &&
+            <div> {
+               result.errors.map(
+                   (e,idx) =>{
+              let msgErr;
+              if (e.type) {
+                  msgErr = <Alert id={idx} variant="danger">{e.type}: {e.error} }</Alert>
+              } else {
+                  msgErr = <Alert id={idx} variant="danger">{e}</Alert>
+              }
+              return msgErr ;
+             })
+            }
+            </div>
             }
             { result.shapeMap && <ShowShapeMap
                 shapeMap={result.shapeMap}

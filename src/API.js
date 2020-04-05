@@ -1,7 +1,7 @@
 class API {
 
     // Routes in server
-    static rootApi = process.env.REACT_APP_RDFSHAPE_HOST + "/api/"; // "http://localhost:8080/api/";
+    static rootApi = process.env.REACT_APP_RDFSHAPE_HOST + "/api/";
 
     static dataInfo = API.rootApi + "data/info";
     static dataOutgoing = API.rootApi + "endpoint/outgoing";
@@ -9,7 +9,7 @@ class API {
     static dataVisualize = API.rootApi + "data/visualize";
     static dataFormats = API.rootApi + "data/formats";
     static dataQuery = API.rootApi + "data/query";
-    static dataExtract = API.rootApi + "data/extract";
+    static dataExtract = API.rootApi + "wikidata/extract";
     static dataVisualFormats = API.rootApi + "data/visualize/formats";
     static endpointInfo = API.rootApi + "endpoint/info";
     static endpointQuery = API.rootApi + "endpoint/query";
@@ -28,6 +28,7 @@ class API {
     static wikidataLanguages = API.rootApi + "wikidata/languages";
     static wikidataSchemaContent = API.rootApi + "wikidata/schemaContent";
     static wikidataQuery = API.rootApi + "wikidata/query";
+    static wikidataValidateDeref = API.rootApi + "wikidata/validate";
 
     static ChangeWikibaseURL = API.rootApi + "changeBase/" ;
 
@@ -36,7 +37,9 @@ class API {
     static wikidataSchemaVisualRoute = "/wikidataSchemaVisual";
     static wikidataQueryRoute = "/wikidataQuery";
     static wikidataValidateRoute = "/wikidataValidate";
+    static wikidataValidateDerefRoute = "/wikidataValidateDeref";
     static wikidataExtractRoute = "/wikidataExtract";
+    static wikidataSheXerRoute = "/wikidataSheXer";
     static wikidataOutgoingRoute = "/wikidataOutgoing";
     static wikidataPropertyInfoRoute = "/wikidataPropertyInfo";
     static wikidataValidateSPARQLRoute = "/wikidataValidateSPARQL";
