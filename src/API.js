@@ -38,6 +38,7 @@ class API {
     static wikidataQueryRoute = "/wikidataQuery";
     static wikidataValidateRoute = "/wikidataValidate";
     static wikidataValidateDerefRoute = "/wikidataValidateDeref";
+    static wikidataValidateDerefShExRoute = "/wikidataValidateDerefShEx";
     static wikidataExtractRoute = "/wikidataExtract";
     static wikidataSheXerRoute = "/wikidataSheXer";
     static wikidataOutgoingRoute = "/wikidataOutgoing";

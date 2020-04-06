@@ -67,6 +67,7 @@ function InputEntitiesByText(props) {
         <Row>
             <Col>
             <AsyncTypeahead
+                id="InputEntitiesByText"
                 filterBy={['id','label','descr']}
                 labelKey="id"
                 multiple={props.multiple}
@@ -95,7 +96,7 @@ function InputEntitiesByText(props) {
                   <InputGroup.Prepend>
                     <InputGroup.Text id="basic-addon1">Language</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <SelectLanguage language={[{label:'en', name: 'English'}]} onChange={setLanguage} />
+                  <SelectLanguage id="SelectLanguage" language={[{label:'en', name: 'English'}]} onChange={setLanguage} />
                 </InputGroup>
             </Col>
         </Row>

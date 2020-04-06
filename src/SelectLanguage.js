@@ -41,7 +41,8 @@ function SelectLanguage(props) {
     }
 
     return (
-       <Typeahead options={options}
+       <Typeahead id="SelectLanguage"
+                  options={options}
                   renderToken={customRenderToken}
                   placeholder="Language"
                   renderMenuItemChildren={(option, props) => (

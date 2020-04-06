@@ -25,9 +25,9 @@ class WikishapeNavbar extends React.Component {
                     </Nav>
                     <Nav>
                         <NavDropdown title="Schema" id="basic-nav-dropdown">
-                            <NavDropdown.Item href={API.wikidataSchemaInfoRoute}>Info about schema</NavDropdown.Item>
-                            <NavDropdown.Item href={API.wikidataSchemaVisualRoute}>Visualize schema</NavDropdown.Item>
-                            <NavDropdown.Item href={API.wikidataValidateDerefRoute} >Validate entities by dereferentiation</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataSchemaInfoRoute}>Info about entity schema</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataSchemaVisualRoute}>Visualize entity schema</NavDropdown.Item>
+                            <NavDropdown.Item href={API.wikidataValidateDerefRoute} >Validate entities with entity schemas (deref)</NavDropdown.Item>
                             <NavDropdown.Item href={API.wikidataValidateRoute} >Validate entities using SPARQL endpoint</NavDropdown.Item>
                             <NavDropdown.Item href={API.wikidataValidateSPARQLRoute}>Validate entities obtained from SPARQL queries</NavDropdown.Item>
                         </NavDropdown>

@@ -75,6 +75,7 @@ function WikidataValidateDeref(props) {
         if (e && e.length) {
             const schemaEntity = e[0]
             dispatch({type: 'set-loading'});
+            dispatch({type: 'unset-result'});
             let params = {}
             params['schemaURL'] = schemaEntity.conceptUri;
             params['schemaFormat'] = 'ShExC';
@@ -88,7 +89,7 @@ function WikidataValidateDeref(props) {
                     dispatch({
                         type: 'set-shapeList',
                         value: {
-                            shapeList: result.shapes,
+                            shapeList: ["Start"].concat(result.shapes),
                             shapesPrefixMap: result.prefixMap},
                     });
                 })
@@ -171,11 +172,12 @@ function WikidataValidateDeref(props) {
     function paramsFromSchema(schemaEntities) {
         console.log(`paramsFromSchema: ${JSON.stringify(schemaEntities)}`)
         let params = {};
-        params['schemaEmbedded'] = false;
-        params['schemaFormat'] = 'ShExC';
-        params['schemaURL'] = schemaEntities[0].conceptUri;
-        params['schemaFormatUrl'] = 'ShExC';
-        console.log(`paramsShEx: ${JSON.stringify(params)}`)
+        //params['schemaEmbedded'] = false;
+        //params['schemaFormat'] = 'ShExC';
+        //params['schemaURL'] = schemaEntities[0].conceptUri;
+        //params['schemaFormatUrl'] = 'ShExC';
+        params['entitySchema'] = status.schemaEntity[0].id;
+        console.log(`paramsFromSchema: ${JSON.stringify(params)}`)
         return params;
     }
 
@@ -190,22 +192,20 @@ function WikidataValidateDeref(props) {
              paramsShEx = paramsFromShEx(shEx);
         console.log(`Validate: paramsShEx: ${JSON.stringify(paramsShEx)}`);
 
-        const paramsPermalink = {...paramsShEx,
-            nodes: status.entities,
-            shape: status.shapeLabel};
-        dispatch({type: "set-permalink", value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
+        const paramsPermalink = {...paramsShEx, nodes: status.entities, shape: status.shapeLabel};
+        dispatch({type: "set-permalink", value: mkPermalink(API.wikidataValidateDerefRoute, paramsPermalink)});
         dispatch({type: "set-result", value: initialResult});
         if (status.schemaEntity) {
             console.log(`schemaEntity: ${JSON.stringify(status.schemaEntity)}`);
             status.entities.forEach(e => {
                 const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
                 let params = {...paramsEndpoint,...paramsShEx};
-                // params['schemaEngine']='ShEx';
-                // params['triggerMode']='shapeMap';
-                // params['shapeMap'] = `${e}@${status.shapeLabel}`;
-                // params['shapeMapFormat']='Compact';
+                params['schemaEngine']='ShEx';
+//                params['triggerMode']='shapeMap';
+//                params['shapeMap'] = `${e}@${status.shapeLabel}`;
+//                params['shapeMapFormat']='Compact';
                 params['item'] = e ;
-                params['entitySchema'] = status.schemaEntity[0].id;
+                // params['entitySchema'] = status.schemaEntity[0].id;
                 const formData = params2Form(params);
                 postValidate(urlServer,formData,e);
             });
@@ -218,7 +218,7 @@ function WikidataValidateDeref(props) {
     }
 
     function postValidate(url, formData, e) {
-//        dispatch({type: 'set-loading'} );
+        dispatch({type: 'set-loading'} );
         axios.post(url,formData).then (response => response.data)
             .then((data) => {
                 console.log(`Return from ${e}`);
@@ -232,11 +232,52 @@ function WikidataValidateDeref(props) {
             })
     }
 
-    function handleShExTabChange(value) { dispatchShEx({ type: 'changeTab', value: value } ); }
-    function handleShExFormatChange(value) {  dispatchShEx({type: 'setFormat', value: value }); }
-    function handleShExByTextChange(value) { dispatchShEx({type: 'setText', value: value}) }
-    function handleShExUrlChange(value) { dispatchShEx({type: 'setUrl', value: value}) }
-    function handleShExFileUpload(value) { dispatchShEx({type: 'setFile', value: value}) }
+    function handleShExTabChange(value) {
+        dispatchShEx({ type: 'changeTab', value: value } );
+        dispatch({type: 'unset-result'});
+    }
+    function handleShExFormatChange(value) {
+        dispatchShEx({type: 'setFormat', value: value });
+        dispatch({type: 'unset-result'});
+    }
+
+    function updateShapeLabel(schemaStr) {
+        let params = {};
+        params['schema'] = schemaStr;
+        params['schemaFormat'] = 'ShExC';
+        params['schemaEngine'] = 'ShEx';
+        axios.post(API.schemaInfo, params2Form(params), {
+            headers: {'Access-Control-Allow-Origin': '*'}
+        })
+            .then(response => response.data)
+            .then(result => {
+                console.log(`Result of schema info: ${JSON.stringify(result)}`);
+                dispatch({
+                    type: 'set-shapeList',
+                    value: {
+                        shapeList: ["Start"].concat(result.shapes),
+                        shapesPrefixMap: result.prefixMap},
+                });
+            })
+            .catch(error => {
+                dispatch({type: 'set-error', value: error.message})
+            })
+    }
+
+    function handleShExByTextChange(value) {
+        dispatchShEx({type: 'setText', value: value});
+        dispatch({type: 'unset-result'});
+        updateShapeLabel(value);
+    }
+
+    function handleShExUrlChange(value) {
+        dispatchShEx({type: 'setUrl', value: value})
+        dispatch({type: 'unset-result'});
+    }
+    function handleShExFileUpload(value) {
+        dispatchShEx({type: 'setFile', value: value})
+        dispatch({type: 'unset-result'});
+    }
 
     function handleTabChange(e) {
         dispatch({type: 'set-schemaActiveTab', value: e});
