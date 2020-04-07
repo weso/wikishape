@@ -71,7 +71,6 @@ function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
       return shapeMap1
 }
 
-
 export function mergeResult(result, newResult, shapesPrefixMap) {
     if (!result) {
         console.log(`No previous result?: returning newResult: ${showResult(newResult, 'New')}`)

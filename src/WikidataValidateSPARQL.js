@@ -121,7 +121,7 @@ function WikidataValidateSPARQL(props) {
        return {
            valid: false,
            type: 'Result',
-           message: 'Validating...',
+           message: 'Validation started',
            shapeMap: resultMap,
            errors: [],
            nodesPrefixMap: wikidataPrefixes, // The prefix map for nodes is wikidata endpoint

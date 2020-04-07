@@ -2,7 +2,7 @@ import React from 'react';
 // import Table from "react-bootstrap/Table";
 import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from "react-bootstrap/Alert";
-import Spinner from "react-bootstrap/Spinner";
+// import Spinner from "react-bootstrap/Spinner";
 import { showQualify } from './Utils';
 import PropTypes from "prop-types";
 
@@ -24,23 +24,27 @@ function shapeFormatter(cell, row) {
 }
 
 function statusFormatter(cell) {
+    console.log(`StatusFormatter: ${cell}`);
     switch (cell) {
         case "conformant":
             return (<span style={{color: 'green'}}>{cell}</span>);
         case "nonconformant":
             return (<span style={{color: 'red'}}>{cell}</span>);
         case "?":
-            return (<span><Spinner animation="border" variant="primary" /></span>);
+            return (<span style={{color: 'orange'}}>?{cell}</span>);
+//            return (<span><Spinner animation="border" variant="primary" /></span>);
         default:
             return (<span>{cell}</span>);
-    }
+    };
 }
 
 function nodeFormatter(cell, row) {
-    if (row.status ==='conformant') {
-        return (<span style={ { color:'green'} }>{cell}</span> );
-    } else
-        return (<span style={ {color: 'red'}}>{cell}</span> );
+    switch (row.status) {
+      case "conformant": return (<span style={ { color:'green'} }>{cell}</span> );
+      case "nonconformant": return (<span style={ {color: 'yellow'}}>{cell}</span> );
+      case "?": return (<span style={ {color: 'orange'}}>{cell}</span> );
+      default: return (<span>{cell}</span>);
+    }
 }
 
 

@@ -2,8 +2,8 @@ import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from "react-bootstrap/Alert";
 
-function showQualify(node, prefix) {
-    // console.log("showQualify node");
+function showQualifyShapeMap(node, prefix) {
+    console.log(`showQualifyShapeMap ${JSON.stringify(node)}`);
     // console.log(node);
     const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
     const matchBase = relativeBaseRegex.exec(node);
@@ -23,7 +23,7 @@ function showQualify(node, prefix) {
                             return "&lt;" + rawNode + "&gt;" ;
                            } else */
                     const longNode = "<" + rawNode + ">";
-                    return <abbr title={longNode + key}>{":" + localName}</abbr> ;
+                    return <a href={rawNode}>{key + ":" + localName}</a> ;
                 }
             }
             return <a href={rawNode}>{"<" + rawNode + ">"}</a>;
@@ -34,12 +34,13 @@ function showQualify(node, prefix) {
     }
 }
 
+
 function shapeMap2Table(shapeMap, nodesPrefixMap, shapesPrefixMap) {
     // console.log("ShapeMap: " + shapeMap)
     return shapeMap.map((assoc,key) => ({
         'id': key,
-        'node': showQualify(assoc.node, nodesPrefixMap),
-        'shape': showQualify(assoc.shape, shapesPrefixMap),
+        'node': showQualifyShapeMap(assoc.node, nodesPrefixMap),
+        'shape': showQualifyShapeMap(assoc.shape, shapesPrefixMap),
         'status': assoc.status,
         'details': assoc.reason
     }))

@@ -4422,7 +4422,7 @@ export const SchemaEntities = [
       "en" : {
         "lang" : "en",
         "label" : "outbreak",
-        "descr" : "",
+        "descr" : "Entity schema for outbreak in specific locations",
         "aliases" : ""
       },
       "ja" : {
@@ -4582,6 +4582,94 @@ export const SchemaEntities = [
         "label" : "Chilean Women Football Players",
         "descr" : "Validate Chilean women soccer players",
         "aliases" : "Chilean Women Football Players"
+      }
+    }
+  },
+  {
+    "id" : "E184",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E184",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E184",
+    "title" : "pandemic (E184) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "pandemic",
+        "descr" : "entity schema of a pandemic",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "pandemia",
+        "descr" : "esquema de entidades para pandemia",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E185",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E185",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E185",
+    "title" : "preprint (E185) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "preprint",
+        "descr" : "entity schema of a preprint",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E186",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E186",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E186",
+    "title" : "Macromolecular complex (E186) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Macromolecular complex",
+        "descr" : "Schema for macromolecular complexes",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Complejo macromolecular",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E187",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E187",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E187",
+    "title" : "hospital (E187) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "hospital",
+        "descr" : "entity schema of hospital",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "hospital",
+        "descr" : "Esquema para hospitales",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E188",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E188",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E188",
+    "title" : "2020 coronavirus pandemic (E188) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "2020 coronavirus pandemic",
+        "descr" : "entity schema of 2020 coronavirus pandemic",
+        "aliases" : ""
       }
     }
   }
