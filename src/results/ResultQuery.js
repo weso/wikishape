@@ -1,36 +1,48 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import EndpointInput from "../EndpointInput";
+import BootstrapTable from "react-bootstrap-table-next";
+import {parseData} from "./ParseQueryResult";
+import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 
 
-class ResultQuery extends React.Component {
- render() {
-     const result = this.props.result;
-     let msg ;
-     if (result === "") {
-         msg = null
-     } else
-     if (result.error) {
-         msg =
-             <div><p>Error: {result.error}</p>
-                 <details><pre>{JSON.stringify(result)}</pre></details>
-                </div>
-     } else {
-         msg = <div>
-             <p>{result.msg}</p>
-             <details><pre>{JSON.stringify(result)}</pre></details>
-         </div>
-     }
+function ResultQuery(props)  {
+    const result = props.result;
+    console.log("ResultQuery " + JSON.stringify(result));
+    let msg ;
+    if (!result || result === '') {
+        msg = null
+    } else
+    if (result.result.error) {
+        msg =
+            <div><p>Error: {result.result.error}</p>
+                <details><pre>{JSON.stringify(result)}</pre></details>
+            </div>
+    } else {
+        const prefixes = wikidataPrefixes ;
+        const table = parseData(result.result, prefixes);
+//      console.log(`ResultQuery. Table = ${JSON.stringify(table)}`);
+        msg = <div>
+            <BootstrapTable
+                keyField='_id'
+                data={table.rows}
+                columns={table.columns}
+                bootstrap4
+                striped
+                hover
+                condensed />
+            <p>{result.msg}</p>
+            <details><pre>{JSON.stringify(result)}</pre></details>
+        </div>
+    }
 
-     return (
-         <div>
-             {msg}
-         </div>
-     );
- }
+    return (
+        <div>
+            {msg}
+        </div>
+    );
 }
 
-EndpointInput.propTypes = {
+ResultQuery.propTypes = {
     result: PropTypes.object.isRequired,
 };
 

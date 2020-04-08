@@ -3,7 +3,7 @@ import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from "react-bootstrap/Alert";
 // import Spinner from "react-bootstrap/Spinner";
-import { showQualify } from './Utils';
+import { showQualify } from './utils/Utils';
 import PropTypes from "prop-types";
 
 function shapeMap2Table(shapeMap, nodesPrefixMap, shapesPrefixMap) {

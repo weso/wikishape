@@ -2,7 +2,7 @@ import React from 'react';
 import {Controlled as CodeMirror} from "react-codemirror2";
 import PropTypes from "prop-types";
 import 'codemirror/addon/display/placeholder';
-import ShExForm from "./ShExForm";
+import ShExForm from "../shex/ShExForm";
 
 require("codemirror/lib/codemirror.css");
 require("codemirror/mode/xml/xml.js");

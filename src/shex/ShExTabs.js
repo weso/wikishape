@@ -1,7 +1,7 @@
 import React from 'react';
-import InputTabsWithFormat from "./InputTabsWithFormat";
+import InputTabsWithFormat from "../components/InputTabsWithFormat";
 import ShExForm from "./ShExForm";
-import API from "./API";
+import API from "../API";
 import PropTypes from "prop-types";
 
 function ShExTabs(props) {

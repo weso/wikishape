@@ -2,27 +2,27 @@ import React, {
     // useState
 } from 'react';
 import './App.css';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import NotFound from './NotFound.js';
 import About from './About.js';
 import Home from './Home.js';
 import API  from './API';
-import WikidataValidate from './WikidataValidate';
-import WikidataValidateSPARQL from './WikidataValidateSPARQL';
-import WikidataQuery from './WikidataQuery';
-import WikidataSchemaInfo from './WikidataSchemaInfo';
-import WikidataSchemaVisual from './WikidataSchemaVisual';
-import WikidataExtract from './WikidataExtract';
-import WikidataSheXer from './WikidataSheXer';
-import WikidataOutgoing from './WikidataOutgoing';
-import WikidataProperty from "./WikidataProperty";
+import WikidataValidate from './wikidata/WikidataValidate';
+import WikidataValidateSPARQL from './wikidata/WikidataValidateSPARQL';
+import WikidataQuery from './wikidata/WikidataQuery';
+import WikidataSchemaInfo from './wikidata/WikidataSchemaInfo';
+import WikidataSchemaVisual from './wikidata/WikidataSchemaVisual';
+import WikidataExtract from './wikidata/WikidataExtract';
+import WikidataSheXer from './wikidata/WikidataSheXer';
+import WikidataOutgoing from './wikidata/WikidataOutgoing';
+import WikidataProperty from "./wikidata/WikidataProperty";
 import ChangeWikibaseURL from "./ChangeWikibaseURL";
-import WikidataValidateDeref from "./WikidataValidateDeref";
+import WikidataValidateDeref from "./wikidata/WikidataValidateDeref";
 
 function Routes() {
 
     return (
-        <Router>
+        <Router basename="/">
             <Switch>
                 <Route path="/" exact component={Home}/>
                 <Route path={API.aboutRoute} component={About}/>

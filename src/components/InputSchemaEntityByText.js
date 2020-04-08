@@ -1,46 +1,51 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from "prop-types";
-import {AsyncTypeahead, Token} from 'react-bootstrap-typeahead';
-import API from "./API";
+import {Typeahead, Token} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SelectLanguage from "./SelectLanguage";
+import { SchemaEntities } from "../resources/schemaEntities"
 import InputGroup from "react-bootstrap/InputGroup";
 
 
-const SEARCH_URI = API.wikidataSearchEntity ;
-const PER_PAGE = 50;
 const defaultLanguage = [{label: 'en', name:'English'}];
 
-function InputEntitiesByText(props) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [options, setOptions] = useState([]);
-    const [selected, setSelected] = useState(props.entities);
+function InputSchemaEntityByText(props) {
     const [language,setLanguage] = useState(defaultLanguage);
+    const [options, setOptions] = useState([]);
 
-    function makeAndHandleRequest(label, language, page = 0) {
-        const lang = language[0] ? language[0].label : "en" ;
-        return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
-            .then((resp) => resp.json())
-            .then((json) => {
-                console.log(`Response for ${label}: ${JSON.stringify(json)}`);
-                return json;
-            });
-    }
+    useEffect(() => {
+         console.log(`Changing language to ${JSON.stringify(language[0])}`)
+         if (language[0]) {
+             setOptions(optionsFromSchemaEntities(language[0].label))
+         }
+        },
+        [language]
+    );
 
-
-    function handleSearch(query) {
-        setIsLoading(true);
-        console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`);
-        makeAndHandleRequest(query, language, 0)
-            .then((resp) => {
-                console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
-                setIsLoading(false);
-                setOptions(resp);
-            });
+    function optionsFromSchemaEntities(lang) {
+        const ses = SchemaEntities.map(e => {
+            const labels = e.labels
+            let labelRecord = null ;
+            if (lang && labels[lang]) {
+                labelRecord = labels[lang]
+            } else {
+                labelRecord = labels['en']
+            }
+            return {
+                id: e.id,
+                label: labelRecord.label,
+                descr: labelRecord.descr,
+                conceptUri : e.conceptUri,
+                webUri: e.webUri,
+                lang: lang
+            }
+        });
+        console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
+        return ses
     }
 
     const MenuItem = ({item}) => (
@@ -63,31 +68,25 @@ function InputEntitiesByText(props) {
 
     return (
         <Container fluid={true}>
-        {/*<Row>{JSON.stringify(language)}</Row>*/}
         <Row>
             <Col>
-            <AsyncTypeahead
-                id="InputEntitiesByText"
+            <Typeahead
+                id="InputSchemaEntityByText"
                 filterBy={['id','label','descr']}
-                labelKey="id"
-                multiple={props.multiple}
-                isLoading={isLoading}
+                labelKey="label"
                 options={options}
                 maxResults = {10}
-                paginate
                 minLength={2}
-                onSearch={handleSearch}
                 renderToken={customRenderToken}
-                placeholder="Q.. or label"
+                placeholder="E.. or label"
                 renderMenuItemChildren={(option, props) => (
                     <MenuItem key={option.id} item={option}/>
                 )}
                 useCache={false}
-                selected={selected}
+                selected={props.entities}
                 onChange={(selected) => {
-                    console.log(`Selected: ${JSON.stringify(selected)}`);
-                    props.onChange(selected);
-                    setSelected(selected)
+                    console.log(`Selected: ${JSON.stringify(selected)}`)
+                    props.onChange(selected)
                 }}
             />
             </Col>
@@ -104,14 +103,9 @@ function InputEntitiesByText(props) {
   );
 }
 
-InputEntitiesByText.propTypes = {
+InputSchemaEntityByText.propTypes = {
     entities: PropTypes.array,
-    multiple: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
 };
 
-InputEntitiesByText.defaultProps = {
-    multiple: true
-};
-
-export default InputEntitiesByText;
+export default InputSchemaEntityByText;

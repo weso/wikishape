@@ -2,7 +2,7 @@ import React from 'react';
 import Alert from "react-bootstrap/Alert";
 import ShowShapeMap from "../shapeMap/ShowShapeMap"
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
-import {showQualify} from "../Utils";
+import {showQualify} from "../utils/Utils";
 
 function showStatus(status) {
     switch (status) {

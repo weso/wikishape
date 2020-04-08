@@ -45,6 +45,7 @@ class API {
     static wikidataPropertyInfoRoute = "/wikidataPropertyInfo";
     static wikidataValidateSPARQLRoute = "/wikidataValidateSPARQL";
     static changeWikibaseURLRoute = "/changeWikibaseURLRoute";
+    static aboutRoute = "/about";
 
     static aboutRoute = "/about";
 

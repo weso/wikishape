@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
-import InputSchemaEntityByText from "./InputSchemaEntityByText";
+import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Permalink } from "./Permalink";
+import { Permalink } from "../Permalink";
 import axios from "axios";
 import Pace from "react-pace-progress";
-import ShExForm from "./ShExForm";
+import ShExForm from "../shex/ShExForm";
 
 function WikidataSchemaInfo(props) {
     const [permalink,setPermalink] = useState(null)

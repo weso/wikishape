@@ -4,22 +4,22 @@ import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Pace from "react-pace-progress";
-import {mkPermalink, params2Form, Permalink} from "./Permalink";
+import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import ShExTabs from "./ShExTabs";
-import API from "./API"
-import { showQualify } from "./Utils";
+import ShExTabs from "../shex/ShExTabs";
+import API from "../API"
+import { showQualify } from "../utils/Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
-import InputShapeLabel from "./InputShapeLabel";
+import InputShapeLabel from "../components/InputShapeLabel";
 import Tabs from "react-bootstrap/Tabs";
-import ResultValidate from "./results/ResultValidate";
-import InputSchemaEntityByText from "./InputSchemaEntityByText";
-import QueryForm from "./QueryForm";
-import { paramsFromShEx, initialShExStatus, shExReducer} from './ShEx'
-import { mergeResult, showResult } from "./results/ResultValidate";
-import {wikidataPrefixes} from "./resources/wikidataPrefixes";
+import ResultValidate from "../results/ResultValidate";
+import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
+import QueryForm from "../query/QueryForm";
+import { paramsFromShEx, initialShExStatus, shExReducer} from '../shex/ShEx'
+import { mergeResult, showResult } from "../results/ResultValidate";
+import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 
 function WikidataValidateSPARQL(props) {
 

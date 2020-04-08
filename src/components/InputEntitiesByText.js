@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import PropTypes from "prop-types";
-import {AsyncTypeahead, Typeahead, Token} from 'react-bootstrap-typeahead';
-import API from "./API";
+import {AsyncTypeahead, Token} from 'react-bootstrap-typeahead';
+import API from "../API";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
 import Container from "react-bootstrap/Container";
@@ -11,11 +11,11 @@ import SelectLanguage from "./SelectLanguage";
 import InputGroup from "react-bootstrap/InputGroup";
 
 
-const SEARCH_URI = API.wikidataSearchProperty ;
+const SEARCH_URI = API.wikidataSearchEntity ;
 const PER_PAGE = 50;
 const defaultLanguage = [{label: 'en', name:'English'}];
 
-function InputPropertiesByText(props) {
+function InputEntitiesByText(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
     const [selected, setSelected] = useState(props.entities);
@@ -67,6 +67,7 @@ function InputPropertiesByText(props) {
         <Row>
             <Col>
             <AsyncTypeahead
+                id="InputEntitiesByText"
                 filterBy={['id','label','descr']}
                 labelKey="id"
                 multiple={props.multiple}
@@ -77,7 +78,7 @@ function InputPropertiesByText(props) {
                 minLength={2}
                 onSearch={handleSearch}
                 renderToken={customRenderToken}
-                placeholder="P.. or label"
+                placeholder="Q.. or label"
                 renderMenuItemChildren={(option, props) => (
                     <MenuItem key={option.id} item={option}/>
                 )}
@@ -95,9 +96,7 @@ function InputPropertiesByText(props) {
                   <InputGroup.Prepend>
                     <InputGroup.Text id="basic-addon1">Language</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <SelectLanguage
-                      language={[{label:'en', name: 'English'}]}
-                      onChange={setLanguage} />
+                  <SelectLanguage id="SelectLanguage" language={[{label:'en', name: 'English'}]} onChange={setLanguage} />
                 </InputGroup>
             </Col>
         </Row>
@@ -105,14 +104,14 @@ function InputPropertiesByText(props) {
   );
 }
 
-InputPropertiesByText.propTypes = {
+InputEntitiesByText.propTypes = {
     entities: PropTypes.array,
     multiple: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
 };
 
-InputPropertiesByText.defaultProps = {
+InputEntitiesByText.defaultProps = {
     multiple: true
 };
 
-export default InputPropertiesByText;
+export default InputEntitiesByText;

@@ -1,17 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from "prop-types";
-import API from "./API";
+import API from "../API";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import {params2Form} from "./Permalink";
+import {params2Form} from "../Permalink";
 import Pace from "react-pace-progress";
 import axios from "axios";
-import QueryForm from "./QueryForm";
+import QueryForm from "../query/QueryForm";
 import Form from "react-bootstrap/Form";
-import {wikidataPrefixes} from "./resources/wikidataPrefixes";
-import {cnvValueFromSPARQL} from "./Utils";
+import {wikidataPrefixes} from "../resources/wikidataPrefixes";
+import {cnvValueFromSPARQL} from "../utils/Utils";
 
 
 const QUERY_URI = API.wikidataQuery ;

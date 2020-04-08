@@ -1,6 +1,6 @@
 import React from 'react';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import {showQualified, showQualify} from "../Utils";
+import {showQualified, showQualify} from "../utils/Utils";
 import { wikidataPrefixes} from "../resources/wikidataPrefixes";
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
@@ -19,10 +19,12 @@ function ResultOutgoing(props) {
          const outgoing = result.children.map(r => {
              const qualifiedPred = showQualify(r.pred,wikidataPrefixes);
              return {
-                 pred: showQualified(qualifiedPred),
+                 pred: showQualified(qualifiedPred, wikidataPrefixes),
                  prefPrefix: qualifiedPred.prefix,
                  localNamePrefix: qualifiedPred.localName,
-                 values: r.values.map(v => {return showQualified(showQualify(v,wikidataPrefixes)) })
+                 values: r.values.map(v => {
+                     return (showQualified(showQualify(v,wikidataPrefixes), wikidataPrefixes))
+                })
          }}) ;
 
          const customSort = (cell, row) => {
@@ -42,7 +44,7 @@ function ResultOutgoing(props) {
 
          msg = <div>
              <p>Endpoint: <a href={result.endpoint}>{result.endpoint}</a></p>
-             <p><a href={result.node}>{showQualified(showQualify(result.node, wikidataPrefixes))}</a></p>
+             <p><a href={result.node}>{showQualified(showQualify(result.node, wikidataPrefixes), wikidataPrefixes)}</a></p>
              <BootstrapTable keyField='id'
                              data={ outgoing }
                              columns={ columns }
