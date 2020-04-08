@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/static/css/main.85b607a5.chunk.css",
+    "main.js": "/static/js/main.13c900e5.chunk.js",
+    "runtime~main.js": "/static/js/runtime~main.098997a1.js",
+    "static/css/2.51c9cb36.chunk.css": "/static/css/2.51c9cb36.chunk.css",
+    "static/js/2.a529cfc0.chunk.js": "/static/js/2.a529cfc0.chunk.js",
+    "index.html": "/index.html",
+    "precache-manifest.52c52d8929b0085e05a898af6cc6c385.js": "/precache-manifest.52c52d8929b0085e05a898af6cc6c385.js",
+    "service-worker.js": "/service-worker.js",
+    "static/media/TurtleForm.delete": "/static/media/TurtleForm.09ee6d5f.delete"
+  }
+}
