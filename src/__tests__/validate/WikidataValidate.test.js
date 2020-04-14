@@ -5,7 +5,6 @@ import WikidataValidate from "../../WikidataValidate";
 import '@testing-library/jest-dom/extend-expect'
 import {waitForElement} from "@testing-library/dom";
 import {addCreateTextRangePolyfill} from "../../utils/TestPolyfill";
-import axios from "axios";
 
 function before() {
     addCreateTextRangePolyfill();
@@ -47,10 +46,9 @@ test("WikidataValidate - submit data and show results after data submit", async 
 
     // submit form
     fireEvent.click(queryByText(/^Validate wikidata entities$/));
-    // expect(axios.post).toHaveBeenCalledTimes(0);
 
     // expect an alert with the validation status
-    let alerts = queryAllByRole("alert");
+    let alerts = await waitForElement(() => queryAllByRole("alert"));
     expect(alerts.length).toEqual(1);
 
     // Expect permalink
