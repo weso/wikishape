@@ -5,12 +5,6 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E1",
     "title" : "ShExR (E1) - Wikidata",
     "labels" : {
-      "fr" : {
-        "lang" : "fr",
-        "label" : "ShExR",
-        "descr" : "Schéma de Shex",
-        "aliases" : ""
-      },
       "it" : {
         "lang" : "it",
         "label" : "ShExR",
@@ -46,6 +40,18 @@ export const SchemaEntities = [
         "label" : "ShExR",
         "descr" : "",
         "aliases" : ""
+      },
+      "ar" : {
+        "lang" : "ar",
+        "label" : "ShEx",
+        "descr" : "مخطط لشكل التعبير",
+        "aliases" : ""
+      },
+      "fr" : {
+        "lang" : "fr",
+        "label" : "ShExR",
+        "descr" : "Schéma de Shex",
+        "aliases" : ""
       }
     }
   },
@@ -55,6 +61,12 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E2",
     "title" : "Wikimedia (E2) - Wikidata",
     "labels" : {
+      "ar" : {
+        "lang" : "ar",
+        "label" : "ويكيميديا",
+        "descr" : "مخطط مشاريع ويكيميديا في ويكي بيانات",
+        "aliases" : ""
+      },
       "lv" : {
         "lang" : "lv",
         "label" : "Wikimedia",
@@ -99,16 +111,16 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E3",
     "title" : "Wikidata Item (E3) - Wikidata",
     "labels" : {
+      "it" : {
+        "lang" : "it",
+        "label" : "elemento Wikidata",
+        "descr" : "schema per un elemento Wikidata",
+        "aliases" : ""
+      },
       "en" : {
         "lang" : "en",
         "label" : "Wikidata Item",
         "descr" : "Schema of a Wikidata item",
-        "aliases" : ""
-      },
-      "fr" : {
-        "lang" : "fr",
-        "label" : "élément Wikidata",
-        "descr" : "",
         "aliases" : ""
       },
       "hu" : {
@@ -117,10 +129,16 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : ""
       },
-      "it" : {
-        "lang" : "it",
-        "label" : "elemento Wikidata",
-        "descr" : "schema per un elemento Wikidata",
+      "ar" : {
+        "lang" : "ar",
+        "label" : "عنصر ويكي بيانات",
+        "descr" : "مخطط عنصر ويكي بيانات",
+        "aliases" : ""
+      },
+      "fr" : {
+        "lang" : "fr",
+        "label" : "élément Wikidata",
+        "descr" : "",
         "aliases" : ""
       }
     }
@@ -136,6 +154,12 @@ export const SchemaEntities = [
         "label" : "Labels/Descriptions",
         "descr" : "Schema of labels and descriptions",
         "aliases" : ""
+      },
+      "ar" : {
+        "lang" : "ar",
+        "label" : "تسميات أو أوصاف",
+        "descr" : "مخطط تسميات أو أوصاف",
+        "aliases" : "تسميات/أوصاف"
       },
       "fr" : {
         "lang" : "fr",
@@ -162,6 +186,12 @@ export const SchemaEntities = [
         "label" : "Statement",
         "descr" : "Schema of a Statement",
         "aliases" : ""
+      },
+      "ar" : {
+        "lang" : "ar",
+        "label" : "بيان",
+        "descr" : "مخطط بيان",
+        "aliases" : "ادعاء"
       },
       "fr" : {
         "lang" : "fr",
@@ -317,11 +347,11 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : "persona"
       },
-      "it" : {
-        "lang" : "it",
-        "label" : "umano",
-        "descr" : "schema per descrivere un essere umano",
-        "aliases" : "persona | individuo | essere umano"
+      "ca" : {
+        "lang" : "ca",
+        "label" : "humà",
+        "descr" : "schema per a éssers humans",
+        "aliases" : "persona | ésser humà"
       },
       "nl" : {
         "lang" : "nl",
@@ -406,6 +436,18 @@ export const SchemaEntities = [
         "label" : "особа",
         "descr" : "проста шема за особу",
         "aliases" : "човек"
+      },
+      "el" : {
+        "lang" : "el",
+        "label" : "άνθρωπος",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "it" : {
+        "lang" : "it",
+        "label" : "umano",
+        "descr" : "schema per descrivere un essere umano",
+        "aliases" : "persona | individuo | essere umano"
       },
       "eo" : {
         "lang" : "eo",
@@ -1560,7 +1602,7 @@ export const SchemaEntities = [
       "gl" : {
         "lang" : "gl",
         "label" : "edición dunha obra escrita",
-        "descr" : "edición concreta dunha libro ou outra obra escrita",
+        "descr" : "edición concreta dun libro ou outra obra escrita",
         "aliases" : "edición"
       },
       "it" : {
@@ -1580,6 +1622,12 @@ export const SchemaEntities = [
         "label" : "edition of a written work",
         "descr" : "manifestation of a written work",
         "aliases" : "edition | translation | manifestation"
+      },
+      "fi" : {
+        "lang" : "fi",
+        "label" : "kirjalisen työn painos",
+        "descr" : "",
+        "aliases" : ""
       },
       "hu" : {
         "lang" : "hu",
@@ -1791,12 +1839,6 @@ export const SchemaEntities = [
         "descr" : "esquema para definir persoas creadoras",
         "aliases" : "autora | autor"
       },
-      "it" : {
-        "lang" : "it",
-        "label" : "autore/autrice",
-        "descr" : "schema per descrivere un/una autore/autrice",
-        "aliases" : ""
-      },
       "en" : {
         "lang" : "en",
         "label" : "author",
@@ -1813,6 +1855,18 @@ export const SchemaEntities = [
         "lang" : "ja",
         "label" : "著者",
         "descr" : "著者用のスキーマ",
+        "aliases" : ""
+      },
+      "el" : {
+        "lang" : "el",
+        "label" : "συγγραφέας",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "it" : {
+        "lang" : "it",
+        "label" : "autore/autrice",
+        "descr" : "schema per descrivere un/una autore/autrice",
         "aliases" : ""
       },
       "eo" : {
@@ -3089,10 +3143,16 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E100",
     "title" : "city (E100) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "city",
-        "descr" : "schema of a city",
+      "fr" : {
+        "lang" : "fr",
+        "label" : "ville",
+        "descr" : "schéma d'une ville",
+        "aliases" : ""
+      },
+      "ca" : {
+        "lang" : "ca",
+        "label" : "ciutat",
+        "descr" : "schema per una ciutat",
         "aliases" : ""
       },
       "de" : {
@@ -3101,16 +3161,16 @@ export const SchemaEntities = [
         "descr" : "Schema für eine Stadt",
         "aliases" : ""
       },
+      "en" : {
+        "lang" : "en",
+        "label" : "city",
+        "descr" : "schema of a city",
+        "aliases" : ""
+      },
       "es" : {
         "lang" : "es",
         "label" : "ciudad",
         "descr" : "esquema para una localidad",
-        "aliases" : ""
-      },
-      "fr" : {
-        "lang" : "fr",
-        "label" : "ville",
-        "descr" : "schéma d'une ville",
         "aliases" : ""
       }
     }
@@ -3622,6 +3682,12 @@ export const SchemaEntities = [
         "label" : "Standard German noun",
         "descr" : "German noun with Gender at the entry level and 8 inflected forms in case and number",
         "aliases" : "German noun"
+      },
+      "ru" : {
+        "lang" : "ru",
+        "label" : "стандартное немецкое существительное",
+        "descr" : "",
+        "aliases" : "немецкое существительное"
       }
     }
   },
@@ -3999,6 +4065,610 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Researcher",
         "descr" : "Schema for Researchers",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E154",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E154",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E154",
+    "title" : "Standard German noun full (E154) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Standard German noun full",
+        "descr" : "a more comprehensive check for German nouns",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E155",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E155",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E155",
+    "title" : "standard English noun (E155) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "standard English noun",
+        "descr" : "English noun with plural and singular",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E156",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E156",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E156",
+    "title" : "keyboard layout (E156) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "keyboard layout",
+        "descr" : "schema for keyboard layouts",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E157",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E157",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E157",
+    "title" : "Endangered language (E157) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Endangered language",
+        "descr" : "entity schema of Endangered language",
+        "aliases" : ""
+      },
+      "nl" : {
+        "lang" : "nl",
+        "label" : "bedreigde taal",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E158",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E158",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E158",
+    "title" : "computer model (E158) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "computer model",
+        "descr" : "schema for models of computer",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E159",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E159",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E159",
+    "title" : "sound card (E159) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "sound card",
+        "descr" : "schema for sound cards",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E160",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E160",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E160",
+    "title" : "Basque noun (E160) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Basque noun",
+        "descr" : "A standard Basque noun with 65 forms",
+        "aliases" : ""
+      },
+      "de" : {
+        "lang" : "de",
+        "label" : "Baskische Nomen",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E161",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E161",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E161",
+    "title" : "JKT48 member (E161) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "JKT48 member",
+        "descr" : "schema for JKT48 member",
+        "aliases" : ""
+      },
+      "id" : {
+        "lang" : "id",
+        "label" : "anggota JKT48",
+        "descr" : "skema anggota JKT48",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E162",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E162",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E162",
+    "title" : "Southern Resident orca (E162) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Southern Resident orca",
+        "descr" : "schema for members of J, K and L orca pods",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E163",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E163",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E163",
+    "title" : "Chilean Politicians (E163) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Chilean Politicians",
+        "descr" : "Schema to validate political party",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Politicos Chilenos",
+        "descr" : "Esquema para validar pertenencia a un Partido Político",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E164",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E164",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E164",
+    "title" : "French standard noun (E164) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "French standard noun",
+        "descr" : "French noun with two forms, singular and plural",
+        "aliases" : ""
+      },
+      "fr" : {
+        "lang" : "fr",
+        "label" : "nom français",
+        "descr" : "nom français régulier avec deux formes : singulier et pluriel",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E165",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E165",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E165",
+    "title" : "virus gene (E165) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "virus gene",
+        "descr" : "schema of a virus gene",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ウィルス遺伝子",
+        "descr" : "ウィルス遺伝子のスキーマ",
+        "aliases" : ""
+      },
+      "nl" : {
+        "lang" : "nl",
+        "label" : "viraal gen",
+        "descr" : "schema van een viraal gen",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E166",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E166",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E166",
+    "title" : "No label defined (E166) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "prueba",
+        "descr" : "prueba",
+        "aliases" : "prueba"
+      }
+    }
+  },
+  {
+    "id" : "E167",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E167",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E167",
+    "title" : "protein (E167) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "protein",
+        "descr" : "schema for a protein in Wikidata",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Esquema proteína",
+        "descr" : "Esquema para proteína",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E168",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E168",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E168",
+    "title" : "LGBT related TV series (E168) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "LGBT related TV series",
+        "descr" : "TV series on LGBTI+ related genre",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E169",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E169",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E169",
+    "title" : "virus protein (E169) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "virus protein",
+        "descr" : "schema that adds to the generic protein schema (E167) to apply on virus protein shapes",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "proteína de virus",
+        "descr" : "Esquema que añade al esquema genérico de proteína (E167) las propiedades específicas de la proteína de virus",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E170",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E170",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E170",
+    "title" : "virus (E170) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "virus",
+        "descr" : "schema for an item depicting a virus",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Virus",
+        "descr" : "Virus",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E171",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E171",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E171",
+    "title" : "Chilean Volcanoes (E171) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Chilean Volcanoes",
+        "descr" : "Chilean Volcanoes",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Volcanes Chilenos",
+        "descr" : "Volcanes Chilenos",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E172",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E172",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E172",
+    "title" : "Chilean Cities (E172) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Chilean Cities",
+        "descr" : "Schema to validate Chilean Cities",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Ciudades Chilenas",
+        "descr" : "Esquema para validar ciudades Chilenas",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E173",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E173",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E173",
+    "title" : "outbreak (E173) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "outbreak",
+        "descr" : "Entity schema for outbreak in specific locations",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "アウトブレイク",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "surto",
+        "descr" : "esquema para items referentes à surtos em locais específicos",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E174",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E174",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E174",
+    "title" : "strain (E174) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "strain",
+        "descr" : "Schema for strain information",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E175",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E175",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E175",
+    "title" : "Test_SAW (E175) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Test_SAW",
+        "descr" : "Schema MTI 2019, valida entidades de ocupación \"investigadores\" con el atributo \"campo de trabajo\" igual a teacher",
+        "aliases" : "Test_SAW"
+      }
+    }
+  },
+  {
+    "id" : "E176",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E176",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E176",
+    "title" : "Chilean astronomers (E176) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Chilean astronomers",
+        "descr" : "Scheme to validate Chilean astronomers",
+        "aliases" : "Chilean Astronomers Scheme"
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Astrónomos Chilenos",
+        "descr" : "Esquema para validar astrónomos Chilenos",
+        "aliases" : "Esquema Astrónomos Chilenos"
+      }
+    }
+  },
+  {
+    "id" : "E177",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E177",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E177",
+    "title" : "Data Structure (E177) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Data Structure",
+        "descr" : "entity schema of data structure",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E178",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E178",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E178",
+    "title" : "Algorithm (E178) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Algorithm",
+        "descr" : "entity schema of algorithm",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E179",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E179",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E179",
+    "title" : "operating system (E179) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "operating system",
+        "descr" : "entity schema of operating system",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E180",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E180",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E180",
+    "title" : "No label defined (E180) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E181",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E181",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E181",
+    "title" : "Chilean soccer players (E181) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Chilean soccer players",
+        "descr" : "MUJERES CHILENAS FUTBOLISTAS",
+        "aliases" : "Mujeres Chilenas Futbolistas"
+      }
+    }
+  },
+  {
+    "id" : "E182",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E182",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E182",
+    "title" : "PRUEBA (E182) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "PRUEBA",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E183",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E183",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E183",
+    "title" : "Chilean Women Football Players (E183) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Chilean Women Football Players",
+        "descr" : "Validate Chilean women soccer players",
+        "aliases" : "Chilean Women Football Players"
+      }
+    }
+  },
+  {
+    "id" : "E184",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E184",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E184",
+    "title" : "pandemic (E184) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "pandemic",
+        "descr" : "entity schema of a pandemic",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "pandemia",
+        "descr" : "esquema de entidades para pandemia",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E185",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E185",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E185",
+    "title" : "preprint (E185) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "preprint",
+        "descr" : "entity schema of a preprint",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E186",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E186",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E186",
+    "title" : "Macromolecular complex (E186) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Macromolecular complex",
+        "descr" : "Schema for macromolecular complexes",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Complejo macromolecular",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E187",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E187",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E187",
+    "title" : "hospital (E187) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "hospital",
+        "descr" : "entity schema of hospital",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "hospital",
+        "descr" : "Esquema para hospitales",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E188",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E188",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E188",
+    "title" : "2020 coronavirus pandemic (E188) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "2020 coronavirus pandemic",
+        "descr" : "entity schema of 2020 coronavirus pandemic",
         "aliases" : ""
       }
     }

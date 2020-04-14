@@ -18,7 +18,7 @@ class About extends React.Component {
             </p>
             <ul>
             <li>Version {process.env.REACT_APP_VERSION} [{process.env.NODE_ENV}]</li>
-                   <li>Server host: {process.env.REACT_APP_RDFSHAPE_HOST}</li>
+                <li>Server host: <a href={process.env.REACT_APP_RDFSHAPE_HOST}>{process.env.REACT_APP_RDFSHAPE_HOST}</a></li>
                    {/*                   <li>Built with <a href="http://www.scala-lang.org/">Scala</a> and <a href="http://www.scala-sbt.org/">SBT</a></li> */}
                    <li>Source code:
                        <ul>

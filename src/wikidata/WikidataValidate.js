@@ -4,22 +4,22 @@ import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Pace from "react-pace-progress";
-import {mkPermalink, params2Form, Permalink} from "./Permalink";
+import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import ShExTabs from "./ShExTabs";
-import API from "./API"
-import {convertTabSchema, showQualify} from "./Utils";
+import ShExTabs from "../shex/ShExTabs";
+import API from "../API"
+import {convertTabSchema, showQualify} from "../utils/Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
-import InputShapeLabel from "./InputShapeLabel";
+import InputShapeLabel from "../components/InputShapeLabel";
 import Tabs from "react-bootstrap/Tabs";
-import InputEntitiesByText from "./InputEntitiesByText";
-import ResultValidate from "./results/ResultValidate";
-import InputSchemaEntityByText from "./InputSchemaEntityByText";
-import { paramsFromShEx, initialShExStatus, shExReducer, shExParamsFromQueryParams,} from './ShEx'
-import { mergeResult } from "./results/ResultValidate";
-import {wikidataPrefixes} from "./resources/wikidataPrefixes";
+import InputEntitiesByText from "../components/InputEntitiesByText";
+import ResultValidate from "../results/ResultValidate";
+import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
+import { paramsFromShEx, initialShExStatus, shExReducer, shExParamsFromQueryParams,} from '../shex/ShEx'
+import { mergeResult } from "../results/ResultValidate";
+import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import qs from "query-string";
 
 function WikidataValidate(props) {
@@ -239,7 +239,7 @@ function WikidataValidate(props) {
 
     return (
        <Container>
-         <h1>Validate Wikidata entities</h1>
+         <h1>Validate Wikidata entities (through SPARQL endpoint)</h1>
                    { status.result || status.loading || status.error ?
                        <Row>
                            {status.loading ? <Pace color="#27ae60"/> :

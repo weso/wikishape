@@ -6,7 +6,7 @@ import ByURL from './ByURL';
 import ByFile from './ByFile';
 import ByText from './ByText';
 import PropTypes from "prop-types";
-import API from './API'
+import API from '../API'
 
 function InputTabs(props) {
     const [activeTab, setActiveTab] = useState(props.activeTab)

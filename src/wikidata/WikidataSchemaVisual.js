@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
-import InputSchemaEntityByText from "./InputSchemaEntityByText";
+import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import API from "./API";
-import {mkPermalink, params2Form, Permalink} from "./Permalink";
+import API from "../API";
+import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import axios from "axios";
 import Pace from "react-pace-progress";
-import ShExForm from "./ShExForm";
-import PrintSVG from "./utils/PrintSVG";
+import ShExForm from "../shex/ShExForm";
+import PrintSVG from "../utils/PrintSVG";
 import qs from 'query-string';
-import { SchemaEntities } from "./resources/schemaEntities"
+import { SchemaEntities } from "../resources/schemaEntities"
 
 
 function WikidataSchemaVisual(props) {

@@ -1,19 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
-import InputEntitiesByText from "./InputEntitiesByText";
+import InputPropertiesByText from "../components/InputPropertiesByText";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import API from "./API";
-import {mkPermalink, Permalink} from "./Permalink";
+import API from "../API";
+import {mkPermalink, Permalink} from "../Permalink";
 import axios from "axios";
-import ResultOutgoing from "./results/ResultOutgoing";
+import ResultOutgoing from "../results/ResultOutgoing";
 import Pace from "react-pace-progress";
 import qs from "query-string";
 
-
-function WikidataOutgoing(props) {
+function WikidataProperty(props) {
 
     const [entities,setEntities] = useState([]);
     const [permalink,setPermalink] = useState('');
@@ -41,7 +40,7 @@ function WikidataOutgoing(props) {
 
     function fetchOutgoing(node) {
         let params={};
-        params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
+        params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
         params['node'] = node ;
         console.log(`Node: ${node}`);
         setPermalink(mkPermalink(API.wikidataOutgoingRoute, params));
@@ -81,13 +80,13 @@ function WikidataOutgoing(props) {
 
     return (
        <Container>
-         <h1>Outgoing arcs from entity</h1>
-         <InputEntitiesByText onChange={handleChange} multiple={false} entities={entities} />
+         <h1>Info about wikidata properties</h1>
+         <InputPropertiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
                { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Get outgoing arcs</Button>
+               <Button variant="primary" type="submit">Outgoing arcs</Button>
          </Form>
           {loading ? <Pace color="#27ae60"/> : null }
           { error? <Alert variant="danger">${error}</Alert>: null }
@@ -97,4 +96,4 @@ function WikidataOutgoing(props) {
     );
 }
 
-export default WikidataOutgoing;
+export default WikidataProperty;

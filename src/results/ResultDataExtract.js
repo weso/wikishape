@@ -1,6 +1,6 @@
 import React from 'react';
-import Code from '../Code'
-import { mkMode } from "../Utils"
+import Code from '../components/Code'
+import { mkMode } from "../utils/Utils"
 
 function ResultDataExtract(props) {
      const result = props.result
@@ -14,10 +14,10 @@ function ResultDataExtract(props) {
                 </div>
      } else {
          msg = <div>
-             <p>{result.msg}</p>
-             {result.inferedShape && (
+             <p>{result.entity}</p>
+             {result.result && (
                  <Code
-                     value={result.inferedShape}
+                     value={result.result}
                      mode="ShExC"
                      readonly={true}
                      linenumbers={true}

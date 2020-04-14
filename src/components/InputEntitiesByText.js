@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from "prop-types";
 import {AsyncTypeahead, Token} from 'react-bootstrap-typeahead';
-import API from "./API";
+import API from "../API";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
 import Container from "react-bootstrap/Container";
@@ -67,6 +67,7 @@ function InputEntitiesByText(props) {
         <Row>
             <Col>
             <AsyncTypeahead
+                id="InputEntitiesByText"
                 filterBy={['id','label','descr']}
                 labelKey="id"
                 multiple={props.multiple}
@@ -95,7 +96,7 @@ function InputEntitiesByText(props) {
                   <InputGroup.Prepend>
                     <InputGroup.Text id="basic-addon1">Language</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <SelectLanguage language={[{label:'en', name: 'English'}]} onChange={setLanguage} />
+                  <SelectLanguage id="SelectLanguage" language={[{label:'en', name: 'English'}]} onChange={setLanguage} />
                 </InputGroup>
             </Col>
         </Row>

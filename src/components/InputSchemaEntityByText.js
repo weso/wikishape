@@ -7,7 +7,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SelectLanguage from "./SelectLanguage";
-import { SchemaEntities } from "./resources/schemaEntities"
+import { SchemaEntities } from "../resources/schemaEntities"
 import InputGroup from "react-bootstrap/InputGroup";
 
 
@@ -71,6 +71,7 @@ function InputSchemaEntityByText(props) {
         <Row>
             <Col>
             <Typeahead
+                id="InputSchemaEntityByText"
                 filterBy={['id','label','descr']}
                 labelKey="label"
                 options={options}
@@ -94,7 +95,7 @@ function InputSchemaEntityByText(props) {
                   <InputGroup.Prepend>
                     <InputGroup.Text id="basic-addon1">Language</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <SelectLanguage language={[{label:'en', name: 'English'}]} onChange={setLanguage} />
+                  <SelectLanguage id="SelectLanguage" language={[{label:'en', name: 'English'}]} onChange={setLanguage} />
                 </InputGroup>
             </Col>
         </Row>

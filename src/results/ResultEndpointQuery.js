@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import BootstrapTable from "react-bootstrap-table-next";
-import {cnvValueFromSPARQL, showQualified, showQualify} from "../Utils";
+import {cnvValueFromSPARQL, showQualified, showQualify} from "../utils/Utils";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 
 function ResultEndpointInfo(props) {
@@ -20,8 +20,9 @@ function ResultEndpointInfo(props) {
                 vars.map(v => {
                     const b = binding[v];
                     const converted = cnvValueFromSPARQL(b);
+                    // const cleanPrefixes = ["wd","wdt"];
                     const qualify = showQualify(converted,wikidataPrefixes);
-                    row[v] = showQualified(qualify)
+                    row[v] = showQualified(qualify,wikidataPrefixes)
                 });
                 return row;
             });
