@@ -1,7 +1,7 @@
 import React from "react";
 
 import {render, fireEvent} from "@testing-library/react";
-import WikidataValidate from "../../WikidataValidate";
+import WikidataValidate from "../../wikidata/WikidataValidate";
 import '@testing-library/jest-dom/extend-expect'
 import {waitForElement} from "@testing-library/dom";
 import {addCreateTextRangePolyfill} from "../../utils/TestPolyfill";
@@ -41,14 +41,14 @@ test("WikidataValidate - submit data and show results after data submit", async 
     const {queryByText, queryAllByRole} = render(<WikidataValidate location={location}/>);
 
     // change input type
-    let shexTab = queryAllByRole("tab")[1];
+    const shexTab = queryAllByRole("tab")[1];
     fireEvent.click(shexTab);
 
     // submit form
     fireEvent.click(queryByText(/^Validate wikidata entities$/));
 
     // expect an alert with the validation status
-    let alerts = await waitForElement(() => queryAllByRole("alert"));
+    const alerts = await waitForElement(() => queryAllByRole("alert"));
     expect(alerts.length).toEqual(1);
 
     // Expect permalink

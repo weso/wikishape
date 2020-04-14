@@ -1,7 +1,7 @@
 import React from "react";
 
 import {render, fireEvent} from "@testing-library/react";
-import WikidataValidateSPARQL from "../../wikidata/WikidataValidateSPARQL";
+import WikidataValidateDeref from "../../wikidata/WikidataValidateDeref";
 import '@testing-library/jest-dom/extend-expect'
 import {waitForElement} from "@testing-library/dom";
 import {addCreateTextRangePolyfill} from "../../utils/TestPolyfill";
@@ -12,22 +12,18 @@ function before() {
     return {search: ""};
 }
 
-test("WikidataValidateSPARQL - shows data", async () => {
+test("WikidataValidateDeref - shows data", async () => {
 
     const location = before();
-    const {queryByText, queryAllByRole} = render(<WikidataValidateSPARQL location={location}/>);
-    // Page title
-    const title = await waitForElement(() => queryByText(
-        /Validate Wikidata entities obtained from SPARQL queries/i));
-    expect(title).toBeInTheDocument();
+    const {queryByText, queryAllByRole} = render(<WikidataValidateDeref location={location}/>);
 
     // 2 visible input tabs
     let tabs = await waitForElement(() => queryAllByRole("tab"));
     expect(tabs.length).toEqual(2);
 
-    // 2 visible input status
+    // 4 visible input status
     let status = await waitForElement(() => queryAllByRole("status"));
-    expect(status.length).toEqual(2);
+    expect(status.length).toEqual(4);
 
     // change input type
     let shexTab = queryAllByRole("tab")[1];
@@ -37,9 +33,9 @@ test("WikidataValidateSPARQL - shows data", async () => {
     tabs = await waitForElement(() => queryAllByRole("tab"));
     expect(tabs.length).toEqual(5);
 
-    // no visible input status
+    // 2 visible input status
     status = await waitForElement(() => queryAllByRole("status"));
-    expect(status.length).toEqual(0);
+    expect(status.length).toEqual(2);
 
     // Data input selector
     const dataInput = await waitForElement(() => queryByText(/^ShEx input$/i));
@@ -49,10 +45,10 @@ test("WikidataValidateSPARQL - shows data", async () => {
     expect(shexFormat).toBeInTheDocument();
 });
 
-test("WikidataValidateSPARQL - submit data and show results after data submit", async () => {
+test("WikidataValidateDeref - submit data and show results after data submit", async () => {
 
     const location = before();
-    const {queryByText, queryAllByText, queryAllByRole} = render(<WikidataValidateSPARQL location={location}/>);
+    const {queryByText, queryAllByText, queryAllByRole} = render(<WikidataValidateDeref location={location}/>);
 
     // change input type
     const shexTab = queryAllByRole("tab")[1];
@@ -61,7 +57,11 @@ test("WikidataValidateSPARQL - submit data and show results after data submit", 
     // submit form
     const submitBtn = queryByText(/^Validate wikidata entities$/i);
     fireEvent.click(submitBtn);
-    expect(axios.post).toHaveBeenCalledTimes(1);
+    expect(axios.post).toHaveBeenCalledTimes(0); // uses get request
+
+    // expect an alert with the validation status
+    const alerts = await waitForElement(() => queryAllByRole("alert"));
+    expect(alerts.length).toEqual(1);
 
     // expect 0 errors within the validation status
     const errors = await waitForElement(() => queryAllByText(/^Error$/i));
