@@ -14,7 +14,7 @@ import Form from "react-bootstrap/Form";
 import API from "../API"
 
 function RDFArea(props) {
-    const [codeMirror,setCodeMirror] = useState(null)
+    const [codeMirror,setCodeMirror] = useState(null);
 
     useEffect(()=> {
         if (!codeMirror) {
@@ -27,7 +27,7 @@ function RDFArea(props) {
         cm.on('change', (cm,change) => {
             props.onChange(cm.getValue())
         });
-        cm.setValue(props.value)
+        cm.setValue(props.value);
         setCodeMirror(cm)
       }
     }, [
@@ -35,7 +35,7 @@ function RDFArea(props) {
         props.urlFormats,
         props.onChange,
         props.value
-    ])
+    ]);
 
     return <div><textarea id={props.id} /></div>
 }
@@ -44,18 +44,18 @@ RDFArea.propTypes = {
     id: PropTypes.string.isRequired,
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired
-}
+};
 
 RDFArea.defaultProps = {
     value: ''
-}
+};
 
 function SelectFormat(props) {
-  const [format,setFormat] = useState('TURTLE')
-  const [formats,setFormats] = useState([])
+  const [format,setFormat] = useState('TURTLE');
+  const [formats,setFormats] = useState([]);
 
   function handleFormatChange(e) {
-        setFormat(e.target.value)
+        setFormat(e.target.value);
         props.handleFormatChange(e.target.value);
   }
 
@@ -66,11 +66,11 @@ function SelectFormat(props) {
           .then((data) => {
               setFormats(data)
       }).catch((error) => {
-          const msg = `Error retrieving formats at url: ${url}\nError: ${error}`
-          console.log(msg)
+          const msg = `Error retrieving formats at url: ${url}\nError: ${error}`;
+          console.log(msg);
           props.handleError(msg)
       })
-  }, [])
+  }, []);
 
   return (<Form.Group>
                 <Form.Label>{props.name}</Form.Label>
@@ -95,11 +95,11 @@ function cnvMode(format) {
 }
 
 function TestRDFArea(props)  {
-    const [defaultFormat,setDefaultFormat] = useState('RDF/XML')
+    const [defaultFormat,setDefaultFormat] = useState('RDF/XML');
     const [data,setData] = useState('');
     const [dataFormat,setDataFormat] = useState(defaultFormat);
     const [msg,setMsg] = useState('');
-    const [mode,setMode] = useState(cnvMode(defaultFormat))
+    const [mode,setMode] = useState(cnvMode(defaultFormat));
 
     useEffect(()=>{
         const url = props.urlDefaultFormat;
@@ -110,7 +110,7 @@ function TestRDFArea(props)  {
             }).catch(() => {
                 setMsg('Error requesting formats from server at url:  ' . url)
         })
-    }, [props.urlDefaultFormat])
+    }, [props.urlDefaultFormat]);
 
 
 
@@ -124,7 +124,7 @@ function TestRDFArea(props)  {
             <br/>
             <SelectFormat name="RDF format"
                           handleFormatChange={(newFormat) => {
-                              setDataFormat(newFormat)
+                              setDataFormat(newFormat);
                               setMode(cnvMode(newFormat))
                           }}
                           urlFormats={API.dataFormats}
