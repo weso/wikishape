@@ -12,7 +12,7 @@ function TestYashe(props)  {
     const [shEx,setShEx] = useState('');
     const [sparql,setSparql] = useState('');
     const [msg,setMsg] = useState('');
-    const [activeTab, setActiveTab] = useState('ShEx')
+    const [activeTab, setActiveTab] = useState('ShEx');
 
     function handleTabChange(e) {
         setActiveTab(e)

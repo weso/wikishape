@@ -2,10 +2,9 @@ import React, {useState} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+
 import TurtleForm from '../TurtleForm.delete'
-import Form from "react-bootstrap/Form";
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
+
 
 function TestYate(props)  {
     const [turtle,setTurtle] = useState('');

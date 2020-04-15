@@ -61,7 +61,7 @@ class TestSearch extends React.Component {
 
     _handleInputChange = (query) => {
         this.setState({query});
-    }
+    };
 
     _handlePagination = (e, shownResults) => {
         const {query} = this.state;
@@ -90,7 +90,7 @@ class TestSearch extends React.Component {
                     options,
                 });
             });
-    }
+    };
 
     _handleSearch = (query) => {
         if (this._cache[query]) {
