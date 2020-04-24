@@ -285,7 +285,7 @@ function WikidataValidateDeref(props) {
 
     return (
        <Container>
-         <h1>Validate Wikidata entities (by Dererentiation)</h1>
+         <h1>Validate Wikidata entities (by Dereferencing)</h1>
                    { status.result || status.loading || status.error ?
                        <Row>
                            {status.loading ? <Pace color="#27ae60"/> :
