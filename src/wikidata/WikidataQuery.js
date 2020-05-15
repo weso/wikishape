@@ -5,13 +5,13 @@ import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import {params2Form, Permalink } from "../Permalink";
 import API from "../API";
+import {validateURL} from "../utils/Utils"
 import Pace from "react-pace-progress";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import ResultEndpointQuery from "../results/ResultEndpointQuery";
 import QueryForm from "../query/QueryForm";
-import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import Spinner from "react-bootstrap/Spinner";
 
 const QUERY_URI = API.wikidataQuery ;
@@ -22,11 +22,19 @@ function WikidataQuery() {
     const [error,setError] = useState(null);
     const [query, setQuery] = useState('');
     const [result, setResult] = useState(null);
+    const [controlPressed, setControlPressed] = useState(false);
+    const currentUrlHostname = API.currentUrl().split(/\/\//)[1].split('/')[0];
 
+    const axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+        }
+    };
 
     const divStyle = {
         display: 'flex',
-        margin: '10px'
+        margin: '10px auto'
     };
     const spinnerStyle = {
         marginLeft: '10px',
@@ -34,13 +42,23 @@ function WikidataQuery() {
     };
 
     function handleChange(queryText){
-      const query = queryText.replace(/^PREFIX.*$/im, '');
+      const query = queryText.replace(/^PREFIX.*$/gim, '');
       setQuery(query);
+    }
+
+    function onKeyDown(event) {
+        const key = event.which || event.keyCode;
+        if (key === 17) setControlPressed(true);
+        else if (key === 13 && controlPressed) handleSubmit(event)
+    }
+
+    function onKeyUp(event) {
+        const key = event.which || event.keyCode;
+        if (key === 17) setControlPressed(false)
     }
 
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(query)
         let params = {};
         params['query'] = query;
         params['endpoint']= localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
@@ -48,15 +66,27 @@ function WikidataQuery() {
         resolveQuery(QUERY_URI,formData);
     }
 
+    // Place the current URL to the resulting items
+    function handleResults(initialResults) {
+        let data = initialResults.results.bindings;
+        for (let i = 0; i < data.length; i++) {
+            console.log(data[i])
+            Object.keys(data[i]).forEach( (key) => {
+                let value = data[i][key].value;
+                console.log(value)
+                if (value && validateURL(value)) {
+                    let path = value.split(/\/\//)[1].split(/\/(.+)/)[1];
+                    data[i][key].value = `${value.split(/\/\//)[0]}//${currentUrlHostname}/${path}`;
+                }
+            });
+        }
+
+        setResult(initialResults);
+    }
+
     function resolveQuery(url,formData) {
         setIsLoading(true);
-        
-        let axiosConfig = {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                "Access-Control-Allow-Origin": "*",
-            }
-        };
+
         axios.post(url,formData,axiosConfig)
             .then(response => {
               setIsLoading(false);
@@ -65,7 +95,7 @@ function WikidataQuery() {
               // realizes there is no data and may fail processing it. Refactor the server to return a more accurate code.
               if (results && results.bindings.length > 0) {
                 setError(null);
-                setResult(response.data);
+                handleResults(response.data)
               }
               else {
                 setResult(null);
@@ -77,7 +107,6 @@ function WikidataQuery() {
               setError(`Error on request: ${url}:  ${error.message}`);
             }).finally ( () => {
                 setIsLoading(false);
-                console.log(result);
               }
             );
           
@@ -86,11 +115,11 @@ function WikidataQuery() {
 
     return (
        <Container fluid={true}>
-         <h1>Query current endpoint:</h1>
-         <h4>{localStorage.getItem("endpoint") || API.wikidataContact.endpoint}</h4>
+         <h1>Query SPARQL endpoint:</h1>
+           <h4>Current endpoint: <a href={API.currentEndpoint()}>{API.currentEndpoint()}</a></h4>
          <Row>
              <Col>
-             <Form onSubmit={handleSubmit}>
+             <Form onSubmit={handleSubmit} onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
                <QueryForm 
                          onChange={handleChange}
                          placeholder="select ?id ..."

@@ -58,6 +58,11 @@ class API {
     static defaultSHACLFormat = "TURTLE";
     static defaultShapeMapFormat = "Compact";
 
+    // URLs and Endpoints
+
+    static currentEndpoint = () => localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
+    static currentUrl = () => localStorage.getItem("url") || API.wikidataContact.url;
+
     static wikidataUrl =  "https://query.wikidata.org/sparql";
     // static wikidataUrlFetch =  "https://www.wikidata.org/sparql";
 

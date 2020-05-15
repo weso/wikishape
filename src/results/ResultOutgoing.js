@@ -4,6 +4,7 @@ import {showQualified, showQualify} from "../utils/Utils";
 import { wikidataPrefixes} from "../resources/wikidataPrefixes";
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
+import API from "../API";
 
 function ResultOutgoing(props) {
      const result = props.result;
@@ -43,8 +44,7 @@ function ResultOutgoing(props) {
          }];
 
          msg = <div>
-             <p>Endpoint: <a href={result.endpoint}>{result.endpoint}</a></p>
-             <p><a href={result.node}>{showQualified(showQualify(result.node, wikidataPrefixes), wikidataPrefixes)}</a></p>
+             <p>Link to entity: <a href={result.node}>{showQualified(showQualify(result.node, wikidataPrefixes), wikidataPrefixes)}</a></p>
              <BootstrapTable keyField='id'
                              data={ outgoing }
                              columns={ columns }
