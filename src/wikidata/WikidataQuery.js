@@ -70,10 +70,8 @@ function WikidataQuery() {
     function handleResults(initialResults) {
         let data = initialResults.results.bindings;
         for (let i = 0; i < data.length; i++) {
-            console.log(data[i])
             Object.keys(data[i]).forEach( (key) => {
                 let value = data[i][key].value;
-                console.log(value)
                 if (value && validateURL(value)) {
                     let path = value.split(/\/\//)[1].split(/\/(.+)/)[1];
                     data[i][key].value = `${value.split(/\/\//)[0]}//${currentUrlHostname}/${path}`;

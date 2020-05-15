@@ -47,8 +47,6 @@ class API {
     static changeWikibaseURLRoute = "/changeWikibaseURLRoute";
     static aboutRoute = "/about";
 
-    static aboutRoute = "/about";
-
     static byTextTab = "byText";
     static byUrlTab = "byUrl";
     static byFileTab = "byFile";
