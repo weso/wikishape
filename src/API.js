@@ -47,8 +47,6 @@ class API {
     static changeWikibaseURLRoute = "/changeWikibaseURLRoute";
     static aboutRoute = "/about";
 
-    static aboutRoute = "/about";
-
     static byTextTab = "byText";
     static byUrlTab = "byUrl";
     static byFileTab = "byFile";
@@ -57,6 +55,11 @@ class API {
     static defaultShExFormat = "ShExC";
     static defaultSHACLFormat = "TURTLE";
     static defaultShapeMapFormat = "Compact";
+
+    // URLs and Endpoints
+
+    static currentEndpoint = () => localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
+    static currentUrl = () => localStorage.getItem("url") || API.wikidataContact.url;
 
     static wikidataUrl =  "https://query.wikidata.org/sparql";
     // static wikidataUrlFetch =  "https://www.wikidata.org/sparql";
@@ -75,7 +78,7 @@ class API {
     };
 
     static localWikibaseContact = {
-        url: "http://localhost:8282",
+        url: "http://localhost:8181",
         endpoint: "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql"
     }
 }

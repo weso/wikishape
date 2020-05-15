@@ -1,5 +1,4 @@
 // import React from 'react';
-import Viz from 'viz.js/viz.js';
 import API from "../API";
 import React, {Fragment} from "react";
 import {ExternalLinkIcon} from "react-open-iconic-svg";
@@ -110,7 +109,7 @@ export function showQualify(node, prefixMap) {
                 };
             }
             // const matchString =
-            const datatypeLiteralRegex = /\"(.*)\"\^\^(.*)/g
+            const datatypeLiteralRegex = /\"(.*)\"\^\^(.*)/g;
             const matchDatatypeLiteral = datatypeLiteralRegex.exec(node);
             if (matchDatatypeLiteral) {
                 const literal = matchDatatypeLiteral[1];
@@ -157,7 +156,7 @@ export function showQualify(node, prefixMap) {
                 localName: node.value,
                 str: `_:${node.value}`,
                 node: node
-            }
+            };
             console.log(`ShowQualify: Unknown format for node: ${JSON.stringify(node)}`);
             return {
                 type: 'Unknown',
@@ -182,7 +181,7 @@ export function showQualify(node, prefixMap) {
 export function showQualified(qualified, prefixes) {
     // console.log(`showQualified ${JSON.stringify(qualified)}`)
     switch (qualified.type) {
-        case 'RelativeIRI': return <span>{qualified.str}</span>
+        case 'RelativeIRI': return <span>{qualified.str}</span>;
         case 'QualifiedName':
             // console.log(`QualifiedName: ${qualified.prefix}`)
             if (prefixes[qualified.prefix]) {
@@ -218,7 +217,7 @@ export function cnvValueFromSPARQL(value) {
             if (value['xml:lang']) return `"${value.value}"@${value['xml:lang']}`;
             return `"${value.value}"`;
         default:
-            console.error(`cnvValueFromSPARQL: Unknown value type for ${value}`)
+            console.error(`cnvValueFromSPARQL: Unknown value type for ${value}`);
             return value
     }
 }
@@ -419,4 +418,15 @@ export function format2mode(format) {
                 return "turtle"
         }
     } else return "turtle"
+}
+
+const regexUrl = new RegExp("^(https?:\\/\\/)?"+ // protocol
+    "((((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,})|localhost)|"+ // domain name
+    "((\\d{1,3}\\.){3}\\d{1,3}))"+ // OR ip (v4) address
+    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*"+ // port and path
+    "(\\?[;&a-z\\d%_.~+=-]*)?"+ // query string
+    "(\\#[-a-z\\d_]*)?$","i");
+
+export function validateURL (receivedUrl) {
+    return !!regexUrl.test(receivedUrl);
 }

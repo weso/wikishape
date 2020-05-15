@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from "prop-types";
+import API from "../API";
 import Yasqe from 'yasgui-yasqe/dist/yasqe.bundled.min';
 import 'yasgui-yasqe/dist/yasqe.min.css';
 import 'codemirror/addon/display/placeholder';
@@ -15,12 +16,16 @@ function QueryForm(props) {
                 sparql: { showQueryButton: false },
                 createShareLink: null,
                 placeholder: placeholder,
-                readonly: readonly
+                readonly: readonly,
+                autofocus: true,
+                requestConfig: {
+                  endpoint: localStorage.getItem("endpoint") || API.wikidataContact.endpoint,
+                }
             };
 //            const y = Yasqe.fromTextArea(textAreaRef, options);
             const y = Yasqe.fromTextArea(document.getElementById('SPARQL-TextArea'), options);
-            y.on('change', (cm,change) => {
-                onChange(cm.getValue())
+            y.on('change', (cm, change) => {
+                onChange(cm.getValue());
             });
 
 //             y.addPrefixes(prefixes);
@@ -44,6 +49,7 @@ function QueryForm(props) {
 
 QueryForm.propTypes = {
     value: PropTypes.string,
+    autocomplete: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
     readonly: PropTypes.bool,
@@ -51,7 +57,8 @@ QueryForm.propTypes = {
 };
 
 QueryForm.defaultProps = {
-    value: ''
+    value: '',
+    prefixes: {},
 };
 
 export default QueryForm;

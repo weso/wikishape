@@ -26,7 +26,7 @@ function InputEntitiesByText(props) {
         return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
-                console.log(`Response for ${label}: ${JSON.stringify(json)}`);
+                // console.log(`Response for ${label}: ${JSON.stringify(json)}`);
                 return json;
             });
     }
@@ -37,7 +37,7 @@ function InputEntitiesByText(props) {
         console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`);
         makeAndHandleRequest(query, language, 0)
             .then((resp) => {
-                console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
+                // console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
                 setIsLoading(false);
                 setOptions(resp);
             });
