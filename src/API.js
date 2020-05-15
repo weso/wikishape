@@ -75,7 +75,7 @@ class API {
     };
 
     static localWikibaseContact = {
-        url: "http://localhost:8282",
+        url: "http://localhost:8181",
         endpoint: "http://localhost:8282/proxy/wdqs/bigdata/namespace/wdq/sparql"
     }
 }

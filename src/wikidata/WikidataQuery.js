@@ -26,15 +26,21 @@ function WikidataQuery() {
 
     const divStyle = {
         display: 'flex',
-        marginTop: '10px'
+        margin: '10px'
     };
     const spinnerStyle = {
         marginLeft: '10px',
         visibility: isLoading?'visible':'hidden'
     };
 
+    function handleChange(queryText){
+      const query = queryText.replace(/^PREFIX.*$/im, '');
+      setQuery(query);
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
+        console.log(query)
         let params = {};
         params['query'] = query;
         params['endpoint']= localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
@@ -44,6 +50,7 @@ function WikidataQuery() {
 
     function resolveQuery(url,formData) {
         setIsLoading(true);
+        
         let axiosConfig = {
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
@@ -51,44 +58,59 @@ function WikidataQuery() {
             }
         };
         axios.post(url,formData,axiosConfig)
-            .then(response => response.data)
-            .then(data => {
-                setIsLoading(false)
-                setResult(data);
-            }).catch(error => {
-            setError(`Error on request: ${url}:  ${error.message}`)
-        })
+            .then(response => {
+              setIsLoading(false);
+              const results = response.data.results;
+              // TODO: Even if the request fails, the RdfShape server returns a 200 status with no data so the client does not
+              // realizes there is no data and may fail processing it. Refactor the server to return a more accurate code.
+              if (results && results.bindings.length > 0) {
+                setError(null);
+                setResult(response.data);
+              }
+              else {
+                setResult(null);
+                setError(`Error on request: ${url}:  No results found`);
+              }
+            })
+            .catch(error => {
+              setResult(null);
+              setError(`Error on request: ${url}:  ${error.message}`);
+            }).finally ( () => {
+                setIsLoading(false);
+                console.log(result);
+              }
+            );
+          
     }
 
 
     return (
        <Container fluid={true}>
          <h1>Query current endpoint:</h1>
-         <h4>{localStorage.getItem("endpoint")}</h4>
+         <h4>{localStorage.getItem("endpoint") || API.wikidataContact.endpoint}</h4>
          <Row>
              <Col>
-             { result || isLoading || error ?
-             <div>
-                 {isLoading ? <Pace color="#27ae60"/> :
-                     error? <Alert variant="danger">{error}</Alert> :
-                     result ?
-                         <ResultEndpointQuery result={result} /> : null
-                 }
-                 { permalink &&  <Permalink url={permalink} /> }
-             </div> : null
-             }
              <Form onSubmit={handleSubmit}>
-               <QueryForm
-                         onChange={setQuery}
+               <QueryForm 
+                         onChange={handleChange}
                          placeholder="select ?id ..."
                          value={query}
-                         prefixes = { wikidataPrefixes }
              />
              <div style={divStyle}>
              <Button variant="primary"
                              type="submit">Resolve</Button>
              <Spinner style={spinnerStyle} animation="border" variant="primary" /></div>
              </Form>
+             { result || isLoading || error ?
+              <div>
+                  {isLoading ? <Pace color="#27ae60"/> :
+                      error? <Alert variant="danger">{error}</Alert> :
+                      result ?
+                          <ResultEndpointQuery result={result} /> : null
+                  }
+                  { permalink &&  <Permalink url={permalink} /> }
+              </div> : null
+              }
              </Col>
          </Row>
        </Container>
