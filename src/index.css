@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.container-fluid {
+   padding: 0 !important;
+ }
+
+.container-fluid > .container-fluid, .container-fluid > .container {
+  margin: 2% auto;
+}
+
+@media only screen and (min-width: 600px) {
+  .container-fluid > .container-fluid, .container-fluid > .container{
+    max-width: 80%;
+  }
+}
+
+.container-fluid .container-fluid > h4, .container-fluid .container > h4 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container-fluid > .row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+table td {
+  overflow-x: auto;
+}

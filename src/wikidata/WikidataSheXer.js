@@ -89,7 +89,7 @@ function WikidataSheXer(props) {
             .then (response => response.data)
             .then((data) => {
                 setLoading(false);
-                setResult(data)
+                setResult(data);
                 if (cb) cb()
             })
             .catch(function (error) {

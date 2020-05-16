@@ -8,6 +8,8 @@ import Form from 'react-bootstrap/Form';
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import API from "../API";
+import {validateURL} from "../utils/Utils"
+import Container from "react-bootstrap/Container";
 
 function ChangeWikibaseURL(props) {
 
@@ -46,17 +48,6 @@ function ChangeWikibaseURL(props) {
         {name: "Example wikibase", data: API.exampleWikibaseContact },
         {name: "Local wikibase (default)", data: API.localWikibaseContact },
     ];
-
-    const regexUrl = new RegExp("^(https?:\\/\\/)?"+ // protocol
-        "((((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,})|localhost)|"+ // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))"+ // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*"+ // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?"+ // query string
-        "(\\#[-a-z\\d_]*)?$","i");
-
-    function validateURL (receivedUrl) {
-        return !!regexUrl.test(receivedUrl);
-    }
 
     function processUrl (receivedUrl) {
         // Validate base url
@@ -138,6 +129,7 @@ function ChangeWikibaseURL(props) {
         if (!isCommonUrl(url)){
             processUrl(url);
         }
+        console.log(url)
     }
 
     function handleOnChangeEndpoint(e) {
@@ -146,6 +138,7 @@ function ChangeWikibaseURL(props) {
         if (!isCommonEndpoint(endpoint)){
             processEndpoint(endpoint);
         }
+        console.log(endpoint)
     }
 
     function handleOnSelect(e) {
@@ -164,37 +157,39 @@ function ChangeWikibaseURL(props) {
     );
 
     return (
-        <Form.Group>
+        <Container>
+            <Form.Group>
 
-            <Form.Label>Custom Wikibase URL</Form.Label>
-            <Form.Control as="input"
-                          type="url"
-                          placeholder="https://..."
-                          value={url}
-                          onChange={handleOnChangeUrl}
-            />
-            <span style={messageUrlStyle}>{messageUrl}</span><br/>
+                <Form.Label>Custom Wikibase URL</Form.Label>
+                <Form.Control as="input"
+                              type="url"
+                              placeholder="https://..."
+                              value={url}
+                              onChange={handleOnChangeUrl}
+                />
+                <span style={messageUrlStyle}>{messageUrl}</span><br/>
 
 
-            <Form.Label>Custom Wikibase Endpoint</Form.Label>
-            <Form.Control as="input"
-                          type="url"
-                          placeholder="https://..."
-                          value={endpoint}
-                          onChange={handleOnChangeEndpoint}
-            />
-            <span style={messageEndpointStyle}>{messageEndpoint}</span>
+                <Form.Label>Custom Wikibase Endpoint</Form.Label>
+                <Form.Control as="input"
+                              type="url"
+                              placeholder="https://..."
+                              value={endpoint}
+                              onChange={handleOnChangeEndpoint}
+                />
+                <span style={messageEndpointStyle}>{messageEndpoint}</span>
 
-            <hr/>
-            <Dropdown onSelect={handleOnSelect}>
-                <DropdownButton alignRight
-                                title="Common Wikibase Instances"
-                                id="select-endpoint"
-                >
-                    {dropDownItems}
-                </DropdownButton>
-            </Dropdown>
-        </Form.Group>
+                <hr/>
+                <Dropdown onSelect={handleOnSelect}>
+                    <DropdownButton alignRight
+                                    title="Common Wikibase Instances"
+                                    id="select-endpoint"
+                    >
+                        {dropDownItems}
+                    </DropdownButton>
+                </Dropdown>
+            </Form.Group>
+        </Container>
     );
 }
 

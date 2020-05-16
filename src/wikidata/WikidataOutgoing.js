@@ -82,6 +82,7 @@ function WikidataOutgoing(props) {
     return (
        <Container>
          <h1>Outgoing arcs from entity</h1>
+           <h4>Current endpoint: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
                { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}

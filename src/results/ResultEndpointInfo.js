@@ -1,5 +1,5 @@
 import React from 'react';
-import { Permalink}  from '../Permalink'
+import {Permalink} from '../Permalink'
 
 function ResultEndpointInfo(props) {
     return (
