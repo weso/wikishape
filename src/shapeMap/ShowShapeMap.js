@@ -2,8 +2,12 @@ import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import Alert from "react-bootstrap/Alert";
 
+
+// TODO: Replace by utils/showQualify
 function showQualifyShapeMap(node, prefix) {
     console.log(`showQualifyShapeMap ${JSON.stringify(node)}`);
+    if (!node) return <code>?</code>;
+    if (node == "<http://www.w3.org/ns/shex#Start>") return <code>START</code>;
     // console.log(node);
     const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
     const matchBase = relativeBaseRegex.exec(node);
@@ -28,7 +32,8 @@ function showQualifyShapeMap(node, prefix) {
             }
             return <a href={rawNode}>{"<" + rawNode + ">"}</a>;
         }
-        if (node.match(/^[0-9"'_]/)) return node;
+        if (node.match(/^[0-9"'_]/)) return node ;
+        if (node === "START") return node ;
         console.error("Unknown format for node: " + node);
         return node;
     }
@@ -47,10 +52,12 @@ function shapeMap2Table(shapeMap, nodesPrefixMap, shapesPrefixMap) {
 }
 
 function shapeFormatter(cell, row) {
-    if (row.status ==='conformant') {
-        return (<span style={ { color:'green'} }>{cell}</span> );
-    } else
-        return (<span style={ {color: 'red'}}>!{cell}</span> );
+    switch (row.status) {
+        case 'conformant': return (<span style={{color: 'green'}}>{cell}</span>);
+        case '?': return (<span style={ {color: 'orange'}}>?{cell}</span> );
+        case 'nonconformant': return (<span style={ {color: 'red'}}>!{cell}</span> );
+        default: return (<span style={ {color: 'blue'}}>unknown status: ${row.status}: {cell}</span> );
+    }
 }
 
 function detailsFormatter(cell, row) {

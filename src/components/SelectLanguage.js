@@ -60,7 +60,7 @@ function SelectLanguage(props) {
 }
 
 SelectLanguage.propTypes = {
-    language: PropTypes.string,
+    language: PropTypes.array,
     onChange: PropTypes.func.isRequired,
 };
 

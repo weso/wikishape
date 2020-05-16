@@ -62,7 +62,10 @@ function WikidataValidateSPARQL(props) {
                 .then(response => response.data)
                 .then(result => {
                     console.log(`Result of schema info: ${JSON.stringify(result)}`)
-                    dispatch({type: 'set-shapeList', value: { shapeList: result.shapes, shapesPrefixMap: result.prefixMap} })
+                    dispatch({type: 'set-shapeList', value: {
+                        shapeList: result.shapes,
+                        shapesPrefixMap: result.prefixMap} }
+                    );
                     dispatchShEx({type:'setUrl', value: schemaEntity.conceptUri})
                 })
                 .catch(error => {

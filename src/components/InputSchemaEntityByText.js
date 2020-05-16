@@ -44,7 +44,7 @@ function InputSchemaEntityByText(props) {
                 lang: lang
             }
         });
-        console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
+        // console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
         return ses
     }
 

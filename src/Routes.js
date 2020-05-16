@@ -2,7 +2,7 @@ import React, {
     // useState
 } from 'react';
 import './App.css';
-import {HashRouter as Router, Route, Switch} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import NotFound from './NotFound.js';
 import About from './About.js';
 import Home from './Home.js';
@@ -16,7 +16,7 @@ import WikidataExtract from './wikidata/WikidataExtract';
 import WikidataSheXer from './wikidata/WikidataSheXer';
 import WikidataOutgoing from './wikidata/WikidataOutgoing';
 import WikidataProperty from "./wikidata/WikidataProperty";
-import ChangeWikibaseURL from "./ChangeWikibaseURL";
+import ChangeWikibaseURL from "./settings/ChangeWikibaseURL";
 import WikidataValidateDeref from "./wikidata/WikidataValidateDeref";
 
 function Routes() {

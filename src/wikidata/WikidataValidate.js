@@ -49,14 +49,14 @@ function WikidataValidate(props) {
               const shExParams = shExParamsFromQueryParams(params);
               dispatchShEx({type: 'set-params', value: shExParams});
               dispatch({type: 'set-params', value: params});
-              console.log(`Entities: ${status.entities} Shape-label: ${status.shapeLabel}`)
+              console.log(`Entities: ${status.entities} Shape-label: ${status.shapeLabel} SchemaEntity: ${status.schemaEntity}`)
               validate();
           } catch(error) {
               dispatch({type: 'set-error', value: error.message})
           }
         }
     },
-        [props.location.search]
+        [props.location.search,status.schemaEntity]
     );
 
     function handleChange(es) {

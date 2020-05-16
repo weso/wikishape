@@ -5,14 +5,15 @@ class Home extends React.Component {
  render() {
      return (
        <Container>
-           <p>Wikishape is a Shape Expressions playground customized for Wikidata</p>
+           <p>Wikishape is a playground customized for Wikidata and Wikibase instances</p>
            <p>If you want a more general RDF playground you can visit <a href="http://rdfshape.weso.es">RDFShape</a></p>
            <p>With Wikishape, you can do the following:</p>
            <ul>
-               <li>Validate Wikidata entities with Wikidata schemas</li>
-               <li>Get information about Wikidata schemas</li>
-               <li>Visualize Wikidata schemas</li>
-               <li>Query Wikidata entities</li>
+               <li>Get information about entities, properties and entity schemas</li>
+               <li>Visualize entity schemas</li>
+               <li>Query entities</li>
+               <li>Validate entities with entity schemas (ShEx)</li>
+               <li>Extract/infer schemas from entities</li>
            </ul>
            <p>You can provide feedback or suggestions through <a href="https://github.com/weso/wikishape/issues">Github issues</a>.</p>
            <p>The source code is available <a href="https://github.com/weso/wikishape">here</a>.</p>

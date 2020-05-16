@@ -54,7 +54,7 @@ function rowIn(row, shapeMap) {
     return shapeMap.filter(r => (r.node === row.node && r.shape === row.shape)).length >= 1
 }
 
-function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
+export function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
  if (shapeMap2 && shapeMap2.length && Array.isArray(shapeMap2)) {
     const qualifiedShapeMap2 = shapeMap2.map(sm => {
         return { ...sm,
@@ -68,7 +68,7 @@ function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
     const newValues = qualifiedShapeMap2.filter((row) => !rowIn(row, qualifiedShapeMap1));
     return mergedValues.concat(newValues);
  } else
-      return shapeMap1
+    return shapeMap1
 }
 
 export function mergeResult(result, newResult, shapesPrefixMap) {
@@ -122,21 +122,7 @@ function ResultValidate(props) {
     } else {
         msg = <div>
             { result.message && <Alert variant="success">{result.message} </Alert> }
-            { result.errors &&
-            <div> {
-               result.errors.map(
-                   (e,idx) =>{
-              let msgErr;
-              if (e.type) {
-                  msgErr = <Alert id={idx} variant="danger">{e.type}: {e.error} }</Alert>
-              } else {
-                  msgErr = <Alert id={idx} variant="danger">{e}</Alert>
-              }
-              return msgErr ;
-             })
-            }
-            </div>
-            }
+            { result.errors && <div> { showErrors(result.errors) }  </div> }
             { result.shapeMap && <ShowShapeMap
                 shapeMap={result.shapeMap}
                 nodesPrefixMap={result.nodesPrefixMap}
@@ -149,6 +135,23 @@ function ResultValidate(props) {
     return (
         <div>{msg}</div>
     );
+}
+
+function showErrors(es) {
+  if (Array.isArray(es)) {
+        es.map(
+            (e,idx) =>{
+                let msgErr;
+                console.log(`Errors: ${es} e: ${e}`);
+                if (e.type) {
+                    msgErr = <Alert id={idx} variant="danger">{e.type}: {e.error} }</Alert>
+                } else {
+                    msgErr = <Alert id={idx} variant="danger">{e}</Alert>
+                }
+                return msgErr ;
+            }) } else {
+     return <Alert variant="danger">{es}</Alert>
+  }
 }
 
 export default ResultValidate;

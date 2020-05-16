@@ -9,7 +9,8 @@ import API from './API.js'
 function WikishapeNavbar() {
 
     function mkHash(route) {
-        return "#" + route;
+        return route ;
+        // return "#" + route;
     }
 
     return (
@@ -42,6 +43,12 @@ function WikishapeNavbar() {
                         </NavDropdown>
                     </Nav>
                     <Nav>
+                        <NavDropdown title="Examples" id="basic-nav-dropdown">
+                            <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&node=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ42'>Show entity (Q42)</NavDropdown.Item>
+                            {/*<NavDropdown.Item href='/#/wikidataSchemaInfo?id=E42&lang=en'>Show entity schema (E42)</NavDropdown.Item>*/}
+                            <NavDropdown.Item href='/wikidataSchemaVisual?id=E42&lang=en'>Visualize entity schema (E42)</NavDropdown.Item>
+                            <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&node=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FP31'>Property</NavDropdown.Item>
+                        </NavDropdown>
                         <NavDropdown title="Settings" id="basic-nav-dropdown">
                             <NavDropdown.Item href={mkHash(API.changeWikibaseURLRoute)}>Change Wikibase URL / SPARQL endpoint</NavDropdown.Item>
                         </NavDropdown>

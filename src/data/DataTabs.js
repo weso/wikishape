@@ -1,5 +1,5 @@
 import React from 'react';
-import TurtleForm from "../TurtleForm.delete";
+import TurtleForm from "../deletedFiles/TurtleForm.delete";
 import InputTabsWithFormat from "../components/InputTabsWithFormat";
 import API from "../API"
 import PropTypes from 'prop-types';

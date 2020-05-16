@@ -60,15 +60,15 @@ function WikidataSchemaVisual(props) {
     }
 
     function getSchemaEntity(params) {
-      const id = params['id'];
-      const lang = params['lang'] ? params['lang'] : 'en'
-      const e = SchemaEntities.find(e => e.id === id)
-      if (e) {
-          console.log(`found entity: ${JSON.stringify(e)}`);
-          return mkSchemaEntity(e,lang);
-      } else {
-          setError(`Entity with id ${id} not found`)
-      }
+        const id = params['id'];
+        const lang = params['lang'] ? params['lang'] : 'en'
+        const e = SchemaEntities.find(e => e.id === id)
+        if (e) {
+            console.log(`found entity: ${JSON.stringify(e)}`);
+            return mkSchemaEntity(e,lang);
+        } else {
+            setError(`Entity with id ${id} not found`)
+        }
     }
 
 
@@ -134,7 +134,6 @@ function WikidataSchemaVisual(props) {
                   <p><code><a href={schemaWebUri}>{schemaWebUri}</a></code></p>
                   { result? <PrintSVG svg={result.svg}/> : null }
                   <details><ShExForm onChange={()=>null} placeholder={''} readonly={true} value={shExContent} /></details>
-                  <Permalink  />
               </div>
               : null
           }

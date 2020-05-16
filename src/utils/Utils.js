@@ -69,10 +69,18 @@ export function maybeAdd(maybe,name,obj) {
  */
 export function showQualify(node, prefixMap) {
     // console.log(`node: ${JSON.stringify(node)}`)
-    if (node) {
-        const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
-        const matchBase = relativeBaseRegex.exec(node);
-        if (matchBase) {
+    if (!node) {
+        return {
+            type: 'empty',
+            prefix: '',
+            localName: '',
+            str: '',
+            node: node
+        }
+    }
+    const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
+    const matchBase = relativeBaseRegex.exec(node);
+    if (matchBase) {
             const rawNode = matchBase[1];
             return {
                 type: 'RelativeIRI',
@@ -82,23 +90,33 @@ export function showQualify(node, prefixMap) {
                 localName: '',
                 node: node
             }
-        } else {
-            const iriRegexp = /^<(.*)>$/g;
-            const matchIri = iriRegexp.exec(node);
-            if (matchIri) {
-                const rawNode = matchIri[1];
-                for (const key in prefixMap) {
-                    if (rawNode.startsWith(prefixMap[key])) {
-                        const localName = rawNode.slice(prefixMap[key].length);
-                        return {
-                            type: 'QualifiedName',
-                            uri: rawNode,
-                            prefix: key,
-                            localName: localName,
-                            str: `${key}:${localName}`,
-                            node: node
-                        };
-                    }
+    }
+    if (node === "<http://www.w3.org/ns/shex#Start>") {
+        return {
+            type: 'RelativeIRI',
+            uri: "http://www.w3.org/ns/shex#Start",
+            str: `START`,
+            prefix: '',
+            localName: '',
+            node: node
+        }
+    }
+    const iriRegexp = /^<(.*)>$/g;
+    const matchIri = iriRegexp.exec(node);
+    if (matchIri) {
+       const rawNode = matchIri[1];
+       for (const key in prefixMap) {
+          if (rawNode.startsWith(prefixMap[key])) {
+               const localName = rawNode.slice(prefixMap[key].length);
+                   return {
+                    type: 'QualifiedName',
+                    uri: rawNode,
+                    prefix: key,
+                    localName: localName,
+                    str: `${key}:${localName}`,
+                    node: node
+                };
+            }
                 }
                 return {
                     type: 'FullIRI',
@@ -109,30 +127,30 @@ export function showQualify(node, prefixMap) {
                     node: node
                 };
             }
-            // const matchString =
-            const datatypeLiteralRegex = /\"(.*)\"\^\^(.*)/g
-            const matchDatatypeLiteral = datatypeLiteralRegex.exec(node);
-            if (matchDatatypeLiteral) {
-                const literal = matchDatatypeLiteral[1];
-                const datatype = matchDatatypeLiteral[2];
-                const datatypeQualified = showQualify(datatype, prefixMap);
-                const datatypeElement = showQualified(datatypeQualified, prefixMap);
-                return {
-                    type: 'DatatypeLiteral',
-                    prefix: '',
-                    localName: '',
-                    str: `"${literal}"`,
-                    datatype: datatype,
-                    datatypeElement: datatypeElement,
-                    node: node
-                }
-            }
-            const langLiteralRegex = /\"(.*)\"@(.*)/g;
-            const matchLangLiteral = langLiteralRegex.exec(node);
-            if (matchLangLiteral) {
-                const literal = matchLangLiteral[1];
-                const lang = matchLangLiteral[2];
-                return {
+     // const matchString =
+     const datatypeLiteralRegex = /\"(.*)\"\^\^(.*)/g
+     const matchDatatypeLiteral = datatypeLiteralRegex.exec(node);
+     if (matchDatatypeLiteral) {
+       const literal = matchDatatypeLiteral[1];
+       const datatype = matchDatatypeLiteral[2];
+       const datatypeQualified = showQualify(datatype, prefixMap);
+       const datatypeElement = showQualified(datatypeQualified, prefixMap);
+       return {
+          type: 'DatatypeLiteral',
+          prefix: '',
+          localName: '',
+          str: `"${literal}"`,
+          datatype: datatype,
+          datatypeElement: datatypeElement,
+          node: node
+       }
+     }
+     const langLiteralRegex = /\"(.*)\"@(.*)/g;
+     const matchLangLiteral = langLiteralRegex.exec(node);
+     if (matchLangLiteral) {
+       const literal = matchLangLiteral[1];
+       const lang = matchLangLiteral[2];
+       return {
                     type: 'LangLiteral',
                     prefix: '',
                     localName: '',
@@ -140,43 +158,40 @@ export function showQualify(node, prefixMap) {
                     datatype: null,
                     node: node
                 }
-            }
-            const literalRegex = /\"(.*)\"/g;
-            const matchLiteral = literalRegex.exec(node);
-            if (matchLiteral) return {
-                type: 'Literal',
-                prefix: '',
-                localName: '',
-                str: node,
-                datatype: null,
-                node: node
-            };
-            if (node.type === 'bnode') return {
-                type: 'BNode',
-                prefix: '',
-                localName: node.value,
-                str: `_:${node.value}`,
-                node: node
-            }
-            console.log(`ShowQualify: Unknown format for node: ${JSON.stringify(node)}`);
-            return {
-                type: 'Unknown',
-                prefix: '',
-                localName: '',
-                str: node,
-                datatype: null,
-                node: node
-            };
-        }
-    } else {
-        return {
-            type: 'empty',
-            prefix: '',
-            localName: '',
-            str: '',
-            node: node
-        }
-    }
+     }
+     const literalRegex = /\"(.*)\"/g;
+     const matchLiteral = literalRegex.exec(node);
+     if (matchLiteral) return {
+       type: 'Literal',
+       prefix: '',
+       localName: '',
+       str: node,
+       datatype: null,
+       node: node
+     };
+     if (node.type === 'bnode') return {
+      type: 'BNode',
+      prefix: '',
+      localName: node.value,
+      str: `_:${node.value}`,
+      node: node
+     }
+     if (node.isString && node.toUpperCase() === 'START') return {
+      type: 'START',
+      prefix: '',
+      localName: '',
+      str: ``,
+      node: node
+     }
+     console.log(`ShowQualify: Unknown format for node: ${JSON.stringify(node)}`);
+     return {
+      type: 'Unknown',
+      prefix: '',
+      localName: '',
+      str: node,
+      datatype: null,
+      node: node
+  };
 }
 
 export function showQualified(qualified, prefixes) {
@@ -197,6 +212,7 @@ export function showQualified(qualified, prefixes) {
         case 'DatatypeLiteral' : return <span>{qualified.str}^^<a href={qualified.datatype}>&lt;{qualified.datatype}&gt;</a></span>;
         case 'Literal' : return <span>{qualified.str}</span>;
         case 'LangLiteral' : return <span>{qualified.str}</span>;
+        case 'START' : return <span>{qualified.str}</span>;
         default:
             console.error(`Unknown type for qualified value`);
             return <span>{qualified.str}</span>

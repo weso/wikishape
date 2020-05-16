@@ -7,7 +7,7 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
 import Form from 'react-bootstrap/Form';
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import API from "./API";
+import API from "../API";
 
 function ChangeWikibaseURL(props) {
 

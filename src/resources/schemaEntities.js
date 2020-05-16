@@ -35,6 +35,12 @@ export const SchemaEntities = [
         "descr" : "Schema of ShEx",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ShExR",
+        "descr" : "ShEx記述用のスキーマ",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "ShExR",
@@ -97,6 +103,12 @@ export const SchemaEntities = [
         "descr" : "Schema of Wikimedia projects in Wikidata",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "Wikimedia",
+        "descr" : "WikidataにおけるWikimediaプロジェクトを記述するためのスキーマ",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "Wikimedia",
@@ -121,6 +133,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Wikidata Item",
         "descr" : "Schema of a Wikidata item",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "Wikidata項目",
+        "descr" : "Wikidata項目記述用のスキーマ",
         "aliases" : ""
       },
       "hu" : {
@@ -149,10 +167,22 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E4",
     "title" : "Labels/Descriptions (E4) - Wikidata",
     "labels" : {
+      "it" : {
+        "lang" : "it",
+        "label" : "Etichetta/Descrizione",
+        "descr" : "schema per etichette e descrizioni di un elemento",
+        "aliases" : ""
+      },
       "en" : {
         "lang" : "en",
         "label" : "Labels/Descriptions",
         "descr" : "Schema of labels and descriptions",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ラベル／説明",
+        "descr" : "ラベル及び説明を記述するためのスキーマ",
         "aliases" : ""
       },
       "ar" : {
@@ -166,12 +196,6 @@ export const SchemaEntities = [
         "label" : "Libellés/Descriptions",
         "descr" : "",
         "aliases" : ""
-      },
-      "it" : {
-        "lang" : "it",
-        "label" : "Etichetta/Descrizione",
-        "descr" : "schema per etichette e descrizioni di un elemento",
-        "aliases" : ""
       }
     }
   },
@@ -181,10 +205,22 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E5",
     "title" : "Statement (E5) - Wikidata",
     "labels" : {
+      "it" : {
+        "lang" : "it",
+        "label" : "Dichiarazione",
+        "descr" : "schema per una dichiarazione in un elemento",
+        "aliases" : ""
+      },
       "en" : {
         "lang" : "en",
         "label" : "Statement",
         "descr" : "Schema of a Statement",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ステートメント",
+        "descr" : "ステートメント記述用のスキーマ",
         "aliases" : ""
       },
       "ar" : {
@@ -197,12 +233,6 @@ export const SchemaEntities = [
         "lang" : "fr",
         "label" : "Déclaration",
         "descr" : "",
-        "aliases" : ""
-      },
-      "it" : {
-        "lang" : "it",
-        "label" : "Dichiarazione",
-        "descr" : "schema per una dichiarazione in un elemento",
         "aliases" : ""
       }
     }
@@ -223,6 +253,12 @@ export const SchemaEntities = [
         "lang" : "it",
         "label" : "Mappatura lingue",
         "descr" : "schema per mappare le lingue",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "言語間マップ",
+        "descr" : "言語間マップを記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -255,6 +291,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Citation",
         "descr" : "Schema of a Citation",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "引用",
+        "descr" : "引用記述用のスキーマ",
         "aliases" : ""
       },
       "hu" : {
@@ -295,6 +337,12 @@ export const SchemaEntities = [
         "descr" : "Schema of a Citation",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "外部RDF",
+        "descr" : "外部RDF記述用のスキーマ",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "Külső RDF",
@@ -326,6 +374,12 @@ export const SchemaEntities = [
         "label" : "Link Wikibase-Wikidata",
         "descr" : "schema per i link fra Wikibase e Wikidata",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "Wikidata-Wikibase",
+        "descr" : "WikidataとWikibaseをリンクするためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -347,12 +401,6 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : "persona"
       },
-      "ca" : {
-        "lang" : "ca",
-        "label" : "humà",
-        "descr" : "schema per a éssers humans",
-        "aliases" : "persona | ésser humà"
-      },
       "nl" : {
         "lang" : "nl",
         "label" : "mens",
@@ -362,7 +410,7 @@ export const SchemaEntities = [
       "ko" : {
         "lang" : "ko",
         "label" : "사람",
-        "descr" : "",
+        "descr" : "사람을 위한 간단한 스키마",
         "aliases" : "인간 | 인물"
       },
       "fy" : {
@@ -398,7 +446,7 @@ export const SchemaEntities = [
       "ja" : {
         "lang" : "ja",
         "label" : "ヒト",
-        "descr" : "",
+        "descr" : "ヒト記述用のスキーマ",
         "aliases" : "人間"
       },
       "fi" : {
@@ -448,6 +496,18 @@ export const SchemaEntities = [
         "label" : "umano",
         "descr" : "schema per descrivere un essere umano",
         "aliases" : "persona | individuo | essere umano"
+      },
+      "ca" : {
+        "lang" : "ca",
+        "label" : "humà",
+        "descr" : "schema per a éssers humans",
+        "aliases" : "persona | ésser humà"
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "humano",
+        "descr" : "esquema para descrever seres humanos",
+        "aliases" : ""
       },
       "eo" : {
         "lang" : "eo",
@@ -535,6 +595,12 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : "festival de cine"
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "映画祭",
+        "descr" : "映画祭を記述するためのスキーマ",
+        "aliases" : ""
+      },
       "fi" : {
         "lang" : "fi",
         "label" : "elokuvafestivaali",
@@ -620,6 +686,12 @@ export const SchemaEntities = [
         "label" : "film festival edition",
         "descr" : "scheme for film festival editions",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "映画祭版",
+        "descr" : "映画祭版を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -657,6 +729,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "natural number",
         "descr" : "basic scheme for natural numbers",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "自然数",
+        "descr" : "自然数を記述するためのスキーマ",
         "aliases" : ""
       },
       "hu" : {
@@ -727,6 +805,12 @@ export const SchemaEntities = [
         "descr" : "scheme for humans with basic properties",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ヒト（基本プロパティ）",
+        "descr" : "基本的なプロパティを持つヒトを記述するためのスキーマ",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "ember (alaptulajdonságok)",
@@ -771,6 +855,12 @@ export const SchemaEntities = [
         "descr" : "schema per descrivere un lessema in lingua danese",
         "aliases" : ""
       },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "lexema dinamarquês",
+        "descr" : "",
+        "aliases" : ""
+      },
       "eo" : {
         "lang" : "eo",
         "label" : "dana leksemo",
@@ -787,6 +877,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Danish Lexeme",
         "descr" : "",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "デンマーク語語彙",
+        "descr" : "デンマーク語語彙を記述するためのスキーマ",
         "aliases" : ""
       },
       "hu" : {
@@ -825,6 +921,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Software Titles",
         "descr" : "schema for Wikidata statements related to software",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ソフトウェア",
+        "descr" : "ソフトウェアを記述するためのスキーマ",
         "aliases" : ""
       },
       "sv" : {
@@ -877,6 +979,12 @@ export const SchemaEntities = [
         "descr" : "esquema simple para una serie de televisión",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "テレビシリーズ",
+        "descr" : "テレビシリースを記述するための基本的なスキーマ、識別子は含まず",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "tévésorozat",
@@ -927,6 +1035,12 @@ export const SchemaEntities = [
         "descr" : "basic scheme for television series season, without identifiers",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "テレビシリーズのシーズン",
+        "descr" : "テレビシリーズのシーズンを記述するための基本的なスキーマ、識別子は含まず",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "tévésorozat évad",
@@ -971,6 +1085,12 @@ export const SchemaEntities = [
         "descr" : "basic scheme for television series episode, without identifiers",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "テレビシリーズのエピソード",
+        "descr" : "テレビシリーズのエピソードを記述するための基本的なスキーマ、識別子は含まず",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "tévésorozat epizód",
@@ -995,6 +1115,12 @@ export const SchemaEntities = [
         "lang" : "fr",
         "label" : "EastEnders",
         "descr" : "série mythique britannique",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "テレビシリーズ",
+        "descr" : "テレビシリーズを記述するための詳細なスキーマ",
         "aliases" : ""
       }
     }
@@ -1034,6 +1160,12 @@ export const SchemaEntities = [
         "label" : "rower",
         "descr" : "schema for items about rowers, defined by P106: Q13382576 or subclass thereof",
         "aliases" : "oarswoman | oarsman"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "漕ぎ手",
+        "descr" : "漕ぎ手を記述するためのスキーマ",
+        "aliases" : ""
       },
       "eo" : {
         "lang" : "eo",
@@ -1077,6 +1209,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "screenwriter",
         "descr" : "basic scheme for screenwriters",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "脚本家",
+        "descr" : "脚本家を記述するためのスキーマ",
         "aliases" : ""
       },
       "hu" : {
@@ -1123,6 +1261,12 @@ export const SchemaEntities = [
         "descr" : "basic schema for film producer",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "映画製作者",
+        "descr" : "映画製作者を記述するための基本的なスキーマ",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "filmproducer",
@@ -1165,6 +1309,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "film director",
         "descr" : "basic scheme for film directors",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "映画監督",
+        "descr" : "映画監督を記述するための基本的なスキーマ",
         "aliases" : ""
       },
       "hu" : {
@@ -1223,6 +1373,12 @@ export const SchemaEntities = [
         "descr" : "basic scheme for actor",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "役者",
+        "descr" : "役者を記述するための基本的なスキーマ",
+        "aliases" : "俳優 | 女優 | 男優"
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "színész",
@@ -1261,6 +1417,12 @@ export const SchemaEntities = [
         "descr" : "basic scheme for lightbulbs",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "電球",
+        "descr" : "電球を記述するための基本的なスキーマ",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "villanykörte",
@@ -1293,10 +1455,22 @@ export const SchemaEntities = [
         "descr" : "schema per descrivere una lampadina di tipo europeo",
         "aliases" : ""
       },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "lâmpada europeia",
+        "descr" : "esquema básico para lâmpada europeia",
+        "aliases" : ""
+      },
       "en" : {
         "lang" : "en",
         "label" : "European lightbulb",
         "descr" : "basic scheme for European lightbulbs",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "欧風電球",
+        "descr" : "欧風の電球を記述するための基本的なスキーマ",
         "aliases" : ""
       },
       "hu" : {
@@ -1313,21 +1487,9 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E28",
     "title" : "cinematographer (E28) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "cinematographer",
-        "descr" : "basic schema for cinematographer",
-        "aliases" : ""
-      },
       "fr" : {
         "lang" : "fr",
         "label" : "directeur de la photographie",
-        "descr" : "",
-        "aliases" : ""
-      },
-      "hu" : {
-        "lang" : "hu",
-        "label" : "operatőr",
         "descr" : "",
         "aliases" : ""
       },
@@ -1335,6 +1497,24 @@ export const SchemaEntities = [
         "lang" : "it",
         "label" : "direttore/direttrice della fotografia",
         "descr" : "schema per descrivere un/una direttore/direttrice della fotografia",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "cinematographer",
+        "descr" : "basic schema for cinematographer",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "撮影監督",
+        "descr" : "撮影監督を記述するための基本的なスキーマ",
+        "aliases" : ""
+      },
+      "hu" : {
+        "lang" : "hu",
+        "label" : "operatőr",
+        "descr" : "",
         "aliases" : ""
       }
     }
@@ -1362,6 +1542,12 @@ export const SchemaEntities = [
         "label" : "cineoperatore/cineoperatrice",
         "descr" : "schema per descrivere un/una cineoperatore/cineoperatrice",
         "aliases" : "cameraman | camerawoman"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "カメラマン",
+        "descr" : "カメラマンを記述するための基本的なスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -1400,6 +1586,12 @@ export const SchemaEntities = [
         "label" : "Australian national parks",
         "descr" : "basic schema for national parks in Australia",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "オーストラリア国立公園",
+        "descr" : "オーストラリアの国立公園を記述するための基本的なスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -1409,18 +1601,6 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E31",
     "title" : "File Format Families (E31) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "File Format Families",
-        "descr" : "schema for Wikidata statements related to file format families",
-        "aliases" : ""
-      },
-      "da" : {
-        "lang" : "da",
-        "label" : "filformat-familie",
-        "descr" : "",
-        "aliases" : ""
-      },
       "fr" : {
         "lang" : "fr",
         "label" : "format de fichier",
@@ -1431,6 +1611,24 @@ export const SchemaEntities = [
         "lang" : "it",
         "label" : "formato file",
         "descr" : "schema per descrivere un formato o una famiglia di formati di file",
+        "aliases" : ""
+      },
+      "da" : {
+        "lang" : "da",
+        "label" : "filformat-familie",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "File Format Families",
+        "descr" : "schema for Wikidata statements related to file format families",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ファイル形式群",
+        "descr" : "ファイル形式に関するWikidataのステートメントのためのスキーマ",
         "aliases" : ""
       }
     }
@@ -1476,6 +1674,12 @@ export const SchemaEntities = [
         "label" : "sovereign state",
         "descr" : "basic schema for sovereign states",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "主権国家",
+        "descr" : "主権国家を記述するための基本的なスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -1495,6 +1699,18 @@ export const SchemaEntities = [
         "lang" : "fr",
         "label" : "Kakapo",
         "descr" : "",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "フクロウオウム",
+        "descr" : "フクロウオウムを記述するためのスキーマ",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "Kakapo",
+        "descr" : "Esquema para items sobre kakapos",
         "aliases" : ""
       }
     }
@@ -1546,6 +1762,12 @@ export const SchemaEntities = [
         "label" : "Danish noun",
         "descr" : "schema for Danish nouns",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "デンマーク語の名詞",
+        "descr" : "デンマーク語の名詞を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -1555,17 +1777,17 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E35",
     "title" : "written work (E35) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "written work",
-        "descr" : "abstract concept of a written work and its relations with its manifestations as editions",
-        "aliases" : "book"
-      },
       "fr" : {
         "lang" : "fr",
         "label" : "œuvre écrite",
         "descr" : "concept d'une œuvre écrite et ses relations avec ses manifestations comme éditions",
         "aliases" : "livre | livres"
+      },
+      "pt" : {
+        "lang" : "pt",
+        "label" : "obra escrita",
+        "descr" : "",
+        "aliases" : ""
       },
       "it" : {
         "lang" : "it",
@@ -1573,11 +1795,17 @@ export const SchemaEntities = [
         "descr" : "schema per descrivere un'opera scritta (e le sue relazioni con le edizioni e manifestazioni)",
         "aliases" : "libro | poesia"
       },
-      "pt" : {
-        "lang" : "pt",
-        "label" : "obra escrita",
-        "descr" : "",
-        "aliases" : ""
+      "en" : {
+        "lang" : "en",
+        "label" : "written work",
+        "descr" : "abstract concept of a written work and its relations with its manifestations as editions",
+        "aliases" : "book"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "著作",
+        "descr" : "著作の抽象概念、そしてその版としての表明との関係",
+        "aliases" : "本"
       }
     }
   },
@@ -1623,9 +1851,21 @@ export const SchemaEntities = [
         "descr" : "manifestation of a written work",
         "aliases" : "edition | translation | manifestation"
       },
+      "es" : {
+        "lang" : "es",
+        "label" : "edición de una obra escrita",
+        "descr" : "manifestación de una obra escrita",
+        "aliases" : "edición | traducción | manifestación"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "著作の版",
+        "descr" : "著作の表明物",
+        "aliases" : "版 | 翻訳 | 表明"
+      },
       "fi" : {
         "lang" : "fi",
-        "label" : "kirjalisen työn painos",
+        "label" : "kirjallisen työn painos",
         "descr" : "",
         "aliases" : ""
       },
@@ -1679,6 +1919,12 @@ export const SchemaEntities = [
         "descr" : "schema of a human gene according to Gene Wiki",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ヒトの遺伝子",
+        "descr" : "Gene Wikiにおいてヒトの遺伝子を記述するためのスキーマ",
+        "aliases" : ""
+      },
       "eo" : {
         "lang" : "eo",
         "label" : "homa geno",
@@ -1728,6 +1974,12 @@ export const SchemaEntities = [
         "label" : "human protein",
         "descr" : "schema of a human protein according to Gene Wiki",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ヒトのタンパク質",
+        "descr" : "Gene Wikiにおいてヒトのタンパク質を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -1753,6 +2005,12 @@ export const SchemaEntities = [
         "lang" : "it",
         "label" : "percorso biologico Reactome",
         "descr" : "schema per descrivere un percorso biologico (con identificatore Reactome)",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "Reactomeのパスウェイ",
+        "descr" : "WikidataにおけるReactomeパスウェイを記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -1792,6 +2050,12 @@ export const SchemaEntities = [
         "label" : "European route",
         "descr" : "basic scheme for European routes, e.g. E40",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "欧州の道",
+        "descr" : "E40のような欧州の道を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -1811,6 +2075,12 @@ export const SchemaEntities = [
         "lang" : "it",
         "label" : "percorso biologico WikiPathways",
         "descr" : "schema per descrivere un percorso biologico (con identificatore WikiPathways)",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "WikidataにおけるWikiPathwaysから得られる生体パスウェイ",
+        "descr" : "WikidataにおけるWikiPathwaysから得られる生体パスウェイを記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -1838,6 +2108,12 @@ export const SchemaEntities = [
         "label" : "autor/a",
         "descr" : "esquema para definir persoas creadoras",
         "aliases" : "autora | autor"
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "autor",
+        "descr" : "esquema para autores",
+        "aliases" : ""
       },
       "en" : {
         "lang" : "en",
@@ -1901,15 +2177,9 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E43",
     "title" : "poem (E43) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "poem",
-        "descr" : "schema for a poem",
-        "aliases" : "piece of poetry | rhyme"
-      },
-      "eo" : {
-        "lang" : "eo",
-        "label" : "poemo",
+      "pt" : {
+        "lang" : "pt",
+        "label" : "poema",
         "descr" : "",
         "aliases" : ""
       },
@@ -1919,10 +2189,22 @@ export const SchemaEntities = [
         "descr" : "schema per descrivere un poema",
         "aliases" : ""
       },
-      "pt" : {
-        "lang" : "pt",
-        "label" : "poema",
+      "eo" : {
+        "lang" : "eo",
+        "label" : "poemo",
         "descr" : "",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "poem",
+        "descr" : "schema for a poem",
+        "aliases" : "piece of poetry | rhyme"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "詩",
+        "descr" : "詩を記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -1933,15 +2215,9 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E44",
     "title" : "University Teacher (E44) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "University Teacher",
-        "descr" : "",
-        "aliases" : "person who teaches at a university"
-      },
-      "da" : {
-        "lang" : "da",
-        "label" : "universitetslærer",
+      "pt" : {
+        "lang" : "pt",
+        "label" : "professor universitário",
         "descr" : "",
         "aliases" : ""
       },
@@ -1951,10 +2227,22 @@ export const SchemaEntities = [
         "descr" : "schema per descrivere un/una professore/professoressa universitario/a",
         "aliases" : ""
       },
-      "pt" : {
-        "lang" : "pt",
-        "label" : "professor universitário",
+      "da" : {
+        "lang" : "da",
+        "label" : "universitetslærer",
         "descr" : "",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "University Teacher",
+        "descr" : "",
+        "aliases" : "person who teaches at a university"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "大学の教師",
+        "descr" : "大学の教師を記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -2006,6 +2294,12 @@ export const SchemaEntities = [
         "label" : "university",
         "descr" : "schema for a university based on the basic metadata listed at https://www.wikidata.org/wiki/Wikidata:WikiProject_Universities/Recommended_statements",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "大学",
+        "descr" : "次のWikiProjectに列挙されている大学メタデータを記述するためのスキーマ https://www.wikidata.org/wiki/Wikidata:WikiProject_Universities/Recommended_statements",
+        "aliases" : ""
       }
     }
   },
@@ -2050,6 +2344,12 @@ export const SchemaEntities = [
         "label" : "chemical element",
         "descr" : "Concept from chemistry allowing properties of atoms to be consistently described",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "元素",
+        "descr" : "",
+        "aliases" : ""
       }
     }
   },
@@ -2070,6 +2370,12 @@ export const SchemaEntities = [
         "label" : "miscela racemica",
         "descr" : "schema per descrivere una miscela racemica",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ラセミ体",
+        "descr" : "",
+        "aliases" : "ラセミ混合物"
       }
     }
   },
@@ -2094,6 +2400,12 @@ export const SchemaEntities = [
       "en" : {
         "lang" : "en",
         "label" : "human",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ヒト",
         "descr" : "",
         "aliases" : ""
       },
@@ -2128,6 +2440,12 @@ export const SchemaEntities = [
         "label" : "prefissi Wikidata",
         "descr" : "schema per descrivere i prefissi SPARQL di Wikidata",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "Wikidataの接頭辞（プレフィックス）",
+        "descr" : "",
+        "aliases" : ""
       }
     }
   },
@@ -2140,6 +2458,12 @@ export const SchemaEntities = [
       "en" : {
         "lang" : "en",
         "label" : "NationalFlag",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "国旗",
         "descr" : "",
         "aliases" : ""
       }
@@ -2156,6 +2480,12 @@ export const SchemaEntities = [
         "label" : "hyperpolyglot",
         "descr" : "basic scheme",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "超多形",
+        "descr" : "",
+        "aliases" : ""
       }
     }
   },
@@ -2169,6 +2499,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "given names in Spain",
         "descr" : "basic scheme for frequent given names in Spain",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "スペインでの名前",
+        "descr" : "スペインで多くつけられている名前を記述するための基本的なスキーマ",
         "aliases" : ""
       }
     }
@@ -2191,6 +2527,12 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "スポーツ選手",
+        "descr" : "スポーツ選手を記述するためのスキーマ",
+        "aliases" : ""
+      },
       "pt" : {
         "lang" : "pt",
         "label" : "desportista",
@@ -2205,15 +2547,9 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E54",
     "title" : "lexeme (E54) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "lexeme",
-        "descr" : "schema for lexemes",
-        "aliases" : ""
-      },
-      "da" : {
-        "lang" : "da",
-        "label" : "leksem",
+      "pt" : {
+        "lang" : "pt",
+        "label" : "lexema",
         "descr" : "",
         "aliases" : ""
       },
@@ -2223,10 +2559,22 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : ""
       },
-      "pt" : {
-        "lang" : "pt",
-        "label" : "lexema",
+      "da" : {
+        "lang" : "da",
+        "label" : "leksem",
         "descr" : "",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "lexeme",
+        "descr" : "schema for lexemes",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "語彙素",
+        "descr" : "語彙素を記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -2241,6 +2589,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "programming language",
         "descr" : "simple schema for programming language",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "プログラム言語",
+        "descr" : "プログラム言語を記述するための簡単なスキーマ",
         "aliases" : ""
       },
       "pt" : {
@@ -2286,6 +2640,12 @@ export const SchemaEntities = [
         "label" : "Danish verb",
         "descr" : "basic schema for Danish verbs",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "デンマーク語の動詞",
+        "descr" : "デンマーク語の動詞を記述するための基本的なスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2312,6 +2672,12 @@ export const SchemaEntities = [
         "label" : "pride",
         "descr" : "schema per un pride",
         "aliases" : "gay pride"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ゲイプライド",
+        "descr" : "",
+        "aliases" : ""
       }
     }
   },
@@ -2338,6 +2704,12 @@ export const SchemaEntities = [
         "label" : "bandiere LGBT",
         "descr" : "schema per le bandiere legate al mondo LGBT+",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "LGBTの旗",
+        "descr" : "LGBTの旗を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2351,6 +2723,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "evidence and conclusion ontology term",
         "descr" : "schema for terms from the evidence and conclusion ontology",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "証拠と結論に関するオントロジー（ECO）の語",
+        "descr" : "証拠と結論に関するオントロジー（ECO）の語を記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -2366,6 +2744,12 @@ export const SchemaEntities = [
         "label" : "cellosaurus cell line",
         "descr" : "schema for a cellosaurus cell line in Wikidata",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "Cellosaurus細胞株",
+        "descr" : "WikidataにおけるCellosaurus細胞株を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2379,6 +2763,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "kakapo schema",
         "descr" : "schema for kakapo individuals on wikidata",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "フクロウオウム",
+        "descr" : "フクロウオウムを記述するためのスキーマ",
         "aliases" : ""
       }
     }
@@ -2401,6 +2791,12 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : "danske stedord"
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "デンマーク語の代名詞",
+        "descr" : "デンマーク語の代名詞を記述するためのスキーマ",
+        "aliases" : ""
+      },
       "pt" : {
         "lang" : "pt",
         "label" : "pronome (danês)",
@@ -2420,6 +2816,12 @@ export const SchemaEntities = [
         "label" : "ClinGen variant pathogenicity",
         "descr" : "schema on genetic variants from ClinGen",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ClinGenにおけるバリアントの病原性",
+        "descr" : "ClinGenにおけるバリアントの病原性を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2433,6 +2835,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "bacterial genome annotation",
         "descr" : "schema for the bacterial genomes in Wikidata",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "バクテリアゲノムのアノテーション",
+        "descr" : "",
         "aliases" : ""
       }
     }
@@ -2478,6 +2886,12 @@ export const SchemaEntities = [
         "label" : "Danish numerals",
         "descr" : "base schema for Danish numerals",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "デンマーク語の数字",
+        "descr" : "デンマーク語の数字を記述するスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2492,6 +2906,12 @@ export const SchemaEntities = [
         "label" : "music composition by W.A.Mozart",
         "descr" : "basic schema of a music composition by Wolfgang Amadeus Mozart",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "モーツァルト作の楽曲",
+        "descr" : "ヴォルフガング・アマデウス・モーツァルト作の楽曲を記述するための基本的なスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2505,6 +2925,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Award",
         "descr" : "Basic schema for awards on Wikidata",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "賞",
+        "descr" : "Wikidataに関連する賞を記述するための基本的なスキーマ",
         "aliases" : ""
       }
     }
@@ -2526,6 +2952,12 @@ export const SchemaEntities = [
         "label" : "dansk orddeling",
         "descr" : "",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "デンマーク語のハイフネーション",
+        "descr" : "",
+        "aliases" : ""
       }
     }
   },
@@ -2535,10 +2967,16 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E69",
     "title" : "disease (E69) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "disease",
-        "descr" : "basic schema for a human disease according to the disease ontology",
+      "pt" : {
+        "lang" : "pt",
+        "label" : "doença",
+        "descr" : "",
+        "aliases" : "enfermidade"
+      },
+      "nl" : {
+        "lang" : "nl",
+        "label" : "ziekte",
+        "descr" : "",
         "aliases" : ""
       },
       "eo" : {
@@ -2547,17 +2985,17 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : ""
       },
-      "nl" : {
-        "lang" : "nl",
-        "label" : "ziekte",
-        "descr" : "",
+      "en" : {
+        "lang" : "en",
+        "label" : "disease",
+        "descr" : "basic schema for a human disease according to the disease ontology",
         "aliases" : ""
       },
-      "pt" : {
-        "lang" : "pt",
-        "label" : "doença",
-        "descr" : "",
-        "aliases" : "enfermidade"
+      "ja" : {
+        "lang" : "ja",
+        "label" : "疾患",
+        "descr" : "Disease Ontologyに基づく疾患を記述するための基本的なスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2572,6 +3010,12 @@ export const SchemaEntities = [
         "label" : "Clinical Interpretations of Variants in Cancer",
         "descr" : "basic schema for items sourced from clinical interpretations in variants in cancer",
         "aliases" : "CIViC schema"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "癌のバリアントに対する臨床上の解釈",
+        "descr" : "CIViCのから取得したデータ項目に対する基本的なスキーマ",
+        "aliases" : "CIViCスキーマ"
       }
     }
   },
@@ -2586,6 +3030,12 @@ export const SchemaEntities = [
         "label" : "ceremonial county of England",
         "descr" : "basic schema for a ceremonial county in England",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "イングランドの典礼カウンティ",
+        "descr" : "イングランドの典礼カウンティを記述するための基本的なスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -2599,6 +3049,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "pharmaceutical drug",
         "descr" : "basic schema of a pharmaceutical drug",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "医薬品",
+        "descr" : "医薬品を記述するための基本的なスキーマ",
         "aliases" : ""
       },
       "pt" : {
@@ -2621,6 +3077,12 @@ export const SchemaEntities = [
         "descr" : "schema for companies that produce software",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ソフトウェア開発企業",
+        "descr" : "ソフトウェア開発企業を記述するためのスキーマ",
+        "aliases" : ""
+      },
       "pt" : {
         "lang" : "pt",
         "label" : "empresa de software",
@@ -2641,6 +3103,12 @@ export const SchemaEntities = [
         "descr" : "basic schema of a pseudogene in Wikidata",
         "aliases" : ""
       },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "偽遺伝子",
+        "descr" : "偽遺伝子（シュードジーン）を記述するための基本的なスキーマ",
+        "aliases" : ""
+      },
       "pt" : {
         "lang" : "pt",
         "label" : "pseudogene",
@@ -2655,15 +3123,9 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E75",
     "title" : "gene (E75) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
+      "pt" : {
+        "lang" : "pt",
         "label" : "gene",
-        "descr" : "basic schema for genes represented in Wikidata",
-        "aliases" : ""
-      },
-      "eo" : {
-        "lang" : "eo",
-        "label" : "geno",
         "descr" : "",
         "aliases" : ""
       },
@@ -2673,10 +3135,22 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : ""
       },
-      "pt" : {
-        "lang" : "pt",
-        "label" : "gene",
+      "eo" : {
+        "lang" : "eo",
+        "label" : "geno",
         "descr" : "",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "gene",
+        "descr" : "basic schema for genes represented in Wikidata",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "遺伝子",
+        "descr" : "遺伝子を記述するための基本的なスキーマ",
         "aliases" : ""
       }
     }
@@ -2715,6 +3189,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Danish adjective",
         "descr" : "Danish adjective",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "デンマーク語の形容詞",
+        "descr" : "デンマーク語の形容詞を記述するスキーマ",
         "aliases" : ""
       }
     }
@@ -3594,6 +4074,12 @@ export const SchemaEntities = [
         "label" : "Nobel Prize Winners",
         "descr" : "Nobel Prize Winners which includes ALL the Prize types including Peace Prize",
         "aliases" : "nobel winner"
+      },
+      "nl" : {
+        "lang" : "nl",
+        "label" : "Winnaars van de Nobelprijs",
+        "descr" : "Nobelprijs winnaars, inclusief de nobelprijs voor de vrede",
+        "aliases" : ""
       }
     }
   },
@@ -3645,15 +4131,9 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E130",
     "title" : "painting (E130) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "painting",
-        "descr" : "surface artistically covered with paint",
-        "aliases" : "paintings"
-      },
-      "nb" : {
-        "lang" : "nb",
-        "label" : "maleri",
+      "fr" : {
+        "lang" : "fr",
+        "label" : "peinture",
         "descr" : "",
         "aliases" : ""
       },
@@ -3663,11 +4143,23 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : ""
       },
+      "nb" : {
+        "lang" : "nb",
+        "label" : "maleri",
+        "descr" : "",
+        "aliases" : ""
+      },
       "sv" : {
         "lang" : "sv",
         "label" : "tavla",
         "descr" : "",
         "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "painting",
+        "descr" : "surface artistically covered with paint",
+        "aliases" : "paintings"
       }
     }
   },
@@ -4066,6 +4558,12 @@ export const SchemaEntities = [
         "label" : "Researcher",
         "descr" : "Schema for Researchers",
         "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "pesquisador",
+        "descr" : "esquema para pesquisadores",
+        "aliases" : ""
       }
     }
   },
@@ -4276,6 +4774,12 @@ export const SchemaEntities = [
         "label" : "viraal gen",
         "descr" : "schema van een viraal gen",
         "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "gene viral",
+        "descr" : "esquema para genes virais",
+        "aliases" : ""
       }
     }
   },
@@ -4316,6 +4820,12 @@ export const SchemaEntities = [
         "label" : "Esquema proteína",
         "descr" : "Esquema para proteína",
         "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "proteína",
+        "descr" : "esquema para proteína no Wikidata",
+        "aliases" : ""
       }
     }
   },
@@ -4345,10 +4855,22 @@ export const SchemaEntities = [
         "descr" : "schema that adds to the generic protein schema (E167) to apply on virus protein shapes",
         "aliases" : ""
       },
+      "de" : {
+        "lang" : "de",
+        "label" : "Virus-Protein",
+        "descr" : "Entity-Schema für ein Virus-Protein, aufbauend auf dem Schema E167 für Proteine allgemein",
+        "aliases" : ""
+      },
       "es" : {
         "lang" : "es",
         "label" : "proteína de virus",
         "descr" : "Esquema que añade al esquema genérico de proteína (E167) las propiedades específicas de la proteína de virus",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "proteína viral",
+        "descr" : "esquema para proteínas virais",
         "aliases" : ""
       }
     }
@@ -4419,6 +4941,12 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E173",
     "title" : "outbreak (E173) - Wikidata",
     "labels" : {
+      "da" : {
+        "lang" : "da",
+        "label" : "udbrud",
+        "descr" : "",
+        "aliases" : ""
+      },
       "en" : {
         "lang" : "en",
         "label" : "outbreak",
@@ -4435,6 +4963,12 @@ export const SchemaEntities = [
         "lang" : "pt-BR",
         "label" : "surto",
         "descr" : "esquema para items referentes à surtos em locais específicos",
+        "aliases" : ""
+      },
+      "vi" : {
+        "lang" : "vi",
+        "label" : "dịch bệnh",
+        "descr" : "",
         "aliases" : ""
       }
     }
@@ -4497,6 +5031,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Data Structure",
         "descr" : "entity schema of data structure",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "estrutura de dados",
+        "descr" : "esquema para estruturas de dados",
         "aliases" : ""
       }
     }
@@ -4591,16 +5131,58 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E184",
     "title" : "pandemic (E184) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "pandemic",
-        "descr" : "entity schema of a pandemic",
+      "yue" : {
+        "lang" : "yue",
+        "label" : "瘟疫大流行",
+        "descr" : "",
+        "aliases" : "瘟疫 | 疫症大流行"
+      },
+      "it" : {
+        "lang" : "it",
+        "label" : "pandemia",
+        "descr" : "",
         "aliases" : ""
       },
       "pt-BR" : {
         "lang" : "pt-BR",
         "label" : "pandemia",
         "descr" : "esquema de entidades para pandemia",
+        "aliases" : ""
+      },
+      "de" : {
+        "lang" : "de",
+        "label" : "Pandemie",
+        "descr" : "Entity-Schema für eine Pandemie",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "pandemic",
+        "descr" : "entity schema of a pandemic",
+        "aliases" : "global pandemic"
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "pandemia",
+        "descr" : "esquema de entidades tipo pandemia",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "パンデミック",
+        "descr" : "パンデミック記述用のスキーマ",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "pandemi",
+        "descr" : "entitetsschema för pandemi",
+        "aliases" : ""
+      },
+      "da" : {
+        "lang" : "da",
+        "label" : "pandemi",
+        "descr" : "",
         "aliases" : ""
       }
     }
@@ -4611,10 +5193,40 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E185",
     "title" : "preprint (E185) - Wikidata",
     "labels" : {
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "preprint",
+        "descr" : "Esquema para artigos científicos publicados como \"preprints\"",
+        "aliases" : "pré-publicações"
+      },
+      "de" : {
+        "lang" : "de",
+        "label" : "Vorabdruck",
+        "descr" : "Entity-Schema für einen Preprint",
+        "aliases" : "Preprint"
+      },
+      "da" : {
+        "lang" : "da",
+        "label" : "preprint",
+        "descr" : "",
+        "aliases" : ""
+      },
       "en" : {
         "lang" : "en",
         "label" : "preprint",
         "descr" : "entity schema of a preprint",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "preimpreso",
+        "descr" : "Esquema para un preimpreso",
+        "aliases" : "Prepublicación"
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "プレプリント",
+        "descr" : "プレプリント記述用のスキーマ",
         "aliases" : ""
       }
     }
@@ -4625,6 +5237,18 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E186",
     "title" : "Macromolecular complex (E186) - Wikidata",
     "labels" : {
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "complexo macromolecular",
+        "descr" : "esquema para complexos macromoleculares",
+        "aliases" : "complexo proteico macromolecular"
+      },
+      "nl" : {
+        "lang" : "nl",
+        "label" : "macromoleculair complex",
+        "descr" : "complex van grote moleculen, zoals eiwitten en RNA fragmenten",
+        "aliases" : ""
+      },
       "en" : {
         "lang" : "en",
         "label" : "Macromolecular complex",
@@ -4634,7 +5258,13 @@ export const SchemaEntities = [
       "es" : {
         "lang" : "es",
         "label" : "Complejo macromolecular",
-        "descr" : "",
+        "descr" : "Esquema para complejos macromoleculares",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "高分子複合体",
+        "descr" : "高分子複合体記述用のスキーマ",
         "aliases" : ""
       }
     }
@@ -4645,6 +5275,24 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E187",
     "title" : "hospital (E187) - Wikidata",
     "labels" : {
+      "fr" : {
+        "lang" : "fr",
+        "label" : "hôpital",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "hospital",
+        "descr" : "Esquema para hospitais",
+        "aliases" : ""
+      },
+      "da" : {
+        "lang" : "da",
+        "label" : "hospital",
+        "descr" : "",
+        "aliases" : "sygehus"
+      },
       "en" : {
         "lang" : "en",
         "label" : "hospital",
@@ -4656,6 +5304,12 @@ export const SchemaEntities = [
         "label" : "hospital",
         "descr" : "Esquema para hospitales",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "病院",
+        "descr" : "病院を記述するためのスキーマ",
+        "aliases" : ""
       }
     }
   },
@@ -4663,13 +5317,403 @@ export const SchemaEntities = [
     "id" : "E188",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E188",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E188",
-    "title" : "2020 coronavirus pandemic (E188) - Wikidata",
+    "title" : "2020 coronavirus pandemic local outbreaks (E188) - Wikidata",
+    "labels" : {
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "surto local da pandemia de coronavirus de 2020",
+        "descr" : "esquema para surtos locais da pandemia de coronavirus de 2020",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "2020 coronavirus pandemic local outbreaks",
+        "descr" : "entity schema of 2020 coronavirus pandemic local outbreaks",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Brote local pandémico coronavirus 2020",
+        "descr" : "Esquema de brote local pandémico coronavirus 2020",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "2020コロナウイルスパンデミック",
+        "descr" : "2020コロナウイルスパンデミック記述用のスキーマ",
+        "aliases" : ""
+      },
+      "fi" : {
+        "lang" : "fi",
+        "label" : "2020 koronaviruspandemian paikallinen epidemia",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E189",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E189",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E189",
+    "title" : "clinical trial (E189) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "2020 coronavirus pandemic",
-        "descr" : "entity schema of 2020 coronavirus pandemic",
+        "label" : "clinical trial",
+        "descr" : "Entity Schema for a clinical trial",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "臨床試験",
+        "descr" : "臨床試験記述用のスキーマ",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E190",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E190",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E190",
+    "title" : "lockdown (E190) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "lockdown",
+        "descr" : "entity schema of a lockdown",
+        "aliases" : ""
+      },
+      "da" : {
+        "lang" : "da",
+        "label" : "nedlukning",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "confinamiento",
+        "descr" : "Esquema de confinamiento",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "ロックダウン",
+        "descr" : "ロックダウン記述用のスキーマ",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E191",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E191",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E191",
+    "title" : "lockdown part of the 2019-2020 coronavirus disease pandemic (E191) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "lockdown part of the 2019-2020 coronavirus disease pandemic",
+        "descr" : "lockdown part of quarantine for the 2019-2020 coronavirus disease pandemic",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "toque de queda parte de la pandemia de enfermedad por coronavirus de 2019-2020",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "fi" : {
+        "lang" : "fi",
+        "label" : "eristys osa 2019-2020 koronaviruspandemiaa",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "コロナウイルスに関連するロックダウン",
+        "descr" : "コロナウイルスに関連するロックダウンを記述するためのスキーマ",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E192",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E192",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E192",
+    "title" : "virus taxon (E192) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "virus taxon",
+        "descr" : "entity schema of a virus taxon",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E193",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E193",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E193",
+    "title" : "Preprint server (E193) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Preprint server",
+        "descr" : "entity schema of a preprint server",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Servidor de preimpresos",
+        "descr" : "Esquema para servidor de preimpresos",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E194",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E194",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E194",
+    "title" : "Complex Portal entity (E194) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Complex Portal entity",
+        "descr" : "Schema of Complex Portal records as reified in Wikidata",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E195",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E195",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E195",
+    "title" : "COVID-19 contact tracing app (E195) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "COVID-19 contact tracing app",
+        "descr" : "Entity schema of COVID-19 contact tracing app",
+        "aliases" : ""
+      },
+      "da" : {
+        "lang" : "da",
+        "label" : "kontaktopsporingsapp",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "fi" : {
+        "lang" : "fi",
+        "label" : "kontaktinjäljityssovellus",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E196",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E196",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E196",
+    "title" : "covid-19 death (E196) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "covid-19 death",
+        "descr" : "entity schema of a covid-19 related death",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E197",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E197",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E197",
+    "title" : "morgue (E197) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "morgue",
+        "descr" : "entity schema of a morgue",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E198",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E198",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E198",
+    "title" : "crematorium (E198) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "crematorium",
+        "descr" : "entity schema of a crematorium",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E199",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E199",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E199",
+    "title" : "Russian noun without paucal (E199) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Russian noun without paucal",
+        "descr" : "Russian noun without paucal",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E200",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E200",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E200",
+    "title" : "Russian noun with paucal (E200) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Russian noun with paucal",
+        "descr" : "Russian standard noun with paucal number",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E201",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E201",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E201",
+    "title" : "Filmmaker (E201) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Filmmaker",
+        "descr" : "schema for a filmmaker whose work is held in a film archive or other insitutional collection",
+        "aliases" : "film director | director | film maker"
+      }
+    }
+  },
+  {
+    "id" : "E202",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E202",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E202",
+    "title" : "German verb (E202) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "German verb",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E203",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E203",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E203",
+    "title" : "No label defined (E203) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "skolenhet",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E204",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E204",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E204",
+    "title" : "Sandwich (E204) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Sandwich",
+        "descr" : "two slices of bread with filling in between them",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E205",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E205",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E205",
+    "title" : "COVID-19 dashboards, search engines and datasets (E205) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "COVID-19 dashboards, search engines and datasets",
+        "descr" : "Entity schema of COVID-19 dashboards, search engines and datasets",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E206",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E206",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E206",
+    "title" : "No label defined (E206) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "de" : {
+        "lang" : "de",
+        "label" : "Stolpersteine",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E207",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E207",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E207",
+    "title" : "dataset (E207) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "dataset",
+        "descr" : "entity schema of dataset",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E208",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E208",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E208",
+    "title" : "SPARQL endpoint (E208) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "SPARQL endpoint",
+        "descr" : "entity schema of a SPARQL endpoint",
+        "aliases" : "entity schema of entities with SPARQL endpoint"
+      }
+    }
+  },
+  {
+    "id" : "E209",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E209",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E209",
+    "title" : "API endpoint (E209) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "API endpoint",
+        "descr" : "entity schema of API endpoint",
+        "aliases" : "entity schema of items with API endpoint"
       }
     }
   }

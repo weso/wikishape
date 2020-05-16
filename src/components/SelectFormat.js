@@ -41,7 +41,7 @@ function SelectFormat(props) {
 
 SelectFormat.propTypes = {
     name: PropTypes.string.isRequired,
-    selectedFormat: PropTypes.string.isRequired,
+    selectedFormat: PropTypes.string,
     handleFormatChange: PropTypes.func.isRequired,
     urlFormats: PropTypes.string.isRequired,
 };
