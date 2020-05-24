@@ -273,7 +273,16 @@ function WikidataValidateDeref(props) {
                 postValidate(urlServer,formData,e);
             });
         } else {
-            console.log(`validate| No schema entity: Params: ${JSON.fromString(validateParams)}`)
+            console.log(`validate| No schema entity: Params: ${JSON.stringify(validateParams)}`)
+            validateParams.entities.forEach(e => {
+                const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
+                let params = {...paramsEndpoint,...paramsSchema};
+                params['schemaEngine'] = 'ShEx';
+                params['item'] = e ;
+                params['shape'] = validateParams.shapeLabel ;
+                const formData = params2Form(params);
+                postValidate(urlServer,formData,e);
+            });
         }
     }
 
