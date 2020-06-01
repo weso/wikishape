@@ -50,7 +50,7 @@ function WikishapeNavbar() {
                             <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&node=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FP31'>Property</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Settings" id="basic-nav-dropdown">
-                            <NavDropdown.Item href={mkHash(API.changeWikibaseURLRoute)}>Change Wikibase URL / SPARQL endpoint</NavDropdown.Item>
+                            <NavDropdown.Item href={mkHash(API.changeWikibaseURLRoute)}>Change target Wikibase</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Help" id="basic-nav-dropdown" className="mr-sm-2">
                             <NavDropdown.Item href="https://app.swaggerhub.com/apis-docs/labra/rdfshape/1.0.1">API
