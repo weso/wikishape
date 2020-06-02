@@ -79,7 +79,7 @@ function WikidataSchemaInfo(props) {
                 const schema = await axios.get(entity.conceptUri);
                 const schemaStr = schema.data ;
                 console.log(`Returning from get Entity: ${JSON.stringify(schemaStr)}`)
-                setPermalink(mkPermalink(API.wikidataSchemaInfoRoute, {id: entity.id, lang: entity.lang}))
+                setPermalink(await mkPermalink(API.wikidataSchemaInfoRoute, {id: entity.id, lang: entity.lang}))
                 setLoading(false);
                 setSchemaEntity(e)
                 setSchemaId(entity.id);

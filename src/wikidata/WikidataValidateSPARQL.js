@@ -176,7 +176,7 @@ function WikidataValidateSPARQL(props) {
                 const paramsShEx = paramsFromShEx(shEx);
                 const initialResult = resultFromEntities(entities, status.shapeLabel);
                 dispatch({type: "set-result", value: initialResult});
-// TODO:                setPermalink(mkPermalink(API.wikidataValidateSPARQLRoute,params));
+// TODO:                setPermalink(await mkPermalink(API.wikidataValidateSPARQLRoute,params));
                 entities.forEach(e => {
                     const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
                     params = {...paramsEndpoint,...paramsShEx};

@@ -38,12 +38,12 @@ function WikidataProperty(props) {
         setEntities(es);
     }
 
-    function fetchOutgoing(node) {
+    async function fetchOutgoing(node) {
         let params={};
         params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
         params['node'] = node ;
         console.log(`Node: ${node}`);
-        setPermalink(mkPermalink(API.wikidataOutgoingRoute, params));
+        setPermalink(await mkPermalink(API.wikidataOutgoingRoute, params));
         getOutgoing(API.dataOutgoing,params);
     }
 

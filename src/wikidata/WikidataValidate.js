@@ -179,7 +179,7 @@ function WikidataValidate(props) {
         return params;
     }
 
-    function validate() {
+    async function validate() {
         console.log(`Validate: entities: ${JSON.stringify(status.entities)}, shape: ${JSON.stringify(status.shapeLabel)}`)
         const initialResult = resultFromEntities(status.entities, status.shapeLabel);
         console.log(`schemaActiveTab: ${status.schemaActiveTab}`);
@@ -193,7 +193,7 @@ function WikidataValidate(props) {
         const paramsPermalink = {...paramsShEx,
             nodes: status.entities,
             shape: status.shapeLabel};
-        dispatch({type: "set-permalink", value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
+        dispatch({type: "set-permalink", value: await mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
         dispatch({type: "set-result", value: initialResult});
         status.entities.forEach(e => {
             const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };

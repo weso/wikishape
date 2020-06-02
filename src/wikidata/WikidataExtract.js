@@ -60,7 +60,7 @@ function WikidataExtract(props) {
             });
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         let params={}
         params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
@@ -69,7 +69,7 @@ function WikidataExtract(props) {
             // params['nodeSelector'] = "<" + nodeSelector + ">";
             params['entity'] = nodeSelector ;
             console.log(`Node selector: ${nodeSelector}`);
-            setPermalink(mkPermalink(API.wikidataExtractRoute, params));
+            setPermalink(await mkPermalink(API.wikidataExtractRoute, params));
             let formData = params2Form(params);
             postExtract(url,formData);
         } else {

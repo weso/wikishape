@@ -93,7 +93,7 @@ function WikidataSchemaVisual(props) {
                 const visualResult = visual.data
                 console.log(`Returning from visualResult...${JSON.stringify(visualResult)}`)
 
-                setPermalink(mkPermalink(API.wikidataSchemaVisualRoute, {id: entity.id, lang: entity.lang}))
+                setPermalink(await mkPermalink(API.wikidataSchemaVisualRoute, {id: entity.id, lang: entity.lang}))
                 setLoading(false);
                 setSchemaEntity(e)
                 setSchemaId(entity.id);

@@ -237,7 +237,7 @@ function WikidataValidateDeref(props) {
         return params;
     }
 
-    function validate(validateParams) {
+    async function validate(validateParams) {
         console.log(`Validate\nvalidateParams: ${JSON.stringify(validateParams)}`)
         const initialResult = resultFromEntities(validateParams.entities, validateParams.shapeLabel);
         setResult(initialResult);
@@ -256,7 +256,7 @@ function WikidataValidateDeref(props) {
             shape: validateParams.shapeLabel,
             schemaActiveTab: validateParams.schemaActiveTab
         };
-        setPermalink(mkPermalink(API.wikidataValidateDerefRoute, paramsPermalink));
+        setPermalink(await mkPermalink(API.wikidataValidateDerefRoute, paramsPermalink));
         console.log(`validate| Permalink: ${JSON.stringify(permalink)}`);
 
         const entitySchema = validateParams.entitySchema ;
