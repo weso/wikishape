@@ -12,6 +12,7 @@ import ShExForm from "../shex/ShExForm";
 import PrintSVG from "../utils/PrintSVG";
 import qs from 'query-string';
 import { SchemaEntities } from "../resources/schemaEntities"
+import {ReloadIcon} from "react-open-iconic-svg";
 
 
 function WikidataSchemaVisual(props) {
@@ -123,9 +124,12 @@ function WikidataSchemaVisual(props) {
          <h1>Visualize Wikidata Schema</h1>
          <InputSchemaEntityByText onChange={setSchemaEntity} entity={schemaEntity} />
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Info about schema entity</Button>
+             <Button className="btn-with-icon" variant="primary" type="submit">Visualize schema
+                 <ReloadIcon className="white-icon"/>
+             </Button>
          </Form>
           {loading ? <Pace color="#27ae60"/> : null }
+          { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">{error}</Alert>: null }
           { shExContent?
               <div>
@@ -137,7 +141,6 @@ function WikidataSchemaVisual(props) {
               </div>
               : null
           }
-          { permalink? <Permalink url={permalink} />: null }
        </Container>
     );
 }

@@ -11,6 +11,7 @@ import axios from "axios";
 import ResultOutgoing from "../results/ResultOutgoing";
 import Pace from "react-pace-progress";
 import qs from "query-string";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 
 function WikidataOutgoing(props) {
@@ -135,7 +136,9 @@ function WikidataOutgoing(props) {
              </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Get outgoing arcs</Button>
+               <Button className="btn-with-icon" variant="primary" type="submit">Get outgoing arcs
+                   <ReloadIcon className="white-icon"/>
+               </Button>
          </Form>
           {loading ? <Pace color="#27ae60"/> : null }
           {permalink? <Permalink url={permalink} />: null }

@@ -11,6 +11,7 @@ import axios from "axios";
 import ResultOutgoing from "../results/ResultOutgoing";
 import Pace from "react-pace-progress";
 import qs from "query-string";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function WikidataProperty(props) {
 
@@ -86,12 +87,14 @@ function WikidataProperty(props) {
                { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Outgoing arcs</Button>
+             <Button className="btn-with-icon" variant="primary" type="submit">Get outgoing arcs
+                 <ReloadIcon className="white-icon"/>
+             </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
+          { loading ? <Pace color="#27ae60"/> : null }
+          { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultOutgoing result={result} />
-         { permalink? <Permalink url={permalink} />: null }
        </Container>
     );
 }

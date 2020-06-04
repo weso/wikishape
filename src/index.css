@@ -12,6 +12,27 @@ code {
     monospace;
 }
 
+.hidden {
+  display: none;
+}
+
+
+.btn-with-icon {
+  margin: 5px auto;
+  display: inline-flex !important;
+  padding: 5px;
+}
+
+.btn-with-icon > svg {
+  margin: auto 5px auto 10px;
+}
+
+.white-icon {
+  fill: white;
+  transform: scale(1.5);
+  margin: auto 5px;
+}
+
 .container-fluid {
    padding: 0 !important;
  }

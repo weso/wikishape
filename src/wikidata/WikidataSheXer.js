@@ -13,6 +13,7 @@ import axios from "axios";
 import ResultDataExtract from "../results/ResultDataExtract";
 import Pace from "react-pace-progress";
 import * as qs from "qs";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function WikidataSheXer(props) {
 
@@ -124,12 +125,14 @@ function WikidataSheXer(props) {
                { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Extract Schema</Button>
+             <Button className="btn-with-icon" variant="primary" type="submit">Extract schema
+                 <ReloadIcon className="white-icon"/>
+             </Button>
          </Form>
           {loading ? <Pace color="#27ae60"/> : null }
+          { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultDataExtract result={result} />
-         { permalink? <Permalink url={permalink} />: null }
        </Container>
     );
 }

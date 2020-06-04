@@ -11,6 +11,7 @@ import ShExForm from "../shex/ShExForm";
 import qs from "query-string";
 import {SchemaEntities} from "../resources/schemaEntities";
 import API from "../API";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function paramsFromQueryParams(params) {
     let newParams = {};
@@ -130,9 +131,12 @@ function WikidataSchemaInfo(props) {
          <h1>Info about Wikidata Schema entity</h1>
          <InputSchemaEntityByText onChange={setSchemaEntity} entity={schemaEntity} />
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Info about schema entity</Button>
+             <Button className="btn-with-icon" variant="primary" type="submit">Get schema info
+                 <ReloadIcon className="white-icon"/>
+             </Button>
          </Form>
           {loading ? <Pace color="#27ae60"/> : null }
+          { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">{error}</Alert>: null }
           { shExContent?
               <div>
@@ -144,7 +148,6 @@ function WikidataSchemaInfo(props) {
               </div>
               : null
           }
-          { permalink? <Permalink url={permalink} />: null }
        </Container>
     );
 }

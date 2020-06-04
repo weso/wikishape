@@ -20,6 +20,7 @@ import QueryForm from "../query/QueryForm";
 import { paramsFromShEx, initialShExStatus, shExReducer} from '../shex/ShEx'
 import { mergeResult, showResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function WikidataValidateSPARQL(props) {
 
@@ -263,8 +264,9 @@ function WikidataValidateSPARQL(props) {
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={status.shapeLabel}
                                             shapeList={status.shapeList}/>
-                           <Button variant="primary"
-                                   type="submit">Validate wikidata entities</Button>
+                           <Button className="btn-with-icon" variant="primary" type="submit">Validate entities
+                               <ReloadIcon className="white-icon"/>
+                           </Button>
                        </Form>
 
                    </Row>

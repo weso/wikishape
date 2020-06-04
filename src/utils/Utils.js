@@ -2,6 +2,7 @@
 import API from "../API";
 import React from "react";
 import {ExternalLinkIcon} from "react-open-iconic-svg";
+import {Slide} from "react-toastify";
 
 // const { Module, render } = require('viz.js/full.render.js');
 
@@ -50,6 +51,19 @@ export function mkMode(format) {
 export function maybeAdd(maybe,name,obj) {
     if (maybe) obj[name] = maybe ;
     return obj;
+}
+
+export const notificationSettings = {
+    permalinkText: 'Link copied to clipboard!',
+    position: 'bottom-right',
+    autoClose: 2500,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnFocusLoss: false,
+    pauseOnHover: true,
+    closeButton: false,
+    transition: Slide,
+    limit: 3
 }
 
 // export const internalPrefixes = ["prn", "prv", "pqv", "pq", "pr", "psn", "psv", "ps", "wdata", "wdno", "wdref", "wds", "wdt", "wdtn", "wdv", "wd", "p"];
@@ -211,7 +225,7 @@ export function showQualified(qualified, prefixes) {
         case 'QualifiedName':
             // console.log(`QualifiedName: ${qualified.prefix}`)
             if (prefixes[qualified.prefix]) {
-                return <a target={'_blank'} href={qualified.uri}>{qualified.str}<ExternalLinkIcon /></a>
+                return <a target={'_blank'} href={qualified.uri}>{qualified.str} <ExternalLinkIcon /></a>
             } else {
                 return <fragment>{qualified.str} <a href={qualified.uri}><ExternalLinkIcon/></a></fragment>
             }
