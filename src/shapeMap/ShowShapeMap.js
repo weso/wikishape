@@ -7,7 +7,7 @@ import Alert from "react-bootstrap/Alert";
 function showQualifyShapeMap(node, prefix) {
     console.log(`showQualifyShapeMap ${JSON.stringify(node)}`);
     if (!node) return <code>?</code>;
-    if (node == "<http://www.w3.org/ns/shex#Start>") return <code>START</code>;
+    if (node === "<http://www.w3.org/ns/shex#Start>") return <code>START</code>;
     // console.log(node);
     const relativeBaseRegex = /^<internal:\/\/base\/(.*)>$/g;
     const matchBase = relativeBaseRegex.exec(node);
@@ -26,7 +26,7 @@ function showQualifyShapeMap(node, prefix) {
                     /*       if (localName.indexOf("/") > -1) {
                             return "&lt;" + rawNode + "&gt;" ;
                            } else */
-                    const longNode = "<" + rawNode + ">";
+                    // const longNode = "<" + rawNode + ">";
                     return <a href={rawNode}>{key + ":" + localName}</a> ;
                 }
             }

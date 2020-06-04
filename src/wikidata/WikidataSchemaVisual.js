@@ -105,7 +105,7 @@ function WikidataSchemaVisual(props) {
             } catch(error) {
                 setLoading(false);
                 setError(`Error doing request SchemaEntity: ${JSON.stringify(schemaEntity)}: ${error.message}`)
-            };
+            }
         } else {
             setLoading(false);
             setError(`No entity selected, SchemaEntity: ${JSON.stringify(schemaEntity)}`)

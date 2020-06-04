@@ -4,7 +4,7 @@ import Alert from "react-bootstrap/Alert";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import {mkPermalink, params2Form, Permalink} from "../Permalink";
+import {mkPermalink, Permalink} from "../Permalink";
 import axios from "axios";
 import Pace from "react-pace-progress";
 import ShExForm from "../shex/ShExForm";
@@ -90,7 +90,7 @@ function WikidataSchemaInfo(props) {
             } catch(error) {
                 setLoading(false);
                 setError(`Error doing request SchemaEntity: ${JSON.stringify(schemaEntity)}: ${error.message}`)
-            };
+            }
         } else {
             setLoading(false);
             setError(`No entity selected, SchemaEntity: ${JSON.stringify(schemaEntity)}`)

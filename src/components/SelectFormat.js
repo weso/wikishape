@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import Form from "react-bootstrap/Form";
-import {Typeahead, Token} from 'react-bootstrap-typeahead';
 import axios from 'axios';
 import PropTypes from "prop-types";
 

@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useEffect} from 'react';
+import React, {useReducer, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "../shex/ShExTabs";
 import API from "../API"
-import {convertTabSchema, showQualify} from "../utils/Utils";
+import {showQualify} from "../utils/Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "../components/InputShapeLabel";

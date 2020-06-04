@@ -29,7 +29,11 @@ function WikidataOutgoing(props) {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
                 if (params.node) {
-                    setEntities([{uri: params.node}]);
+                    setEntities([
+                        {
+                            uri: params.node
+                        }]
+                    );
                     setNode(params.node)
                     setLastNode(params.node)
                 } else {
@@ -119,7 +123,16 @@ function WikidataOutgoing(props) {
            <h4>Current endpoint: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
-               { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
+             <tbody>
+               { entities.map(e =>
+                   <tr key={e.id || e.uri}>
+                       <td>{e.label || 'Unknown label'}</td>
+                       <td>{<a target={'_blank'} href={e.uri}>{e.uri}</a> || 'Unknown URI'}</td>
+                       <td>{e.descr || 'No description provided'}</td>
+                   </tr>
+                )
+               }
+             </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
                <Button variant="primary" type="submit">Get outgoing arcs</Button>

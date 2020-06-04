@@ -39,6 +39,12 @@ function InputEntitiesByText(props) {
             .then((resp) => {
                 // console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
                 setIsLoading(false);
+
+                // Prune bad formatted results
+                for (const it of resp){
+                    if (!it.label || typeof it.label != 'string') it.label = ''
+                    if (!it.descr || typeof it.descr != 'string') it.descr = ''
+                }
                 setOptions(resp);
             });
     }

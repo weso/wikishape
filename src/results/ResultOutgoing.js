@@ -6,8 +6,8 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 
 function ResultOutgoing(props) {
-     const result = props.result;
-     let msg ;
+    const result = props.result
+    let msg ;
      if (!result || result === '') {
          msg = null
      } else
@@ -18,33 +18,60 @@ function ResultOutgoing(props) {
      } else {
          const outgoing = result.children.map(r => {
              const qualifiedPred = showQualify(r.pred,wikidataPrefixes);
-             return {
+             return  {
+                 id: r.pred,
                  pred: showQualified(qualifiedPred, wikidataPrefixes),
                  prefPrefix: qualifiedPred.prefix,
                  localNamePrefix: qualifiedPred.localName,
-                 values: r.values.map(v => {
-                     return (showQualified(showQualify(v,wikidataPrefixes), wikidataPrefixes))
-                })
-         }}) ;
-
-         const customSort = (cell, row) => {
-             console.log(`Cell: ${cell}, Row: ${row}`);
-             return `${row.prefix}:${row.localName}:${row.value}`
-         };
+                 values: r.values.map(v =>
+                     showQualified(showQualify(v,wikidataPrefixes), wikidataPrefixes)
+                )
+             }
+         });
 
          const columns = [{
              dataField: 'pred',
-             text: 'pred',
+             text: 'Predicate',
              sort: true,
-             sortValue: customSort,
+             sortFunc: (a, b, order, dataField, rowA, rowB) => {
+                 if (!rowA.id || !rowB.id) return 0
+                 let ret = 0
+                 if (!rowA.id.includes("prop")) ret = 1
+                 else if (!rowB.id.includes("prop")) ret = -1
+
+                 else {
+                     let idA = rowA.id.replace("/direct", "").split('prop/')[1]
+                     let idB = rowB.id.replace("/direct", "").split('prop/')[1]
+                     if (idA && idB) {
+                         idA = idA.substring(1, idA.length - 1);
+                         idB = idB.substring(1, idB.length - 1);
+                         try {
+                             idA = parseInt(idA)
+                             idB = parseInt(idB)
+                             if (idA > idB) ret = 1
+                             if (idA < idB) ret = -1
+                             else ret = rowA.id.localeCompare(rowB.id)
+                         }
+                         catch {
+                             ret = 0
+                         }
+                     }
+                     else ret = rowA.id.localeCompare(rowB.id)
+                 }
+                 // else ret = rowA.id.localeCompare(rowB.id)
+                 // console.log(idA, idB)
+
+                 if (order === 'asc') ret *=-1
+                 return ret
+             }
          }, {
              dataField: 'values',
              text: 'Value',
          }];
 
          msg = <div>
-             <p>Link to entity: <a href={result.node}>{showQualified(showQualify(result.node, wikidataPrefixes), wikidataPrefixes)}</a></p>
-             <BootstrapTable keyField='id'
+             <p>Link to entity: {showQualified(showQualify(result.node, wikidataPrefixes), wikidataPrefixes)}</p>
+             <BootstrapTable keyField="id"
                              data={ outgoing }
                              columns={ columns }
                              bootstrap4

@@ -4,7 +4,7 @@ import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Pace from "react-pace-progress";
-import {mkPermalink, params2Form, Permalink} from "../Permalink";
+import {params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "../shex/ShExTabs";

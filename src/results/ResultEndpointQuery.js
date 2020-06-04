@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import BootstrapTable from "react-bootstrap-table-next";
 import {cnvValueFromSPARQL, showQualified, showQualify} from "../utils/Utils";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 
 function ResultEndpointInfo(props) {
-    const [table, setTable] = useState(parseData(props.result));
+    const [table] = useState(parseData(props.result));
 
     function parseData(data) {
         if (data.head && data.head.vars && data.head.vars.length) {
@@ -15,15 +15,16 @@ function ResultEndpointInfo(props) {
                     text: v,
                     sort: true
                 }});
-            const rows = data.results.bindings.map((binding,idx) => {
+            const rows = data.results.bindings.map( (binding,idx) => {
                 let row = {_id: idx};
-                vars.map(v => {
+
+                for (const v of vars){
                     const b = binding[v];
                     const converted = cnvValueFromSPARQL(b);
                     // const cleanPrefixes = ["wd","wdt"];
                     const qualify = showQualify(converted, wikidataPrefixes);
                     row[v] = showQualified(qualify, wikidataPrefixes)
-                });
+                }
                 return row;
             });
             return {
