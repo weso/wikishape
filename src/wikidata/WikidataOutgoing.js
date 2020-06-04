@@ -6,7 +6,7 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import API from "../API";
-import {mkPermalink, Permalink} from "../Permalink";
+import {mkPermalink, mkPermalinkLong, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultOutgoing from "../results/ResultOutgoing";
 import Pace from "react-pace-progress";
@@ -16,17 +16,22 @@ import qs from "query-string";
 function WikidataOutgoing(props) {
 
     const [entities,setEntities] = useState([]);
+    const [node,setNode] = useState('');
+    const [lastNode,setLastNode] = useState('');
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
+
+    const ApiEndpoint = API.dataOutgoing
 
     useEffect(() => {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
                 if (params.node) {
                     setEntities([{uri: params.node}]);
-                    fetchOutgoing(params.node);
+                    setNode(params.node)
+                    setLastNode(params.node)
                 } else {
                     setError(`No value for parameter node`)
                 }
@@ -35,48 +40,77 @@ function WikidataOutgoing(props) {
         [props.location.search]
     );
 
+    useEffect( () => {
+        if (node) {
+            // Remove results / errors / permalink from previous query
+            resetState()
+            // Update history
+            setUpHistory()
+            getOutgoing()
+        }
+    }, [node])
+
     function handleChange(es) {
         setEntities(es);
-    }
-
-    async function fetchOutgoing(node) {
-        let params={};
-        params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
-        params['node'] = node ;
-        console.log(`Node: ${node}`);
-        setPermalink(await mkPermalink(API.wikidataOutgoingRoute, params));
-        getOutgoing(API.dataOutgoing, params);
     }
 
     function handleSubmit(event) {
         event.preventDefault();
         if (entities && entities.length > 0 && entities[0].uri) {
-            const node = entities[0].uri;
-            fetchOutgoing(node)
+            setNode(entities[0].uri)
         } else {
             setError(`No entity selected`)
         }
     }
 
-    function getOutgoing(url, params, cb) {
+    function getOutgoing(cb) {
         setLoading(true);
-        axios.get(url,{
+        const params = {
+            endpoint: API.currentEndpoint(),
+            node: node
+        }
+        axios.get(ApiEndpoint,{
             params: params,
             headers: { 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
             }})
             .then (response => response.data)
-            .then((data) => {
-                setLoading(false);
+            .then(async (data) => {
+                setError(null)
                 setResult(data);
+                setPermalink(await mkPermalink(API.wikidataOutgoingRoute, params));
                 if (cb) cb()
             })
             .catch((error) => {
-                console.log(`Error processing request: ${url}: ${error.message}`);
-                setLoading(false);
-                setError(`Error processing ${url}: ${error.message}`);
-            });
+                console.log(`Error processing request: ${ApiEndpoint}: ${error.message}`);
+                setError(`Error processing ${ApiEndpoint}: ${error.message}`);
+            })
+            .finally( () => setLoading(false) );
 
+    }
+
+    function setUpHistory() {
+        // Store the last search URL in the browser history to allowgoing back
+        if (lastNode && lastNode.localeCompare(node) !== 0){
+            // eslint-disable-next-line no-restricted-globals
+            history.pushState(null, document.title, mkPermalinkLong(API.wikidataOutgoingRoute, {
+                node: lastNode
+            }))
+        }
+        // Change current url for shareable links
+        // eslint-disable-next-line no-restricted-globals
+        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataOutgoingRoute, {
+            node: node
+        }))
+
+        setLastNode(node)
+
+    }
+
+    function resetState() {
+        setResult(null)
+        setPermalink(null)
+        setError(null)
     }
 
     return (
@@ -91,9 +125,9 @@ function WikidataOutgoing(props) {
                <Button variant="primary" type="submit">Get outgoing arcs</Button>
          </Form>
           {loading ? <Pace color="#27ae60"/> : null }
+          {permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultOutgoing result={result} />
-         { permalink? <Permalink url={permalink} />: null }
        </Container>
     );
 }

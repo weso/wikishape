@@ -27,6 +27,12 @@ export function mkPermalink(route, params) {
       })
 }
 
+export function mkPermalinkLong(route, params) {
+    return getHost() +
+        // "#" + // This one is added for HashBrowser
+        route + "?" + qs.stringify(params)
+}
+
 export function params2Form(params) {
     let formData = new FormData();
     Object.keys(params).forEach(key => {
@@ -43,7 +49,7 @@ function getHost() {
 
 export function Permalink(props) {
     if (props.url)
-        return <Button variant="secondary" href={props.url}>Permalink</Button>;
+        return <Button className="btn-permalink" variant="secondary" href={props.url}>Permalink</Button>;
 
     return null
 }

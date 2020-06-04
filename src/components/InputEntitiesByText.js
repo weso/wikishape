@@ -23,7 +23,7 @@ function InputEntitiesByText(props) {
 
     function makeAndHandleRequest(label, language, page = 0) {
         const lang = language[0] ? language[0].label : "en" ;
-        return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
+        return fetch(`${SEARCH_URI}?endpoint=${API.currentUrl()}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
                 // console.log(`Response for ${label}: ${JSON.stringify(json)}`);

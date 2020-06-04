@@ -4,7 +4,6 @@ import {showQualified, showQualify} from "../utils/Utils";
 import { wikidataPrefixes} from "../resources/wikidataPrefixes";
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
-import API from "../API";
 
 function ResultOutgoing(props) {
      const result = props.result;
@@ -58,8 +57,8 @@ function ResultOutgoing(props) {
 
      return (
          <div>
-             {msg}
              { result && <details><pre>{JSON.stringify(result)}</pre></details> }
+             {msg}
          </div>
      );
 }
