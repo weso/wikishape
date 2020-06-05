@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useEffect} from 'react';
+import React, {useReducer, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "../shex/ShExTabs";
 import API from "../API"
-import {convertTabSchema, showQualify} from "../utils/Utils";
+import {showQualify} from "../utils/Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "../components/InputShapeLabel";
@@ -21,6 +21,7 @@ import { paramsFromShEx, initialShExStatus, shExReducer, shExParamsFromQueryPara
 import { mergeResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import qs from "query-string";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function WikidataValidate(props) {
 
@@ -179,7 +180,7 @@ function WikidataValidate(props) {
         return params;
     }
 
-    function validate() {
+    async function validate() {
         console.log(`Validate: entities: ${JSON.stringify(status.entities)}, shape: ${JSON.stringify(status.shapeLabel)}`)
         const initialResult = resultFromEntities(status.entities, status.shapeLabel);
         console.log(`schemaActiveTab: ${status.schemaActiveTab}`);
@@ -193,7 +194,7 @@ function WikidataValidate(props) {
         const paramsPermalink = {...paramsShEx,
             nodes: status.entities,
             shape: status.shapeLabel};
-        dispatch({type: "set-permalink", value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
+        dispatch({type: "set-permalink", value: await mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
         dispatch({type: "set-result", value: initialResult});
         status.entities.forEach(e => {
             const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
@@ -280,8 +281,9 @@ function WikidataValidate(props) {
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={status.shapeLabel}
                                             shapeList={status.shapeList}/>
-                           <Button variant="primary"
-                                   type="submit">Validate wikidata entities</Button>
+                           <Button className="btn-with-icon" variant="primary" type="submit">Validate entities
+                               <ReloadIcon className="white-icon"/>
+                           </Button>
                        </Form>
 
                    </Row>

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
 import API from "../API";
 import Yasqe from 'yasgui-yasqe/dist/yasqe.bundled.min';

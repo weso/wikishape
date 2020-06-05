@@ -23,7 +23,7 @@ function InputEntitiesByText(props) {
 
     function makeAndHandleRequest(label, language, page = 0) {
         const lang = language[0] ? language[0].label : "en" ;
-        return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
+        return fetch(`${SEARCH_URI}?endpoint=${API.currentUrl()}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
                 // console.log(`Response for ${label}: ${JSON.stringify(json)}`);
@@ -39,6 +39,12 @@ function InputEntitiesByText(props) {
             .then((resp) => {
                 // console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
                 setIsLoading(false);
+
+                // Prune bad formatted results
+                for (const it of resp){
+                    if (!it.label || typeof it.label != 'string') it.label = ''
+                    if (!it.descr || typeof it.descr != 'string') it.descr = ''
+                }
                 setOptions(resp);
             });
     }

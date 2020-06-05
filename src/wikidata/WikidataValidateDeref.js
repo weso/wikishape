@@ -25,6 +25,7 @@ import { paramsFromShEx, initialShExStatus, shExReducer, shExParamsFromQueryPara
 import { mergeResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import qs from "query-string";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function WikidataValidateDeref(props) {
 
@@ -237,7 +238,7 @@ function WikidataValidateDeref(props) {
         return params;
     }
 
-    function validate(validateParams) {
+    async function validate(validateParams) {
         console.log(`Validate\nvalidateParams: ${JSON.stringify(validateParams)}`)
         const initialResult = resultFromEntities(validateParams.entities, validateParams.shapeLabel);
         setResult(initialResult);
@@ -256,7 +257,7 @@ function WikidataValidateDeref(props) {
             shape: validateParams.shapeLabel,
             schemaActiveTab: validateParams.schemaActiveTab
         };
-        setPermalink(mkPermalink(API.wikidataValidateDerefRoute, paramsPermalink));
+        setPermalink(await mkPermalink(API.wikidataValidateDerefRoute, paramsPermalink));
         console.log(`validate| Permalink: ${JSON.stringify(permalink)}`);
 
         const entitySchema = validateParams.entitySchema ;
@@ -412,8 +413,9 @@ function WikidataValidateDeref(props) {
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={shapeLabel}
                                             shapeList={shapeList}/>
-                           <Button variant="primary"
-                                   type="submit">Validate wikidata entities</Button>
+                           <Button className="btn-with-icon" variant="primary" type="submit">Validate entities
+                               <ReloadIcon className="white-icon"/>
+                           </Button>
                        </Form>
 
                    </Row>

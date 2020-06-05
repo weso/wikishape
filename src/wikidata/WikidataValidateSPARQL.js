@@ -4,7 +4,7 @@ import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Pace from "react-pace-progress";
-import {mkPermalink, params2Form, Permalink} from "../Permalink";
+import {params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "../shex/ShExTabs";
@@ -20,6 +20,7 @@ import QueryForm from "../query/QueryForm";
 import { paramsFromShEx, initialShExStatus, shExReducer} from '../shex/ShEx'
 import { mergeResult, showResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function WikidataValidateSPARQL(props) {
 
@@ -176,7 +177,7 @@ function WikidataValidateSPARQL(props) {
                 const paramsShEx = paramsFromShEx(shEx);
                 const initialResult = resultFromEntities(entities, status.shapeLabel);
                 dispatch({type: "set-result", value: initialResult});
-// TODO:                setPermalink(mkPermalink(API.wikidataValidateSPARQLRoute,params));
+// TODO:                setPermalink(await mkPermalink(API.wikidataValidateSPARQLRoute,params));
                 entities.forEach(e => {
                     const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
                     params = {...paramsEndpoint,...paramsShEx};
@@ -263,8 +264,9 @@ function WikidataValidateSPARQL(props) {
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={status.shapeLabel}
                                             shapeList={status.shapeList}/>
-                           <Button variant="primary"
-                                   type="submit">Validate wikidata entities</Button>
+                           <Button className="btn-with-icon" variant="primary" type="submit">Validate entities
+                               <ReloadIcon className="white-icon"/>
+                           </Button>
                        </Form>
 
                    </Row>

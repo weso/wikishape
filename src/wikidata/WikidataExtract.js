@@ -11,6 +11,7 @@ import axios from "axios";
 import ResultDataExtract from "../results/ResultDataExtract";
 import Pace from "react-pace-progress";
 import * as qs from "qs";
+import {ReloadIcon} from "react-open-iconic-svg";
 
 function WikidataExtract(props) {
 
@@ -60,7 +61,7 @@ function WikidataExtract(props) {
             });
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         let params={}
         params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
@@ -69,7 +70,7 @@ function WikidataExtract(props) {
             // params['nodeSelector'] = "<" + nodeSelector + ">";
             params['entity'] = nodeSelector ;
             console.log(`Node selector: ${nodeSelector}`);
-            setPermalink(mkPermalink(API.wikidataExtractRoute, params));
+            setPermalink(await mkPermalink(API.wikidataExtractRoute, params));
             let formData = params2Form(params);
             postExtract(url,formData);
         } else {
@@ -86,12 +87,14 @@ function WikidataExtract(props) {
                { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Extract Schema</Button>
+             <Button className="btn-with-icon" variant="primary" type="submit">Extract schema
+                 <ReloadIcon className="white-icon"/>
+             </Button>
          </Form>
           {loading ? <Pace color="#27ae60"/> : null }
+          { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultDataExtract result={result} />
-         { permalink? <Permalink url={permalink} />: null }
        </Container>
     );
 }

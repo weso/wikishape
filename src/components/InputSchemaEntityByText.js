@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
-import {Typeahead, Token} from 'react-bootstrap-typeahead';
+import {Token, Typeahead} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SelectLanguage from "./SelectLanguage";
-import { SchemaEntities } from "../resources/schemaEntities"
+import {SchemaEntities} from "../resources/schemaEntities"
 import InputGroup from "react-bootstrap/InputGroup";
 
 
@@ -27,9 +27,10 @@ function InputSchemaEntityByText(props) {
     );
 
     function optionsFromSchemaEntities(lang) {
-        const ses = SchemaEntities.map(e => {
+        // console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
+        return SchemaEntities.map(e => {
             const labels = e.labels
-            let labelRecord = null ;
+            let labelRecord = null;
             if (lang && labels[lang]) {
                 labelRecord = labels[lang]
             } else {
@@ -39,13 +40,11 @@ function InputSchemaEntityByText(props) {
                 id: e.id,
                 label: labelRecord.label,
                 descr: labelRecord.descr,
-                conceptUri : e.conceptUri,
+                conceptUri: e.conceptUri,
                 webUri: e.webUri,
                 lang: lang
             }
-        });
-        // console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
-        return ses
+        })
     }
 
     const MenuItem = ({item}) => (
