@@ -30,9 +30,9 @@ function WikidataSchemaInfo(props) {
     const [schemaConceptUri, setSchemaConceptUri] = useState('');
     const [error,setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [selectedEntity,setSelectedEntity] = useState([]);
     const [schemaEntity,setSchemaEntity] = useState([]);
     const [lastSchemaEntity, setLastSchemaEntity] = useState([]);
+    const [selectedEntity,setSelectedEntity] = useState([]);
 
     useEffect(() => {
             if (props.location.search) {
@@ -57,7 +57,6 @@ function WikidataSchemaInfo(props) {
                 // Remove results / errors / permalink from previous query
                 resetState()
                 // Update history
-
                 setUpHistory()
                 fetchSchemaEntity(schemaEntity)
             }
@@ -123,7 +122,6 @@ function WikidataSchemaInfo(props) {
         if (lastSchemaEntity && schemaEntity &&
             lastSchemaEntity.length && schemaEntity.length &&
             lastSchemaEntity[0].id.localeCompare(schemaEntity[0].id) !== 0){
-            console.info("ADDED TO HISTORY: ", lastSchemaEntity[0].id, schemaEntity[0].id)
             // eslint-disable-next-line no-restricted-globals
             history.pushState(null, document.title, mkPermalinkLong(API.wikidataSchemaInfoRoute, {
                 id: lastSchemaEntity[0].id,
@@ -150,7 +148,7 @@ function WikidataSchemaInfo(props) {
     return (
        <Container>
          <h1>Info about Wikidata Schema entity</h1>
-         <InputSchemaEntityByText onChange={setSelectedEntity} entity={schemaEntity} />
+         <InputSchemaEntityByText onChange={setSelectedEntity} entity={selectedEntity} />
          <Form onSubmit={handleSubmit}>
              <Button className="btn-with-icon" variant="primary" type="submit">Get schema info
                  <ReloadIcon className="white-icon"/>
