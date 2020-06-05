@@ -95,7 +95,7 @@ function WikidataOutgoing(props) {
     }
 
     function setUpHistory() {
-        // Store the last search URL in the browser history to allowgoing back
+        // Store the last search URL in the browser history to allow going back
         if (lastNode && lastNode.localeCompare(node) !== 0){
             // eslint-disable-next-line no-restricted-globals
             history.pushState(null, document.title, mkPermalinkLong(API.wikidataOutgoingRoute, {
