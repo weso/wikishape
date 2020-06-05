@@ -67,6 +67,7 @@ function InputPropertiesByText(props) {
         <Row>
             <Col>
             <AsyncTypeahead
+                id='type-ahead'
                 filterBy={['id','label','descr']}
                 labelKey="id"
                 multiple={props.multiple}
