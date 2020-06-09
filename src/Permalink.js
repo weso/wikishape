@@ -53,7 +53,6 @@ function getHost() {
 
 function handleClick(e) {
     e.preventDefault()
-    console.info(e.target)
     // Create a dummy input to copy the link from it
     const dummy = document.createElement("input");
 

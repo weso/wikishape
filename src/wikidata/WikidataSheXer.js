@@ -129,7 +129,7 @@ function WikidataSheXer(props) {
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
+          { loading ? <Pace color="#27ae60"/> : null }
           { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultDataExtract result={result} />

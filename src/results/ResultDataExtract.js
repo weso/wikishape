@@ -4,7 +4,7 @@ import Code from '../components/Code'
 function ResultDataExtract(props) {
      const result = props.result
      let msg ;
-     if (result === "") {
+     if (!result) {
          msg = null
      } else
      if (result.error) {
