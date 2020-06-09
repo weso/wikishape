@@ -11,9 +11,9 @@ import API from "../API";
 import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultDataExtract from "../results/ResultDataExtract";
-import Pace from "react-pace-progress";
 import * as qs from "qs";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataSheXer(props) {
 
@@ -22,6 +22,8 @@ function WikidataSheXer(props) {
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
+    const [progressPercent,setProgressPercent] = useState(0);
+
     const url = "http://156.35.86.6:8080/shexer";
 
     function handleChange(es) {
@@ -86,12 +88,17 @@ function WikidataSheXer(props) {
 
     function postExtract(url, jsonData, cb) {
         setLoading(true);
+        setProgressPercent(10)
         axios.post(url,jsonData, { headers: {'Content-type': 'Application/json'}})
-            .then (response => response.data)
+            .then (response => {
+                setProgressPercent(70)
+                return response.data
+            })
             .then((data) => {
                 setLoading(false);
                 setResult(data);
                 if (cb) cb()
+                setProgressPercent(100)
             })
             .catch(function (error) {
                 setLoading(false);
@@ -125,11 +132,11 @@ function WikidataSheXer(props) {
                { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
          </Table>
          <Form onSubmit={handleSubmit}>
-             <Button className="btn-with-icon" variant="primary" type="submit">Extract schema
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Extract schema
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
-          { loading ? <Pace color="#27ae60"/> : null }
+          { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultDataExtract result={result} />

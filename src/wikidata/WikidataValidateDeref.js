@@ -7,7 +7,6 @@ import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Pace from "react-pace-progress";
 import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -26,6 +25,7 @@ import { mergeResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import qs from "query-string";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataValidateDeref(props) {
 
@@ -55,8 +55,8 @@ function WikidataValidateDeref(props) {
    // const [nodesPrefixMap,setNodesPrefixMap] = useState([]);
     const [shapesPrefixMap, setShapesPrefixMap] = useState([]);
     const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema');
-
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     const urlServer = API.wikidataValidateDeref;
 
@@ -118,6 +118,7 @@ function WikidataValidateDeref(props) {
             const entitySchema = e[0]
             setLoading(true);
             setResult('');
+            setProgressPercent(10)
 
             // Fetch Schema from Entity schema URL
             let params = {}
@@ -125,10 +126,14 @@ function WikidataValidateDeref(props) {
             params['schemaFormat'] = 'ShExC';
             params['schemaEngine'] = 'ShEx';
             const postParams = params2Form(params);
+            setProgressPercent(30)
             axios.post(API.schemaInfo, postParams, {
                 headers: {'Access-Control-Allow-Origin': '*'}
             })
-                .then(response => response.data)
+                .then(response => {
+                    setProgressPercent(75)
+                    return response.data
+                })
                 .then(result => {
                     console.log(`Result of schema info: ${JSON.stringify(result)}`);
                     /* let shapes = [] ;
@@ -144,12 +149,12 @@ function WikidataValidateDeref(props) {
                     setShapeLabel(newShapeLabel);
 
                     setShapesPrefixMap(result.shapesPrefixMap);
-                    setLoading(false);
+                    setProgressPercent(100)
                 })
                 .catch(error => {
                     setError(`handleSchemaEntityChange: error after POST ${API.schemaInfo} with params ${JSON.stringify(postParams)}: ${error.message}`);
-                    setLoading(false);
                 })
+                .finally( () => setLoading(false))
             setEntitySchema(e);
         }
     }
@@ -375,7 +380,7 @@ function WikidataValidateDeref(props) {
          <h1>Validate Wikidata entities</h1>
                    { result || loading || error ?
                        <Row>
-                           {loading ? <Pace color="#27ae60"/> :
+                           {loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> :
                             error? <Alert variant="danger">{error}</Alert> :
                             result ?
                               <ResultValidate result={result} /> : null
@@ -413,7 +418,7 @@ function WikidataValidateDeref(props) {
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={shapeLabel}
                                             shapeList={shapeList}/>
-                           <Button className="btn-with-icon" variant="primary" type="submit">Validate entities
+                           <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Validate entities
                                <ReloadIcon className="white-icon"/>
                            </Button>
                        </Form>

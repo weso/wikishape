@@ -3,7 +3,6 @@ import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Pace from "react-pace-progress";
 import {params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -21,6 +20,7 @@ import { paramsFromShEx, initialShExStatus, shExReducer} from '../shex/ShEx'
 import { mergeResult, showResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataValidateSPARQL(props) {
 
@@ -43,6 +43,7 @@ function WikidataValidateSPARQL(props) {
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
     const urlServer = API.schemaValidate;
     const [permalink, setPermalink] = useState(null);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     function handleShapeLabelChange(label) {
         console.log(`handleShapeLabelChange: ${label}`)
@@ -168,17 +169,22 @@ function WikidataValidateSPARQL(props) {
         const formDataQuery = params2Form(params);
         dispatch({type: 'set-loading', value: true});
         dispatch({type: 'unset-result'});
+        setProgressPercent(25)
         axios.post(API.wikidataQuery,formDataQuery)
-            .then(response => response.data)
-            .then(data => {
+            .then(response => {
+                setProgressPercent(70)
+                return response.data
+            })
+            .then(async data => {
                 const entities = parseData(data);
                 dispatch({type: 'set-loading', value: false});
                 dispatch({ type: 'set-entities', value: entities});
                 const paramsShEx = paramsFromShEx(shEx);
                 const initialResult = resultFromEntities(entities, status.shapeLabel);
                 dispatch({type: "set-result", value: initialResult});
+                setProgressPercent(80)
 // TODO:                setPermalink(await mkPermalink(API.wikidataValidateSPARQLRoute,params));
-                entities.forEach(e => {
+                for (const e of entities) {
                     const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
                     params = {...paramsEndpoint,...paramsShEx};
                     params['schemaEngine']="ShEx";
@@ -187,7 +193,8 @@ function WikidataValidateSPARQL(props) {
                     params['shapeMapFormat']="Compact";
                     const formData = params2Form(params);
                     postValidate(urlServer,formData,e);
-                });
+                }
+                setProgressPercent(100)
             }).catch(error => {
             dispatch({type: 'set-error', value: error.message});
         })
@@ -221,7 +228,7 @@ function WikidataValidateSPARQL(props) {
          <h1>Validate Wikidata entities obtained from SPARQL queries</h1>
                    { status.result || status.loading || status.error ?
                        <Row>
-                           {status.loading ? <Pace color="#27ae60"/> :
+                           {status.loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> :
                                status.error? <Alert variant="danger">{status.error}</Alert> :
                                status.result ?
                                    <ResultValidate result={status.result} /> : null
@@ -264,7 +271,7 @@ function WikidataValidateSPARQL(props) {
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={status.shapeLabel}
                                             shapeList={status.shapeList}/>
-                           <Button className="btn-with-icon" variant="primary" type="submit">Validate entities
+                           <Button className={"btn-with-icon " + (status.loading ? "disabled" : "")} variant="primary" type="submit">Validate entities
                                <ReloadIcon className="white-icon"/>
                            </Button>
                        </Form>

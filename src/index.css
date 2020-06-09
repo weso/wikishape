@@ -60,3 +60,7 @@ code {
 table td {
   overflow-x: auto;
 }
+
+.disabled {
+  cursor: not-allowed !important;
+}

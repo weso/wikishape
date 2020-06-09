@@ -6,7 +6,6 @@ import Alert from "react-bootstrap/Alert";
 import {mkPermalink, mkPermalinkLong, params2Form, Permalink} from "../Permalink";
 import API from "../API";
 import {validateURL} from "../utils/Utils"
-import Pace from "react-pace-progress";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
@@ -27,6 +26,8 @@ function WikidataQuery(props) {
     const [lastEndpoint, setLastEndpoint] = useState('')
     const [result, setResult] = useState(null);
     const [controlPressed, setControlPressed] = useState(false);
+    const [progressPercent,setProgressPercent] = useState(0);
+
     const currentUrlHostname = API.currentUrl().split(/\/\//)[1].split('/')[0];
 
 
@@ -68,6 +69,7 @@ function WikidataQuery(props) {
         setQuery(query);
     }
 
+    // Used to query the server on "Control + Enter"
     function onKeyDown(event) {
         const key = event.which || event.keyCode;
         if (key === 17) setControlPressed(true);
@@ -116,6 +118,7 @@ function WikidataQuery(props) {
 
     function resolveQuery(url,formData) {
         setIsLoading(true);
+        setProgressPercent(20)
         axios.post(url,formData, {
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
@@ -123,7 +126,7 @@ function WikidataQuery(props) {
             }
         })
             .then(async response => {
-                setIsLoading(false);
+                setProgressPercent(75)
                 const results = response.data.results;
                 // TODO: Even if the request fails, the RdfShape server returns a 200 status with no data so the client
                 // has to check if there is any result. Refactor the server to return a more accurate code.
@@ -131,6 +134,7 @@ function WikidataQuery(props) {
                     if (results.bindings.length > 0) {
                         setError(null);
                         handleResults(response.data)
+                        setProgressPercent(90)
                     }
                 }
                 else {
@@ -142,6 +146,7 @@ function WikidataQuery(props) {
                     query: query,
                     endpoint: endpoint
                 }));
+                setProgressPercent(100)
             })
             .catch(error => {
                 setResult(null);
@@ -172,6 +177,7 @@ function WikidataQuery(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setProgressPercent(0)
     }
 
 
@@ -188,7 +194,7 @@ function WikidataQuery(props) {
                             value={query}
                         />
                         <div style={divStyle}>
-                            <Button variant="primary"
+                            <Button variant="primary" className={isLoading ? "disabled" : ""}
                                     type="submit">Resolve (Ctrl+Enter)</Button>
                             <Spinner style={spinnerStyle} animation="border" variant="primary" />
                         </div>
@@ -197,7 +203,7 @@ function WikidataQuery(props) {
                     { result || isLoading || error ?
                         <div>
                             {
-                                isLoading ? <Pace color="#27ae60"/> :
+                                // isLoading ? <ProgressBar striped animated variant="info" now={progressPercent}/> :
                                     error? <Alert variant="danger">{error}</Alert> : null
                             }
                             {

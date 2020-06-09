@@ -7,12 +7,12 @@ import Button from "react-bootstrap/Button";
 import API from "../API";
 import {mkPermalink, mkPermalinkLong, params2Form, Permalink} from "../Permalink";
 import axios from "axios";
-import Pace from "react-pace-progress";
 import ShExForm from "../shex/ShExForm";
 import PrintSVG from "../utils/PrintSVG";
 import qs from 'query-string';
 import { SchemaEntities } from "../resources/schemaEntities"
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 
 function WikidataSchemaVisual(props) {
@@ -28,6 +28,7 @@ function WikidataSchemaVisual(props) {
     const [schemaEntity,setSchemaEntity] = useState([]);
     const [lastSchemaEntity, setLastSchemaEntity] = useState([]);
     const [selectedEntity,setSelectedEntity] = useState([]);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     useEffect(() => {
        if (props.location.search) {
@@ -98,11 +99,15 @@ function WikidataSchemaVisual(props) {
     const fetchSchemaEntity = async (e) => {
         console.log(`fetchSchemaEntity(${JSON.stringify(e)})`)
         setLoading(true);
-        try {  const entity = e[0];
+        setProgressPercent(10)
+        try {
+            const entity = e[0];
+            setProgressPercent(30)
             const schema = await axios.get(entity.conceptUri);
             const schemaStr = schema.data ;
             console.log(`Returning from get Entity: ${JSON.stringify(schemaStr)}`)
 
+            setProgressPercent(70)
             // Prepare params to call visualize schema
             let params = {}
             params['schemaURL']=entity.conceptUri;
@@ -111,6 +116,7 @@ function WikidataSchemaVisual(props) {
             const visual = await axios.post(API.schemaVisualize, params2Form(params),{
                 headers: { 'Access-Control-Allow-Origin': '*'}
             });
+            setProgressPercent(90)
             setLoading(false)
             setSchemaEntity(e)
             setSchemaId(entity.id)
@@ -120,6 +126,7 @@ function WikidataSchemaVisual(props) {
             setShExContent(schemaStr)
             setResult(visual.data)
             setPermalink(await mkPermalink(API.wikidataSchemaVisualRoute, {id: entity.id, lang: entity.lang}))
+            setProgressPercent(100)
 
         } catch(error) {
             setLoading(false);
@@ -162,6 +169,7 @@ function WikidataSchemaVisual(props) {
         setShExContent(null)
         setPermalink(null)
         setError(null)
+        setProgressPercent(0)
     }
 
     return (
@@ -169,11 +177,11 @@ function WikidataSchemaVisual(props) {
          <h1>Visualize Wikidata Schema</h1>
          <InputSchemaEntityByText onChange={setSelectedEntity} entity={selectedEntity} />
          <Form onSubmit={handleSubmit}>
-             <Button className="btn-with-icon" variant="primary" type="submit">Visualize schema
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Visualize schema
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
+          {loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">{error}</Alert>: null }
           { shExContent?

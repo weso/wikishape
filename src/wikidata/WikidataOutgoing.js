@@ -9,9 +9,9 @@ import API from "../API";
 import {mkPermalink, mkPermalinkLong, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultOutgoing from "../results/ResultOutgoing";
-import Pace from "react-pace-progress";
 import qs from "query-string";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 
 function WikidataOutgoing(props) {
@@ -23,6 +23,7 @@ function WikidataOutgoing(props) {
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     const ApiEndpoint = API.dataOutgoing
 
@@ -74,20 +75,25 @@ function WikidataOutgoing(props) {
             endpoint: API.currentEndpoint(),
             node: node
         }
+        setProgressPercent(30)
         axios.get(ApiEndpoint,{
             params: params,
             headers: { 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
             }})
-            .then (response => response.data)
+            .then (response => {
+                setProgressPercent(70)
+                return response.data
+            })
             .then(async (data) => {
-                setResult(data);
+                setResult(data)
+                setProgressPercent(100)
                 setPermalink(await mkPermalink(API.wikidataOutgoingRoute, params));
                 if (cb) cb()
             })
             .catch((error) => {
-                console.log(`Error processing request: ${ApiEndpoint}: ${error.message}`);
-                setError(`Error processing ${ApiEndpoint}: ${error.message}`);
+                console.log(`Error processing request: ${ApiEndpoint}: ${error.message}`)
+                setError(`Error processing ${ApiEndpoint}: ${error.message}`)
             })
             .finally( () => setLoading(false) );
 
@@ -115,6 +121,7 @@ function WikidataOutgoing(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setProgressPercent(0)
     }
 
     return (
@@ -135,11 +142,11 @@ function WikidataOutgoing(props) {
              </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button className="btn-with-icon" variant="primary" type="submit">Get outgoing arcs
+               <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Get outgoing arcs
                    <ReloadIcon className="white-icon"/>
                </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
+          {loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           {permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultOutgoing result={result} />

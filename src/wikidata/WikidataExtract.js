@@ -9,9 +9,9 @@ import API from "../API";
 import {mkPermalink, mkPermalinkLong, params2Form, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultDataExtract from "../results/ResultDataExtract";
-import Pace from "react-pace-progress";
 import * as qs from "qs";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataExtract(props) {
 
@@ -23,6 +23,7 @@ function WikidataExtract(props) {
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
     const [endpoint,setEndpoint] = useState(API.currentEndpoint);
+    const [progressPercent,setProgressPercent] = useState(0);
 
 
     const url = API.dataExtract;
@@ -66,15 +67,21 @@ function WikidataExtract(props) {
 
     function postExtract(cb) {
         setLoading(true);
+        setProgressPercent(10)
         const params = {
             entity: entities[0].uri,
             endpoint: endpoint
         }
         const formData = params2Form(params)
+        setProgressPercent(30)
         axios.post(url, formData)
-            .then (response => response.data)
+            .then (response => {
+                setProgressPercent(70)
+                return response.data
+            })
             .then(async data => {
                 setResult(data)
+                setProgressPercent(100)
                 setPermalink(await mkPermalink(API.wikidataExtractRoute, params));
                 if (cb) cb()
             })
@@ -109,6 +116,7 @@ function WikidataExtract(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setProgressPercent(0)
     }
 
 
@@ -129,11 +137,11 @@ function WikidataExtract(props) {
              </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-             <Button className="btn-with-icon" variant="primary" type="submit">Extract schema
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Extract schema
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
-          { loading ? <Pace color="#27ae60"/> : null }
+          { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null}
           { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultDataExtract result={result} />

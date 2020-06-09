@@ -1,9 +1,8 @@
-import React, {useReducer, useEffect} from 'react';
+import React, {useReducer, useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Pace from "react-pace-progress";
 import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -22,6 +21,7 @@ import { mergeResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import qs from "query-string";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataValidate(props) {
 
@@ -41,6 +41,8 @@ function WikidataValidate(props) {
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
+    const [progressPercent,setProgressPercent] = useState(0);
+
     const urlServer = API.schemaValidate;
 
     useEffect(() => {
@@ -243,7 +245,7 @@ function WikidataValidate(props) {
          <h1>Validate Wikidata entities (through SPARQL endpoint)</h1>
                    { status.result || status.loading || status.error ?
                        <Row>
-                           {status.loading ? <Pace color="#27ae60"/> :
+                           {status.loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> :
                             status.error? <Alert variant="danger">{status.error}</Alert> :
                             status.result ?
                               <ResultValidate result={status.result} /> : null
@@ -281,7 +283,7 @@ function WikidataValidate(props) {
                            <InputShapeLabel onChange={handleShapeLabelChange}
                                             value={status.shapeLabel}
                                             shapeList={status.shapeList}/>
-                           <Button className="btn-with-icon" variant="primary" type="submit">Validate entities
+                           <Button className={"btn-with-icon " + (status.loading ? "disabled" : "")} variant="primary" type="submit">Validate entities
                                <ReloadIcon className="white-icon"/>
                            </Button>
                        </Form>
