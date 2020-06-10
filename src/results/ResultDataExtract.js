@@ -13,7 +13,7 @@ function ResultDataExtract(props) {
                 </div>
      } else {
          msg = <div>
-             <p>{result.entity}</p>
+             <p>{<a target='_blank' href={result.entity}>{result.entity}</a>}</p>
              {result.result && (
                  <Code
                      value={result.result}

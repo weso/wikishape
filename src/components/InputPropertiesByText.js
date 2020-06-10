@@ -28,7 +28,8 @@ function InputPropertiesByText(props) {
             .then((json) => {
                 console.log(`Response for ${label}: ${JSON.stringify(json)}`);
                 return json;
-            });
+            })
+            .catch( () => []);
     }
 
 

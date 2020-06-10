@@ -27,10 +27,9 @@ function InputSchemaEntityByText(props) {
     );
 
     function optionsFromSchemaEntities(lang) {
-        // console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
         return SchemaEntities.map(e => {
             const labels = e.labels
-            let labelRecord = null;
+            let labelRecord;
             if (lang && labels[lang]) {
                 labelRecord = labels[lang]
             } else {

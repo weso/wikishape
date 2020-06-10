@@ -18,13 +18,12 @@ function WikidataExtract(props) {
     const [entities,setEntities] = useState([]);
     const [selectedEntities, setSelectedEntities] = useState([]);
     const [lastEntities, setLastEntities] = useState([]);
+    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
-    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [progressPercent,setProgressPercent] = useState(0);
-
 
     const url = API.dataExtract;
 
@@ -52,7 +51,7 @@ function WikidataExtract(props) {
             }
         }
         else {
-            setError(`No entity selected, SchemaEntity: ${JSON.stringify(entities)}`)
+            setError(`No entities selected, SchemaEntity: ${JSON.stringify(entities)}`)
         }
     }, [entities])
 
@@ -60,7 +59,7 @@ function WikidataExtract(props) {
         setSelectedEntities(es)
     }
 
-    async function handleSubmit(event) {
+    function handleSubmit(event) {
         event.preventDefault();
         setEntities(selectedEntities)
     }
@@ -122,7 +121,8 @@ function WikidataExtract(props) {
 
     return (
        <Container>
-         <h1>Extract schema from Wikidata entities</h1>
+         <h1>Extract schema from Wikibase entities</h1>
+           <h4>Target Wikibase: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} entities={entities} />
          <Table>
              <tbody>

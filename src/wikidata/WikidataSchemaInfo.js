@@ -160,14 +160,14 @@ function WikidataSchemaInfo(props) {
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
-          {loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
+          { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">{error}</Alert>: null }
           { shExContent?
               <div>
                   <h1>{schemaId} - {schemaLabel}</h1>
                   <p>{schemaDescr}</p>
-                  <p><code><a href={schemaWebUri}>{schemaWebUri}</a></code></p>
+                  <p><code><a target={'_blank'} href={schemaWebUri}>{schemaWebUri}</a></code></p>
                   <p>Raw schema uri: <code><a href={schemaConceptUri}>{schemaConceptUri}</a></code></p>
               <ShExForm onChange={()=>null} placeholder={''} readonly={true} value={shExContent} />
               </div>

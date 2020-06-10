@@ -3,12 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import Table from "react-bootstrap/Table";
-//import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-//import DataTabs from "../data/DataTabs";
 import Button from "react-bootstrap/Button";
 import API from "../API";
-import {mkPermalink, params2Form, Permalink} from "../Permalink";
+import {mkPermalink, mkPermalinkLong, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultDataExtract from "../results/ResultDataExtract";
 import * as qs from "qs";
@@ -18,6 +16,9 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 function WikidataSheXer(props) {
 
     const [entities,setEntities] = useState([]);
+    const [selectedEntities, setSelectedEntities] = useState([]);
+    const [lastEntities, setLastEntities] = useState([]);
+    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
@@ -26,30 +27,36 @@ function WikidataSheXer(props) {
 
     const url = "http://156.35.86.6:8080/shexer";
 
-    function handleChange(es) {
-        setEntities(es);
-    }
-
 
     useEffect(() => {
         if (props.location.search) {
             let params = {};
-            const queryParams = qs.parse(props.location.search);
-            params['entity'] = queryParams.entity;
-            const formData = params2Form(params);
-            postExtract(url, sheXerParams(queryParams.entity), () => {
-                setEntities(updateEntities(params,entities));
-            });
+            const queryParams = qs.parse(props.location.search.substring(1));
+            if (queryParams.endpoint)
+                setEndpoint(queryParams.endpoint)
+            if (queryParams.entity) {
+                setSelectedEntities([{'uri': queryParams.entity}])
+                setEntities([{'uri': queryParams.entity}])
+                setLastEntities([{'uri': queryParams.entity}])
+            }
         }
     }, [props.location.search]);
 
-    function updateEntities(params, entities) {
-        if (params['entity']) {
-            return [ params['entity'] ]
-        } else {
-            return entities
+    useEffect( () => {
+        if (entities) {
+            if (entities.length && entities[0].uri) {
+                // Remove results / errors / permalink from previous query
+                resetState()
+                // Update history
+                setUpHistory()
+                postExtract(sheXerParams(entities[0].uri))
+            }
         }
-    }
+        else {
+            setError(`No entities selected, SchemaEntity: ${JSON.stringify(entities)}`)
+        }
+    }, [entities])
+
 
     function sheXerParams(entity) {
         return {"prefixes": {
@@ -86,50 +93,85 @@ function WikidataSheXer(props) {
 
     }
 
-    function postExtract(url, jsonData, cb) {
+    function handleChange(es) {
+        setSelectedEntities(es);
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        setEntities(selectedEntities)
+    }
+
+    function postExtract(jsonData, cb) {
         setLoading(true);
-        setProgressPercent(10)
+        setProgressPercent(30)
+        const params = {
+            entity: entities[0].uri,
+            endpoint: endpoint
+        }
         axios.post(url,jsonData, { headers: {'Content-type': 'Application/json'}})
             .then (response => {
                 setProgressPercent(70)
                 return response.data
             })
-            .then((data) => {
-                setLoading(false);
+            .then(async data => {
                 setResult(data);
                 if (cb) cb()
+                setProgressPercent(90)
+                setPermalink(await mkPermalink(API.wikidataSheXerRoute, params));
                 setProgressPercent(100)
             })
             .catch(function (error) {
-                setLoading(false);
                 setError(`Error in request: ${url}: ${error.message}`);
-            });
+            })
+            .finally( () => setLoading(false));
     }
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        let params={}
-        params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
-        if (entities && entities.length > 0 && entities[0].uri ) {
-            const nodeSelector = entities[0].uri
-            // params['nodeSelector'] = "<" + nodeSelector + ">";
-            params['entity'] = nodeSelector ;
-            console.log(`Node selector: ${nodeSelector}`);
-            setPermalink(await mkPermalink(API.wikidataExtractRoute, params));
-            // let formData = params2Form(params);
-            postExtract(url,sheXerParams(nodeSelector));
-        } else {
-            setError(`No entities selected`)
+    function setUpHistory() {
+        // Store the last search URL in the browser history to allow going back
+        if (lastEntities && entities &&
+            lastEntities.length && entities.length &&
+            lastEntities[0].uri.localeCompare(entities[0].uri) !== 0){
+            // eslint-disable-next-line no-restricted-globals
+            history.pushState(null, document.title, mkPermalinkLong(API.wikidataExtractRoute, {
+                entity: lastEntities[0].uri,
+                endpoint: endpoint
+            }))
         }
+        // Change current url for shareable links
+        // eslint-disable-next-line no-restricted-globals
+        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataExtractRoute, {
+            entity: entities[0].uri,
+            endpoint: endpoint
+        }))
+
+        setLastEntities(entities)
+    }
+
+    function resetState() {
+        setResult(null)
+        setPermalink(null)
+        setError(null)
+        setProgressPercent(0)
     }
 
 
     return (
        <Container>
-         <h1>Extract schema from Wikidata entities (sheXer)</h1>
+         <h1>Extract schema from Wikibase entities (sheXer)</h1>
+           <h4>Target Wikibase: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} entities={entities} />
          <Table>
-               { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
+             <tbody>
+               { entities.map(e =>
+                   <tr key={e.id || e.uri}>
+                       <td>{e.label || 'Unknown label'}</td>
+                       <td>{<a target='_blank' href={e.uri}>{e.uri}</a> || 'Unknown URI'}</td>
+                       <td>{e.descr || 'No description provided'}</td>
+                   </tr>
+               )
+               }
+             </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
              <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Extract schema

@@ -28,6 +28,11 @@
   bottom: 5px !important;
 }
 
+.yashe .yashe_buttons {
+  top: unset !important;
+  bottom: 5px !important;
+}
+
 .dropdown-menu > a {
   white-space: normal;
 }

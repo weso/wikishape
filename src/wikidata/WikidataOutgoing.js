@@ -48,6 +48,7 @@ function WikidataOutgoing(props) {
 
     useEffect( () => {
         if (node) {
+            console.error(node)
             // Remove results / errors / permalink from previous query
             resetState()
             // Update history
@@ -127,7 +128,7 @@ function WikidataOutgoing(props) {
     return (
        <Container>
          <h1>Outgoing arcs from entity</h1>
-           <h4>Current endpoint: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
+           <h4>Target Wikibase: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
              <tbody>

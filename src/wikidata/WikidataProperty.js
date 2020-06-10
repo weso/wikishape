@@ -30,6 +30,7 @@ function WikidataProperty(props) {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
                 if (params.node) {
+                    console.log("=====> PARAMS: ", params)
                     setEntities([{uri: params.node}]);
                     setNode(params.node)
                     setLastNode(params.node)
