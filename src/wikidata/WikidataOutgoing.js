@@ -19,6 +19,7 @@ function WikidataOutgoing(props) {
     const [entities,setEntities] = useState([]);
     const [node,setNode] = useState('');
     const [lastNode,setLastNode] = useState('');
+    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
@@ -30,6 +31,8 @@ function WikidataOutgoing(props) {
     useEffect(() => {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
+                if (params.endpoint)
+                    setEndpoint(params.endpoint)
                 if (params.node) {
                     setEntities([
                         {
@@ -73,7 +76,7 @@ function WikidataOutgoing(props) {
     function getOutgoing(cb) {
         setLoading(true);
         const params = {
-            endpoint: API.currentEndpoint(),
+            endpoint: endpoint,
             node: node
         }
         setProgressPercent(30)
@@ -105,13 +108,15 @@ function WikidataOutgoing(props) {
         if (lastNode && lastNode.localeCompare(node) !== 0){
             // eslint-disable-next-line no-restricted-globals
             history.pushState(null, document.title, mkPermalinkLong(API.wikidataOutgoingRoute, {
-                node: lastNode
+                node: lastNode,
+                endpoint: endpoint
             }))
         }
         // Change current url for shareable links
         // eslint-disable-next-line no-restricted-globals
         history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataOutgoingRoute, {
-            node: node
+            node: node,
+            endpoint: endpoint
         }))
 
         setLastNode(node)
@@ -122,13 +127,14 @@ function WikidataOutgoing(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setEndpoint(API.currentEndpoint())
         setProgressPercent(0)
     }
 
     return (
        <Container>
-         <h1>Outgoing arcs from entity</h1>
-           <h4>Target Wikibase: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
+         <h1>Outgoing arcs from Wikibase entity</h1>
+           <h4>Target Wikibase: <a target='_blank' href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
              <tbody>

@@ -18,6 +18,7 @@ function WikidataProperty(props) {
     const [entities,setEntities] = useState([]);
     const [node,setNode] = useState('');
     const [lastNode,setLastNode] = useState('');
+    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
@@ -29,6 +30,8 @@ function WikidataProperty(props) {
     useEffect(() => {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
+                if (params.endpoint)
+                    setEndpoint(params.endpoint)
                 if (params.node) {
                     console.log("=====> PARAMS: ", params)
                     setEntities([{uri: params.node}]);
@@ -69,7 +72,7 @@ function WikidataProperty(props) {
         setLoading(true);
         setProgressPercent(20)
         const params = {
-            endpoint: API.currentEndpoint(),
+            endpoint: endpoint,
             node: node
         }
         axios.get(ApiEndpoint,{
@@ -100,23 +103,26 @@ function WikidataProperty(props) {
         if (lastNode && lastNode.localeCompare(node) !== 0){
             // eslint-disable-next-line no-restricted-globals
             history.pushState(null, document.title, mkPermalinkLong(API.wikidataOutgoingRoute, {
-                node: lastNode
+                node: lastNode,
+                endpoint: endpoint
             }))
         }
         // Change current url for shareable links
         // eslint-disable-next-line no-restricted-globals
         history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataOutgoingRoute, {
-            node: node
+            node: node,
+            endpoint: endpoint
         }))
 
         setLastNode(node)
-
     }
 
     function resetState() {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setProgressPercent(0)
+        setEndpoint(API.currentEndpoint())
     }
 
     return (

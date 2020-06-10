@@ -12,6 +12,7 @@ import ResultDataExtract from "../results/ResultDataExtract";
 import * as qs from "qs";
 import {ReloadIcon} from "react-open-iconic-svg";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import set from "cytoscape/src/set";
 
 function WikidataSheXer(props) {
 
@@ -152,6 +153,7 @@ function WikidataSheXer(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setEndpoint(API.currentEndpoint())
         setProgressPercent(0)
     }
 

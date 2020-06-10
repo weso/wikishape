@@ -115,6 +115,7 @@ function WikidataExtract(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setEndpoint(API.currentEndpoint())
         setProgressPercent(0)
     }
 
