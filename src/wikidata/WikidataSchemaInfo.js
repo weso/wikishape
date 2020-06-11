@@ -156,7 +156,9 @@ function WikidataSchemaInfo(props) {
          <h1>Info about Wikidata Schema entity</h1>
          <InputSchemaEntityByText onChange={setSelectedEntity} entity={selectedEntity} />
          <Form onSubmit={handleSubmit}>
-             <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Get schema info
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Get schema info
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>

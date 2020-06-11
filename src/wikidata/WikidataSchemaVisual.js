@@ -177,7 +177,9 @@ function WikidataSchemaVisual(props) {
          <h1>Visualize Wikidata Schema</h1>
          <InputSchemaEntityByText onChange={setSelectedEntity} entity={selectedEntity} />
          <Form onSubmit={handleSubmit}>
-             <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Visualize schema
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Visualize schema
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>

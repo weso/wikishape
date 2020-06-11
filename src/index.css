@@ -68,3 +68,7 @@ table td {
 .disabled {
   cursor: not-allowed !important;
 }
+
+.progress {
+  margin: 6px 0;
+}

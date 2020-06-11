@@ -2,8 +2,7 @@ import React, { useState, useReducer } from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import {params2Form, Permalink} from "../Permalink";
+import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "../shex/ShExTabs";
@@ -42,8 +41,8 @@ function WikidataValidateSPARQL(props) {
     const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema');
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
     const urlServer = API.schemaValidate;
-    const [permalink, setPermalink] = useState(null);
     const [progressPercent,setProgressPercent] = useState(0);
+    const [progressLabel,setProgressLabel] = useState('');
 
     function handleShapeLabelChange(label) {
         console.log(`handleShapeLabelChange: ${label}`)
@@ -53,7 +52,7 @@ function WikidataValidateSPARQL(props) {
     function handleSchemaEntityChange(e) {
         if (e && e.length) {
             const schemaEntity = e[0]
-            dispatch({type: 'set-loading'})
+            dispatch({type: 'set-loading', value: true})
             let params = {}
             params['schemaURL'] = schemaEntity.conceptUri
             params['schemaFormat'] = 'ShExC'
@@ -80,11 +79,12 @@ function WikidataValidateSPARQL(props) {
     function statusReducer(status,action) {
         switch (action.type) {
             case "set-loading":
-              return { ...status, loading: true, error: false};
+              return { ...status, loading: action.value, error: false};
+            case "set-permalink":
+                return {...status, permalink: action.value }
             case "set-result":
               console.log(`statusReducer: set-result: ${showResult(action.value,'reducer')}`);
               return { ...status,
-                  loading: false,
                   error: false,
                   result: mergeResult(status.result, action.value, status.shapesPrefixMap)};
             case "unset-result":
@@ -126,7 +126,6 @@ function WikidataValidateSPARQL(props) {
        return {
            valid: false,
            type: 'Result',
-           message: 'Validation started',
            shapeMap: resultMap,
            errors: [],
            nodesPrefixMap: wikidataPrefixes, // The prefix map for nodes is wikidata endpoint
@@ -164,12 +163,22 @@ function WikidataValidateSPARQL(props) {
 
     function handleSubmit(event) {
         event.preventDefault();
+        resetState()
         let params = {};
+
+        if (query.trim().length === 0){
+            dispatch({
+                type: 'set-error',
+                value: `No query introduced`
+            });
+            return
+        }
+
         params['query']=query;
         const formDataQuery = params2Form(params);
         dispatch({type: 'set-loading', value: true});
-        dispatch({type: 'unset-result'});
         setProgressPercent(25)
+        setProgressLabel('Performing query...')
         axios.post(API.wikidataQuery,formDataQuery)
             .then(response => {
                 setProgressPercent(70)
@@ -177,13 +186,12 @@ function WikidataValidateSPARQL(props) {
             })
             .then(async data => {
                 const entities = parseData(data);
-                dispatch({type: 'set-loading', value: false});
                 dispatch({ type: 'set-entities', value: entities});
                 const paramsShEx = paramsFromShEx(shEx);
                 const initialResult = resultFromEntities(entities, status.shapeLabel);
                 dispatch({type: "set-result", value: initialResult});
                 setProgressPercent(80)
-// TODO:                setPermalink(await mkPermalink(API.wikidataValidateSPARQLRoute,params));
+                dispatch({type: "set-permalink", value: await mkPermalink(API.wikidataValidateSPARQLRoute,params)});
                 for (const e of entities) {
                     const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
                     params = {...paramsEndpoint,...paramsShEx};
@@ -196,21 +204,30 @@ function WikidataValidateSPARQL(props) {
                 }
                 setProgressPercent(100)
             }).catch(error => {
-            dispatch({type: 'set-error', value: error.message});
+                dispatch({type: 'set-loading', value: false});
+                dispatch({type: 'set-error', value: error.message});
         })
 
     }
 
     function postValidate(url, formData, e) {
-//        dispatch({type: 'set-loading'} );
-        axios.post(url,formData).then (response => response.data)
-            .then((data) => {
+        setProgressPercent(60)
+        setProgressLabel('Validating results...')
+        axios.post(url,formData).then (response => {
+            setProgressPercent(80)
+            return response.data
+        })
+            .then(data => {
                 console.log(`Return from ${e}`)
                 dispatch({type: 'set-result', value: data})
             })
             .catch(function (error) {
                 dispatch({type: 'set-error', value: `Error validating ${e} ${url} ${JSON.stringify(formData)}: ${error}` })
             })
+            .finally( () => {
+                    dispatch({type: 'set-loading', value: false});
+                }
+            )
     }
 
     function handleShExTabChange(value) { dispatchShEx({ type: 'changeTab', value: value } ); }
@@ -223,60 +240,75 @@ function WikidataValidateSPARQL(props) {
         setSchemaActiveTab(e)
     }
 
+    function resetState() {
+        dispatch({type: 'unset-result'});
+        dispatch({type: 'set-permalink', value: ''})
+        dispatch({type: 'set-error', value: ''})
+        dispatch({type: 'set-loading', value: false})
+        setProgressPercent(0)
+        setProgressLabel('')
+    }
+
     return (
        <Container>
          <h1>Validate Wikidata entities obtained from SPARQL queries</h1>
-                   { status.result || status.loading || status.error ?
-                       <Row>
-                           {status.loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> :
-                               status.error? <Alert variant="danger">{status.error}</Alert> :
-                               status.result ?
-                                   <ResultValidate result={status.result} /> : null
-                           }
-                           { permalink &&  <Col><Permalink url={permalink} /> </Col>}
-                       </Row> : null
-                   }
-                   <Row>
-                       <Form onSubmit={handleSubmit}>
-                           <QueryForm
-                               onChange={setQuery}
-                               placeholder="select ?id ..."
-                               value={query}
-                               prefixes={ wikidataPrefixes }
-                           />
-                           <Tabs activeKey={schemaActiveTab}
-                                 transition={false}
-                                 id="SchemaTabs"
-                                 onSelect={handleTabChange}
-                           >
-                           <Tab eventKey="BySchema" title="Wikidata schema">
-                               <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={schemaEntity} />
+               <Row>
+                   <Form onSubmit={handleSubmit}>
+                       <QueryForm
+                           onChange={setQuery}
+                           placeholder="select ?id ..."
+                           value={query}
+                           prefixes={ wikidataPrefixes }
+                       />
+                       <Tabs activeKey={schemaActiveTab}
+                             transition={false}
+                             id="SchemaTabs"
+                             onSelect={handleTabChange}
+                       >
+                       <Tab eventKey="BySchema" title="Wikidata schema">
+                           <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={schemaEntity} />
+                        </Tab>
+                        <Tab eventKey="ByShExTab" title="ShEx">
+                           <ShExTabs activeTab={shEx.shExActiveTab}
+                                 handleTabChange={handleShExTabChange}
+
+                                 textAreaValue={shEx.shExTextArea}
+                                 handleByTextChange={handleShExByTextChange}
+
+                                 shExUrl={shEx.shExUrl}
+                                 handleShExUrlChange={handleShExUrlChange}
+
+                                 handleFileUpload={handleShExFileUpload}
+
+                                 dataFormat={shEx.shExFormat}
+                                 handleShExFormatChange={handleShExFormatChange} />
                             </Tab>
-                            <Tab eventKey="ByShExTab" title="ShEx">
-                               <ShExTabs activeTab={shEx.shExActiveTab}
-                                     handleTabChange={handleShExTabChange}
-
-                                     textAreaValue={shEx.shExTextArea}
-                                     handleByTextChange={handleShExByTextChange}
-
-                                     shExUrl={shEx.shExUrl}
-                                     handleShExUrlChange={handleShExUrlChange}
-
-                                     handleFileUpload={handleShExFileUpload}
-
-                                     dataFormat={shEx.shExFormat}
-                                     handleShExFormatChange={handleShExFormatChange} />
-                                </Tab>
-                           </Tabs>
-                           <InputShapeLabel onChange={handleShapeLabelChange}
-                                            value={status.shapeLabel}
-                                            shapeList={status.shapeList}/>
-                           <Button className={"btn-with-icon " + (status.loading ? "disabled" : "")} variant="primary" type="submit">Validate entities
-                               <ReloadIcon className="white-icon"/>
-                           </Button>
-                       </Form>
-
-                   </Row>
+                       </Tabs>
+                       <InputShapeLabel onChange={handleShapeLabelChange}
+                                        value={status.shapeLabel}
+                                        shapeList={status.shapeList}/>
+                       <Button className={"btn-with-icon " + (status.loading ? "disabled" : "")}
+                               variant="primary" type="submit" disabled={status.loading}>
+                           Validate entities
+                           <ReloadIcon className="white-icon"/>
+                       </Button>
+                   </Form>
+               </Row>
+               { status.result || status.loading || status.error ?
+                   <Row style={{display: 'block'}}>
+                       {
+                           status.loading ? <ProgressBar style={{width: "100%"}} striped animated
+                                                         variant="info" now={progressPercent} label={progressLabel}/> : null
+                       }
+                       {
+                           status.error? <Alert variant="danger">{status.error}</Alert> :
+                               status.result ? <ResultValidate result={status.result} /> : null
+                       }
+                       {
+                           status.permalink ? <Permalink url={status.permalink} /> : null
+                       }
+                   </Row> : null
+               }
            </Container>
    );
 }

@@ -6,7 +6,6 @@ import React, {
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -56,6 +55,7 @@ function WikidataValidateDeref(props) {
     const [shapesPrefixMap, setShapesPrefixMap] = useState([]);
     const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema');
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
+    const [progressLabel,setProgressLabel] = useState('');
     const [progressPercent,setProgressPercent] = useState(0);
 
     const urlServer = API.wikidataValidateDeref;
@@ -117,8 +117,9 @@ function WikidataValidateDeref(props) {
         if (e && e.length) {
             const entitySchema = e[0]
             setLoading(true);
+            setProgressPercent(90)
+            setProgressLabel('Retrieving schema info...')
             setResult('');
-            setProgressPercent(10)
 
             // Fetch Schema from Entity schema URL
             let params = {}
@@ -126,12 +127,10 @@ function WikidataValidateDeref(props) {
             params['schemaFormat'] = 'ShExC';
             params['schemaEngine'] = 'ShEx';
             const postParams = params2Form(params);
-            setProgressPercent(30)
             axios.post(API.schemaInfo, postParams, {
                 headers: {'Access-Control-Allow-Origin': '*'}
             })
                 .then(response => {
-                    setProgressPercent(75)
                     return response.data
                 })
                 .then(result => {
@@ -149,12 +148,15 @@ function WikidataValidateDeref(props) {
                     setShapeLabel(newShapeLabel);
 
                     setShapesPrefixMap(result.shapesPrefixMap);
-                    setProgressPercent(100)
                 })
                 .catch(error => {
                     setError(`handleSchemaEntityChange: error after POST ${API.schemaInfo} with params ${JSON.stringify(postParams)}: ${error.message}`);
                 })
-                .finally( () => setLoading(false))
+                .finally( () => {
+                    setLoading(false)
+                    setProgressLabel('')
+                    setProgressPercent(0)
+                })
             setEntitySchema(e);
         }
     }
@@ -223,7 +225,6 @@ function WikidataValidateDeref(props) {
         return {
             valid: false,
             type: 'Result',
-            message: 'Validation started',
             shapeMap: resultMap,
             errors: [],
             nodesPrefixMap: wikidataPrefixes, // The prefix map for nodes is wikidata endpoint
@@ -265,62 +266,65 @@ function WikidataValidateDeref(props) {
         setPermalink(await mkPermalink(API.wikidataValidateDerefRoute, paramsPermalink));
         console.log(`validate| Permalink: ${JSON.stringify(permalink)}`);
 
-        const entitySchema = validateParams.entitySchema ;
-        if (entitySchema) {
-            console.log(`validate| entitySchema: ${JSON.stringify(entitySchema)} Entities: ${JSON.stringify(validateParams.entities)}`);
-            validateParams.entities.forEach(e => {
-                const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
-                let params = {...paramsEndpoint,...paramsSchema};
-                params['schemaEngine'] = 'ShEx';
-                params['item'] = e ;
-                params['shape'] = validateParams.shapeLabel ;
-                const formData = params2Form(params);
+        const entitySchema = validateParams.entitySchema
+        entitySchema ?
+            console.log(`validate| entitySchema: ${JSON.stringify(entitySchema)} Entities: ${JSON.stringify(validateParams.entities)}`)
+            : console.log(`validate| No schema entity: Params: ${JSON.stringify(validateParams)}`)
+        validateParams.entities.forEach(e => {
+            const paramsEndpoint = { endpoint: API.currentUrl() };
+            let params = {...paramsEndpoint,...paramsSchema};
+            params['schemaEngine'] = 'ShEx';
+            params['item'] = e ;
+            params['shape'] = validateParams.shapeLabel ;
+            const formData = params2Form(params);
 
-                postValidate(urlServer,formData,e);
-            });
-        } else {
-            console.log(`validate| No schema entity: Params: ${JSON.stringify(validateParams)}`)
-            validateParams.entities.forEach(e => {
-                const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
-                let params = {...paramsEndpoint,...paramsSchema};
-                params['schemaEngine'] = 'ShEx';
-                params['item'] = e ;
-                params['shape'] = validateParams.shapeLabel ;
-                const formData = params2Form(params);
-                postValidate(urlServer,formData,e);
-            });
-        }
+            postValidate(urlServer,formData,e);
+        })
     }
 
 
     function handleSubmit(event) {
-        event.preventDefault();
+        event.preventDefault()
+        resetState()
         console.log(`Validate button!: Status entities: ${JSON.stringify(entities)}`)
-        let params = {
-            entitySchema: entitySchema,
-            schemaActiveTab: schemaActiveTab,
-            shapeLabel: shapeLabel,
-            shapeList: shapeList,
-            entities: entities,
-            shEx: shEx
+        if (entities && entities.length) {
+            let params = {
+                entitySchema: entitySchema,
+                schemaActiveTab: schemaActiveTab,
+                shapeLabel: shapeLabel,
+                shapeList: shapeList,
+                entities: entities,
+                shEx: shEx
+            }
+            validate(params);
         }
-        validate(params);
+        else setError ("No entities selected")
     }
 
     function postValidate(url, formData, e) {
         console.log(`POST validation: ${JSON.stringify(formData)}`);
         setLoading(true);
-        axios.post(url,formData).then (response => response.data)
-            .then((data) => {
+        setProgressPercent(15)
+        axios.post(url,formData).then (response => {
+            setProgressPercent(65)
+            return response.data
+        })
+            .then(data => {
                 console.log(`Return from validation ${JSON.stringify(data)}`);
                 const mergedResult = mergeResult(result, data, shapesPrefixMap);
                 console.log(`Merged result: ${JSON.stringify(mergedResult)}`);
                 setLoading(false);
                 setError(null);
+                setProgressPercent(90)
                 setResult(mergedResult);
+                setProgressPercent(100)
             })
             .catch((error) => {
                 setError(`Error validating ${e} ${url} ${JSON.stringify(formData)}: ${error}`);
+            })
+            .finally( () => {
+                setLoading(false)
+                setProgressPercent(0)
             })
     }
 
@@ -375,55 +379,73 @@ function WikidataValidateDeref(props) {
         setSchemaActiveTab(e);
     }
 
+    function resetState() {
+        setResult(null)
+        setPermalink(null)
+        setError(null)
+        setLoading(false)
+        setProgressPercent(0)
+        setProgressLabel('')
+    }
+
     return (
        <Container>
          <h1>Validate Wikidata entities</h1>
-                   { result || loading || error ?
-                       <Row>
-                           {loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> :
-                            error? <Alert variant="danger">{error}</Alert> :
-                            result ?
-                              <ResultValidate result={result} /> : null
-                           }
-                           { permalink &&  <Col><Permalink url={permalink} /> </Col>}
-                       </Row> : null
-                   }
-                   <Row>
-                       <Form onSubmit={handleSubmit}>
-                           <InputEntitiesByText onChange={handleChangeEntities} entities={entities} />
-                           <Tabs activeKey={schemaActiveTab}
-                                 transition={false}
-                                 id="SchemaTabs"
-                                 onSelect={handleTabChange}
-                           >
-                           <Tab eventKey="BySchema" title="Wikidata schema">
-                               <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={entitySchema} />
-                            </Tab>
-                            <Tab eventKey="ByShExTab" title="ShEx">
-                               <ShExTabs activeTab={shEx.shExActiveTab}
-                                     handleTabChange={handleShExTabChange}
+           <Row>
+               <Form onSubmit={handleSubmit}>
+                   <InputEntitiesByText onChange={handleChangeEntities} entities={entities} />
+                   <Tabs activeKey={schemaActiveTab}
+                         transition={false}
+                         id="SchemaTabs"
+                         onSelect={handleTabChange}
+                   >
+                   <Tab eventKey="BySchema" title="Wikidata schema">
+                       <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={entitySchema} />
+                    </Tab>
+                    <Tab eventKey="ByShExTab" title="ShEx">
+                       <ShExTabs activeTab={shEx.shExActiveTab}
+                             handleTabChange={handleShExTabChange}
 
-                                     textAreaValue={shEx.shExTextArea}
-                                     handleByTextChange={handleShExByTextChange}
+                             textAreaValue={shEx.shExTextArea}
+                             handleByTextChange={handleShExByTextChange}
 
-                                     shExUrl={shEx.shExUrl}
-                                     handleShExUrlChange={handleShExUrlChange}
+                             shExUrl={shEx.shExUrl}
+                             handleShExUrlChange={handleShExUrlChange}
 
-                                     handleFileUpload={handleShExFileUpload}
+                             handleFileUpload={handleShExFileUpload}
 
-                                     dataFormat={shEx.shExFormat}
-                                     handleShExFormatChange={handleShExFormatChange} />
-                                </Tab>
-                           </Tabs>
-                           <InputShapeLabel onChange={handleShapeLabelChange}
-                                            value={shapeLabel}
-                                            shapeList={shapeList}/>
-                           <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Validate entities
-                               <ReloadIcon className="white-icon"/>
-                           </Button>
-                       </Form>
+                             dataFormat={shEx.shExFormat}
+                             handleShExFormatChange={handleShExFormatChange} />
+                        </Tab>
+                   </Tabs>
+                   <InputShapeLabel onChange={handleShapeLabelChange}
+                                    value={shapeLabel}
+                                    shapeList={shapeList}/>
+                   <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                           variant="primary"
+                           type="submit" disabled={loading}>
+                       Validate entities
+                       <ReloadIcon className="white-icon"/>
+                   </Button>
+               </Form>
+           </Row>
+           { result || error || loading ?
+           <Row style={{display: 'block'}}>
+               {
+                   loading ? <ProgressBar style={{width: "100%"}} striped animated variant="info"
+                                          now={progressPercent} label={progressLabel}/> : null
+               }
+               {
+                   error ? <Alert variant="danger">{error}</Alert> :
+                   result ?
+                       <ResultValidate result={result} /> : null
+               }
+               {
+                   permalink ? <Permalink url={permalink} />: null
+               }
+           </Row> : null
+           }
 
-                   </Row>
            </Container>
    );
 }

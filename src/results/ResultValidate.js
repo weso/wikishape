@@ -133,7 +133,7 @@ function ResultValidate(props) {
     }
 
     return (
-        <div>{msg}</div>
+        <div style={{width: '100%'}}>{msg}</div>
     );
 }
 

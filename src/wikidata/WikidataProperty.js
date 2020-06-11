@@ -142,7 +142,9 @@ function WikidataProperty(props) {
              </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-             <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Get outgoing arcs
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Get outgoing arcs
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>

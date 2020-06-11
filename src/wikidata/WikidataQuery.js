@@ -195,7 +195,8 @@ function WikidataQuery(props) {
                         />
                         <div style={divStyle}>
                             <Button variant="primary" className={isLoading ? "disabled" : ""}
-                                    type="submit">Resolve (Ctrl+Enter)</Button>
+                                    type="submit" disabled={isLoading}>
+                                Resolve (Ctrl+Enter)</Button>
                             <Spinner style={spinnerStyle} animation="border" variant="primary" />
                         </div>
                     </Form>

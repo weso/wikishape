@@ -176,7 +176,9 @@ function WikidataSheXer(props) {
              </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-             <Button className={"btn-with-icon " + (loading ? "disabled" : "")} variant="primary" type="submit">Extract schema
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Extract schema
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
