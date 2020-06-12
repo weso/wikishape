@@ -169,7 +169,7 @@ function WikidataSchemaInfo(props) {
               <div>
                   <h1>{schemaId} - {schemaLabel}</h1>
                   <p>{schemaDescr}</p>
-                  <p><code><a target={'_blank'} href={schemaWebUri}>{schemaWebUri}</a></code></p>
+                  <p><code><a target="_blank" href={schemaWebUri}>{schemaWebUri}</a></code></p>
                   <p>Raw schema uri: <code><a href={schemaConceptUri}>{schemaConceptUri}</a></code></p>
               <ShExForm onChange={()=>null} placeholder={''} readonly={true} value={shExContent} />
               </div>

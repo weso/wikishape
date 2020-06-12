@@ -29,7 +29,6 @@ function InputEntitiesByText(props) {
                 return json;
             })
             .catch( () => [])
-
     }
 
 

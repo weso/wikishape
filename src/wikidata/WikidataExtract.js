@@ -33,9 +33,9 @@ function WikidataExtract(props) {
             if (queryParams.endpoint)
                 setEndpoint(queryParams.endpoint)
             if (queryParams.entity) {
-                setSelectedEntities([{'uri': queryParams.entity}])
-                setEntities([{'uri': queryParams.entity}])
-                setLastEntities([{'uri': queryParams.entity}])
+                setSelectedEntities([{"uri": queryParams.entity}])
+                setEntities([{"uri": queryParams.entity}])
+                setLastEntities([{"uri": queryParams.entity}])
             }
         }
     }, [props.location.search]);
@@ -129,9 +129,9 @@ function WikidataExtract(props) {
              <tbody>
                { selectedEntities.map(e =>
                    <tr key={e.id || e.uri}>
-                       <td>{e.label || 'Unknown label'}</td>
-                       <td>{<a target='_blank' href={e.uri}>{e.uri}</a> || 'Unknown URI'}</td>
-                       <td>{e.descr || 'No description provided'}</td>
+                       <td>{e.label || "Unknown label"}</td>
+                       <td>{<a target="_blank" href={e.uri}>{e.uri}</a> || "Unknown URI"}</td>
+                       <td>{e.descr || "No description provided"}</td>
                    </tr>
                )
                }

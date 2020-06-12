@@ -36,13 +36,13 @@ function WikidataValidateSPARQL(props) {
     };
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
-    const [query, setQuery] = useState('');
-    const [schemaEntity,setSchemaEntity] = useState('');
+    const [query, setQuery] = useState("");
+    const [schemaEntity,setSchemaEntity] = useState("");
     const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema');
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
     const urlServer = API.schemaValidate;
     const [progressPercent,setProgressPercent] = useState(0);
-    const [progressLabel,setProgressLabel] = useState('');
+    const [progressLabel,setProgressLabel] = useState("");
 
     function handleShapeLabelChange(label) {
         console.log(`handleShapeLabelChange: ${label}`)
@@ -212,7 +212,7 @@ function WikidataValidateSPARQL(props) {
 
     function postValidate(url, formData, e) {
         setProgressPercent(60)
-        setProgressLabel('Validating results...')
+        setProgressLabel("Validating results...")
         axios.post(url,formData).then (response => {
             setProgressPercent(80)
             return response.data

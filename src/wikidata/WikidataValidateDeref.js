@@ -44,18 +44,18 @@ function WikidataValidateDeref(props) {
 
   /*   const [status, dispatch] = useReducer(statusReducer, initialStatus); */
     const [entities,setEntities] = useState([]);
-    const [permalink,setPermalink] = useState('');
+    const [permalink,setPermalink] = useState("");
     const [result,setResult] = useState(null);
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
     const [entitySchema,setEntitySchema] = useState(null);
-    const [shapeLabel,setShapeLabel] = useState('');
+    const [shapeLabel,setShapeLabel] = useState("");
     const [shapeList,setShapeList] = useState([]);
    // const [nodesPrefixMap,setNodesPrefixMap] = useState([]);
     const [shapesPrefixMap, setShapesPrefixMap] = useState([]);
-    const [schemaActiveTab, setSchemaActiveTab] = useState('BySchema');
+    const [schemaActiveTab, setSchemaActiveTab] = useState("BySchema");
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
-    const [progressLabel,setProgressLabel] = useState('');
+    const [progressLabel,setProgressLabel] = useState("");
     const [progressPercent,setProgressPercent] = useState(0);
 
     const urlServer = API.wikidataValidateDeref;
@@ -118,8 +118,8 @@ function WikidataValidateDeref(props) {
             const entitySchema = e[0]
             setLoading(true);
             setProgressPercent(90)
-            setProgressLabel('Retrieving schema info...')
-            setResult('');
+            setProgressLabel("Retrieving schema info...")
+            setResult("");
 
             // Fetch Schema from Entity schema URL
             let params = {}

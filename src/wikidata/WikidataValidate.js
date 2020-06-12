@@ -79,7 +79,7 @@ function WikidataValidate(props) {
             const schemaEntity = e[0]
             dispatch({type: 'set-loading', value: true})
             setProgressPercent(90)
-            setProgressLabel('Retrieving schema info...')
+            setProgressLabel("Retrieving schema info...")
             let params = {}
             params['schemaURL'] = schemaEntity.conceptUri
             params['schemaFormat'] = 'ShExC'

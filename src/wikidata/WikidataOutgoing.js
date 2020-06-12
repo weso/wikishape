@@ -31,8 +31,9 @@ function WikidataOutgoing(props) {
     useEffect(() => {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
-                if (params.endpoint)
+                if (params.endpoint) {
                     setEndpoint(params.endpoint)
+                }
                 if (params.node) {
                     setEntities([
                         {
@@ -51,7 +52,6 @@ function WikidataOutgoing(props) {
 
     useEffect( () => {
         if (node) {
-            console.error(node)
             // Remove results / errors / permalink from previous query
             resetState()
             // Update history
@@ -96,7 +96,6 @@ function WikidataOutgoing(props) {
                 if (cb) cb()
             })
             .catch((error) => {
-                console.log(`Error processing request: ${ApiEndpoint}: ${error.message}`)
                 setError(`Error processing ${ApiEndpoint}: ${error.message}`)
             })
             .finally( () => setLoading(false) );
@@ -134,15 +133,15 @@ function WikidataOutgoing(props) {
     return (
        <Container>
          <h1>Outgoing arcs from Wikibase entity</h1>
-           <h4>Target Wikibase: <a target='_blank' href={API.currentUrl()}>{API.currentUrl()}</a></h4>
+           <h4>Target Wikibase: <a target="_blank" href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
              <tbody>
                { entities.map(e =>
                    <tr key={e.id || e.uri}>
-                       <td>{e.label || 'Unknown label'}</td>
-                       <td>{<a target='_blank' href={e.uri}>{e.uri}</a> || 'Unknown URI'}</td>
-                       <td>{e.descr || 'No description provided'}</td>
+                       <td>{e.label || "Unknown label"}</td>
+                       <td>{<a target="_blank" href={e.uri}>{e.uri}</a> || "Unknown URI"}</td>
+                       <td>{e.descr || "No description provided"}</td>
                    </tr>
                 )
                }

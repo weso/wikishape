@@ -7,7 +7,7 @@ import Routes from './Routes.js';
 function App() {
 
   useEffect(() => {
-      document.title = 'WikiShape';
+      document.title = "WikiShape";
   }, [])
 
   return (
