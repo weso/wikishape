@@ -9,26 +9,31 @@ import API from "../API";
 import {mkPermalink, mkPermalinkLong, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultOutgoing from "../results/ResultOutgoing";
-import Pace from "react-pace-progress";
 import qs from "query-string";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataProperty(props) {
 
     const [entities,setEntities] = useState([]);
     const [node,setNode] = useState('');
     const [lastNode,setLastNode] = useState('');
+    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     const ApiEndpoint = API.dataOutgoing
 
     useEffect(() => {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
+                if (params.endpoint)
+                    setEndpoint(params.endpoint)
                 if (params.node) {
+                    console.log("=====> PARAMS: ", params)
                     setEntities([{uri: params.node}]);
                     setNode(params.node)
                     setLastNode(params.node)
@@ -65,8 +70,9 @@ function WikidataProperty(props) {
 
     function getOutgoing(cb) {
         setLoading(true);
+        setProgressPercent(20)
         const params = {
-            endpoint: API.currentEndpoint(),
+            endpoint: endpoint,
             node: node
         }
         axios.get(ApiEndpoint,{
@@ -74,12 +80,15 @@ function WikidataProperty(props) {
             headers: { 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
             }})
-            .then (response => response.data)
+            .then (response => {
+                setProgressPercent(70)
+                return response.data
+            })
             .then( async data => {
-                setError(null)
                 setResult(data);
                 setPermalink(await mkPermalink(API.wikidataOutgoingRoute, params));
                 if (cb) cb()
+                setProgressPercent(100)
             })
             .catch((error) => {
                 console.log(`Error processing request: ${ApiEndpoint}: ${error.message}`);
@@ -94,23 +103,26 @@ function WikidataProperty(props) {
         if (lastNode && lastNode.localeCompare(node) !== 0){
             // eslint-disable-next-line no-restricted-globals
             history.pushState(null, document.title, mkPermalinkLong(API.wikidataOutgoingRoute, {
-                node: lastNode
+                node: lastNode,
+                endpoint: endpoint
             }))
         }
         // Change current url for shareable links
         // eslint-disable-next-line no-restricted-globals
         history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataOutgoingRoute, {
-            node: node
+            node: node,
+            endpoint: endpoint
         }))
 
         setLastNode(node)
-
     }
 
     function resetState() {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setProgressPercent(0)
+        setEndpoint(API.currentEndpoint())
     }
 
     return (
@@ -122,7 +134,7 @@ function WikidataProperty(props) {
                  { entities.map(e =>
                      <tr key={e.id || e.uri}>
                          <td>{e.label || 'Unknown label'}</td>
-                         <td>{<a target={'_blank'} href={e.uri}>{e.uri}</a> || 'Unknown URI'}</td>
+                         <td>{<a target="_blank" href={e.uri}>{e.uri}</a> || 'Unknown URI'}</td>
                          <td>{e.descr || 'No description provided'}</td>
                      </tr>
                  )
@@ -130,11 +142,13 @@ function WikidataProperty(props) {
              </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-             <Button className="btn-with-icon" variant="primary" type="submit">Get outgoing arcs
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Get outgoing arcs
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
-          { loading ? <Pace color="#27ae60"/> : null }
+          { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultOutgoing result={result} />

@@ -9,9 +9,9 @@ import API from "../API";
 import {mkPermalink, mkPermalinkLong, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultOutgoing from "../results/ResultOutgoing";
-import Pace from "react-pace-progress";
 import qs from "query-string";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 
 function WikidataOutgoing(props) {
@@ -19,16 +19,21 @@ function WikidataOutgoing(props) {
     const [entities,setEntities] = useState([]);
     const [node,setNode] = useState('');
     const [lastNode,setLastNode] = useState('');
+    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     const ApiEndpoint = API.dataOutgoing
 
     useEffect(() => {
             if (props.location.search) {
                 const params = qs.parse(props.location.search);
+                if (params.endpoint) {
+                    setEndpoint(params.endpoint)
+                }
                 if (params.node) {
                     setEntities([
                         {
@@ -71,24 +76,27 @@ function WikidataOutgoing(props) {
     function getOutgoing(cb) {
         setLoading(true);
         const params = {
-            endpoint: API.currentEndpoint(),
+            endpoint: endpoint,
             node: node
         }
+        setProgressPercent(30)
         axios.get(ApiEndpoint,{
             params: params,
             headers: { 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
             }})
-            .then (response => response.data)
+            .then (response => {
+                setProgressPercent(70)
+                return response.data
+            })
             .then(async (data) => {
-                setError(null)
-                setResult(data);
+                setResult(data)
+                setProgressPercent(100)
                 setPermalink(await mkPermalink(API.wikidataOutgoingRoute, params));
                 if (cb) cb()
             })
             .catch((error) => {
-                console.log(`Error processing request: ${ApiEndpoint}: ${error.message}`);
-                setError(`Error processing ${ApiEndpoint}: ${error.message}`);
+                setError(`Error processing ${ApiEndpoint}: ${error.message}`)
             })
             .finally( () => setLoading(false) );
 
@@ -99,13 +107,15 @@ function WikidataOutgoing(props) {
         if (lastNode && lastNode.localeCompare(node) !== 0){
             // eslint-disable-next-line no-restricted-globals
             history.pushState(null, document.title, mkPermalinkLong(API.wikidataOutgoingRoute, {
-                node: lastNode
+                node: lastNode,
+                endpoint: endpoint
             }))
         }
         // Change current url for shareable links
         // eslint-disable-next-line no-restricted-globals
         history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataOutgoingRoute, {
-            node: node
+            node: node,
+            endpoint: endpoint
         }))
 
         setLastNode(node)
@@ -116,31 +126,35 @@ function WikidataOutgoing(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
+        setEndpoint(API.currentEndpoint())
+        setProgressPercent(0)
     }
 
     return (
        <Container>
-         <h1>Outgoing arcs from entity</h1>
-           <h4>Current endpoint: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
+         <h1>Outgoing arcs from Wikibase entity</h1>
+           <h4>Target Wikibase: <a target="_blank" href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputEntitiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
              <tbody>
                { entities.map(e =>
                    <tr key={e.id || e.uri}>
-                       <td>{e.label || 'Unknown label'}</td>
-                       <td>{<a target={'_blank'} href={e.uri}>{e.uri}</a> || 'Unknown URI'}</td>
-                       <td>{e.descr || 'No description provided'}</td>
+                       <td>{e.label || "Unknown label"}</td>
+                       <td>{<a target="_blank" href={e.uri}>{e.uri}</a> || "Unknown URI"}</td>
+                       <td>{e.descr || "No description provided"}</td>
                    </tr>
                 )
                }
              </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button className="btn-with-icon" variant="primary" type="submit">Get outgoing arcs
+               <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                       variant="primary" type="submit" disabled={loading}>
+                   Get outgoing arcs
                    <ReloadIcon className="white-icon"/>
                </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
+          {loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           {permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">${error}</Alert>: null }
          <ResultOutgoing result={result} />

@@ -1,6 +1,6 @@
 {
-  "short_name": "RDFShape",
-  "name": "RDFShape client",
+  "short_name": "WikiShape",
+  "name": "WikiShape",
   "icons": [
     {
       "src": "favicon.ico",

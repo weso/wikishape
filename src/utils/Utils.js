@@ -225,7 +225,7 @@ export function showQualified(qualified, prefixes) {
         case 'QualifiedName':
             // console.log(`QualifiedName: ${qualified.prefix}`)
             if (prefixes[qualified.prefix]) {
-                return <a target={'_blank'} href={qualified.uri}>{qualified.str} <ExternalLinkIcon /></a>
+                return <a target="_blank" href={qualified.uri}>{qualified.str} <ExternalLinkIcon /></a>
             } else {
                 return <fragment>{qualified.str} <a href={qualified.uri}><ExternalLinkIcon/></a></fragment>
             }

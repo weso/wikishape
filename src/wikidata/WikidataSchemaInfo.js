@@ -6,12 +6,12 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {mkPermalink, mkPermalinkLong, Permalink} from "../Permalink";
 import axios from "axios";
-import Pace from "react-pace-progress";
 import ShExForm from "../shex/ShExForm";
 import qs from "query-string";
 import {SchemaEntities} from "../resources/schemaEntities";
 import API from "../API";
 import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function paramsFromQueryParams(params) {
     let newParams = {};
@@ -33,6 +33,7 @@ function WikidataSchemaInfo(props) {
     const [schemaEntity,setSchemaEntity] = useState([]);
     const [lastSchemaEntity, setLastSchemaEntity] = useState([]);
     const [selectedEntity,setSelectedEntity] = useState([]);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     useEffect(() => {
             if (props.location.search) {
@@ -95,15 +96,19 @@ function WikidataSchemaInfo(props) {
     const fetchSchemaEntity = async () => {
         console.log(`fetchSchemaEntity(${JSON.stringify(schemaEntity)})`)
         setLoading(true)
+        setProgressPercent(10)
         try {
             const entity = schemaEntity[0]
+            setProgressPercent(30)
             const schema = await axios.get(entity.conceptUri)
+            setProgressPercent(80)
             setSchemaId(entity.id)
             setSchemaLabel(entity.label)
             setSchemaDescr(entity.descr)
             setSchemaWebUri(entity.webUri)
             setShExContent(schema.data)
             setPermalink(await mkPermalink(API.wikidataSchemaInfoRoute, {id: entity.id, lang: entity.lang}))
+            setProgressPercent(100)
         } catch(error) {
             setError(`Error doing request SchemaEntity: ${JSON.stringify(schemaEntity)}: ${error.message}`)
         }
@@ -143,6 +148,7 @@ function WikidataSchemaInfo(props) {
         setShExContent(null)
         setPermalink(null)
         setError(null)
+        setProgressPercent(0)
     }
 
     return (
@@ -150,18 +156,20 @@ function WikidataSchemaInfo(props) {
          <h1>Info about Wikidata Schema entity</h1>
          <InputSchemaEntityByText onChange={setSelectedEntity} entity={selectedEntity} />
          <Form onSubmit={handleSubmit}>
-             <Button className="btn-with-icon" variant="primary" type="submit">Get schema info
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Get schema info
                  <ReloadIcon className="white-icon"/>
              </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
+          { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">{error}</Alert>: null }
           { shExContent?
               <div>
                   <h1>{schemaId} - {schemaLabel}</h1>
                   <p>{schemaDescr}</p>
-                  <p><code><a href={schemaWebUri}>{schemaWebUri}</a></code></p>
+                  <p><code><a target="_blank" href={schemaWebUri}>{schemaWebUri}</a></code></p>
                   <p>Raw schema uri: <code><a href={schemaConceptUri}>{schemaConceptUri}</a></code></p>
               <ShExForm onChange={()=>null} placeholder={''} readonly={true} value={shExContent} />
               </div>

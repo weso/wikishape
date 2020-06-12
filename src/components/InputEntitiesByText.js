@@ -26,15 +26,14 @@ function InputEntitiesByText(props) {
         return fetch(`${SEARCH_URI}?endpoint=${API.currentUrl()}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
-                // console.log(`Response for ${label}: ${JSON.stringify(json)}`);
                 return json;
-            });
+            })
+            .catch( () => [])
     }
 
 
     function handleSearch(query) {
         setIsLoading(true);
-        console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`);
         makeAndHandleRequest(query, language, 0)
             .then((resp) => {
                 // console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
@@ -69,7 +68,6 @@ function InputEntitiesByText(props) {
 
     return (
         <Container fluid={true}>
-        {/*<Row>{JSON.stringify(language)}</Row>*/}
         <Row>
             <Col>
             <AsyncTypeahead
@@ -91,7 +89,6 @@ function InputEntitiesByText(props) {
                 useCache={false}
                 selected={selected}
                 onChange={(selected) => {
-                    console.log(`Selected: ${JSON.stringify(selected)}`);
                     props.onChange(selected);
                     setSelected(selected)
                 }}

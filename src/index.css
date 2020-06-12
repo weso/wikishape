@@ -57,6 +57,18 @@ code {
   margin-bottom: 10px;
 }
 
+.white-background {
+  background-color: white !important; /* "!important" overrides bootstrap */
+}
+
 table td {
   overflow-x: auto;
+}
+
+.disabled {
+  cursor: not-allowed !important; /* "!important" overrides bootstrap */
+}
+
+.progress {
+  margin: 6px 0;
 }

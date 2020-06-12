@@ -4,7 +4,7 @@ import Code from '../components/Code'
 function ResultDataExtract(props) {
      const result = props.result
      let msg ;
-     if (result === "") {
+     if (!result) {
          msg = null
      } else
      if (result.error) {
@@ -13,7 +13,7 @@ function ResultDataExtract(props) {
                 </div>
      } else {
          msg = <div>
-             <p>{result.entity}</p>
+             <p>{<a target="_blank" href={result.entity}>{result.entity}</a>}</p>
              {result.result && (
                  <Code
                      value={result.result}
