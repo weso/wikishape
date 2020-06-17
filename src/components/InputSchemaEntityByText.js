@@ -9,6 +9,7 @@ import Col from "react-bootstrap/Col";
 import SelectLanguage from "./SelectLanguage";
 import {SchemaEntities} from "../resources/schemaEntities"
 import InputGroup from "react-bootstrap/InputGroup";
+import API from "../API";
 
 
 const defaultLanguage = [{label: 'en', name:'English'}];
@@ -16,6 +17,7 @@ const defaultLanguage = [{label: 'en', name:'English'}];
 function InputSchemaEntityByText(props) {
     const [language,setLanguage] = useState(defaultLanguage);
     const [options, setOptions] = useState([]);
+    const [endpoint] = useState(props.endpoint || API.currentUrl());
 
     useEffect(() => {
          console.log(`Changing language to ${JSON.stringify(language[0])}`)

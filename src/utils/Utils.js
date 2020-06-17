@@ -63,7 +63,7 @@ export const notificationSettings = {
     pauseOnHover: true,
     closeButton: false,
     transition: Slide,
-    limit: 3
+    limit: 1
 }
 
 // export const internalPrefixes = ["prn", "prv", "pqv", "pq", "pr", "psn", "psv", "ps", "wdata", "wdno", "wdref", "wds", "wdt", "wdtn", "wdv", "wd", "p"];

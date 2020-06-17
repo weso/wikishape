@@ -4,6 +4,7 @@ import {showQualified, showQualify} from "../utils/Utils";
 import { wikidataPrefixes} from "../resources/wikidataPrefixes";
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
+import Alert from "react-bootstrap/Alert";
 
 function ResultOutgoing(props) {
     const result = props.result
@@ -13,8 +14,7 @@ function ResultOutgoing(props) {
      } else
      if (result.error) {
          msg =
-             <div><p>Error: {result.error}</p>
-                </div>
+             <div><Alert variant="danger">Error: {result.error}</Alert></div>
      } else {
          const outgoing = result.children.map(r => {
              const qualifiedPred = showQualify(r.pred,wikidataPrefixes);

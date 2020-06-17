@@ -19,11 +19,12 @@ function InputEntitiesByText(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
     const [selected, setSelected] = useState(props.entities);
+    const [endpoint] = useState(props.endpoint || API.currentUrl());
     const [language,setLanguage] = useState(defaultLanguage);
 
     function makeAndHandleRequest(label, language, page = 0) {
         const lang = language[0] ? language[0].label : "en" ;
-        return fetch(`${SEARCH_URI}?endpoint=${API.currentUrl()}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
+        return fetch(`${SEARCH_URI}?endpoint=${endpoint}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
                 return json;

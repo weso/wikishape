@@ -390,7 +390,8 @@ function WikidataValidateDeref(props) {
 
     return (
        <Container>
-         <h1>Validate Wikidata entities</h1>
+         <h1>Validate Wikibase entities</h1>
+           <h4>Target Wikibase: <a target="_blank" href={API.currentUrl()}>{API.currentUrl()}</a></h4>
            <Row>
                <Form onSubmit={handleSubmit}>
                    <InputEntitiesByText onChange={handleChangeEntities} entities={entities} />

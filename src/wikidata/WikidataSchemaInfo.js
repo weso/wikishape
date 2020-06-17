@@ -154,7 +154,7 @@ function WikidataSchemaInfo(props) {
     return (
        <Container>
          <h1>Info about Wikidata Schema entity</h1>
-         <InputSchemaEntityByText onChange={setSelectedEntity} entity={selectedEntity} />
+         <InputSchemaEntityByText endpoint={API.wikidataContact.url} onChange={setSelectedEntity} entity={selectedEntity} />
          <Form onSubmit={handleSubmit}>
              <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
                      variant="primary" type="submit" disabled={loading}>
