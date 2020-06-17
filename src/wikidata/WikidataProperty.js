@@ -16,6 +16,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 function WikidataProperty(props) {
 
     const [entities,setEntities] = useState([]);
+    const [lastEntities,setLastEntities] = useState([]);
     const [node,setNode] = useState('');
     const [lastNode,setLastNode] = useState('');
     const [endpoint,setEndpoint] = useState(API.currentEndpoint);
@@ -29,16 +30,21 @@ function WikidataProperty(props) {
 
     useEffect(() => {
             if (props.location.search) {
-                const params = qs.parse(props.location.search);
-                if (params.endpoint)
-                    setEndpoint(params.endpoint)
-                if (params.node) {
-                    console.log("=====> PARAMS: ", params)
-                    setEntities([{uri: params.node}]);
-                    setNode(params.node)
-                    setLastNode(params.node)
-                } else {
-                    setError(`No value for parameter node`)
+                const queryParams = qs.parse(props.location.search);
+                if (queryParams.endpoint)
+                    setEndpoint(queryParams.endpoint)
+                if (queryParams.entities) {
+                    let entitiesFromUrl = []
+                    try {
+                        entitiesFromUrl = JSON.parse(queryParams.entities)
+                    }
+                    catch (e) {
+                        setError("Could not parse parameters from URL")
+                    }
+                    setEntities(entitiesFromUrl)
+                    setLastEntities(entitiesFromUrl)
+                    if (entitiesFromUrl.length)
+                        setNode(entitiesFromUrl[0].uri)
                 }
             }
         },
@@ -64,7 +70,8 @@ function WikidataProperty(props) {
         if (entities && entities.length > 0 && entities[0].uri) {
             setNode(entities[0].uri)
         } else {
-            setError(`No property selected`)
+            resetState()
+            setError("No property selected")
         }
     }
 
@@ -86,7 +93,8 @@ function WikidataProperty(props) {
             })
             .then( async data => {
                 setResult(data);
-                setPermalink(await mkPermalink(API.wikidataOutgoingRoute, params));
+                setPermalink(await mkPermalink(API.wikidataPropertyInfoRoute,
+                    {...params, entities: JSON.stringify(entities)}));
                 if (cb) cb()
                 setProgressPercent(100)
             })
@@ -100,21 +108,21 @@ function WikidataProperty(props) {
 
     function setUpHistory() {
         // Store the last search URL in the browser history to allow going back
-        if (lastNode && lastNode.localeCompare(node) !== 0){
+        if (lastEntities && entities && JSON.stringify(lastEntities) !== JSON.stringify(entities)){
             // eslint-disable-next-line no-restricted-globals
-            history.pushState(null, document.title, mkPermalinkLong(API.wikidataOutgoingRoute, {
-                node: lastNode,
+            history.pushState(null, document.title, mkPermalinkLong(API.wikidataPropertyInfoRoute, {
+                entities: JSON.stringify(lastEntities),
                 endpoint: endpoint
             }))
         }
         // Change current url for shareable links
         // eslint-disable-next-line no-restricted-globals
-        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataOutgoingRoute, {
-            node: node,
+        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataPropertyInfoRoute, {
+            entities: JSON.stringify(entities),
             endpoint: endpoint
         }))
 
-        setLastNode(node)
+        setLastEntities(entities)
     }
 
     function resetState() {
@@ -127,7 +135,8 @@ function WikidataProperty(props) {
 
     return (
        <Container>
-         <h1>Info about wikidata properties</h1>
+         <h1>Info about Wikibase properties</h1>
+           <h4>Target Wikibase: <a target="_blank" href={API.currentUrl()}>{API.currentUrl()}</a></h4>
          <InputPropertiesByText onChange={handleChange} multiple={false} entities={entities} />
          <Table>
              <tbody>
@@ -150,7 +159,7 @@ function WikidataProperty(props) {
          </Form>
           { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           { permalink? <Permalink url={permalink} />: null }
-          { error? <Alert variant="danger">${error}</Alert>: null }
+          { error? <Alert variant="danger">{error}</Alert>: null }
          <ResultOutgoing result={result} />
        </Container>
     );

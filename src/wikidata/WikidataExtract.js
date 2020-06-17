@@ -18,7 +18,6 @@ function WikidataExtract(props) {
     const [entities,setEntities] = useState([]);
     const [selectedEntities, setSelectedEntities] = useState([]);
     const [lastEntities, setLastEntities] = useState([]);
-    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
@@ -30,12 +29,17 @@ function WikidataExtract(props) {
     useEffect(() => {
         if (props.location.search) {
             const queryParams = qs.parse(props.location.search.substring(1));
-            if (queryParams.endpoint)
-                setEndpoint(queryParams.endpoint)
-            if (queryParams.entity) {
-                setSelectedEntities([{"uri": queryParams.entity}])
-                setEntities([{"uri": queryParams.entity}])
-                setLastEntities([{"uri": queryParams.entity}])
+            if (queryParams.entities) {
+                let entitiesFromUrl = []
+                try {
+                    entitiesFromUrl = JSON.parse(queryParams.entities)
+                }
+                catch (e) {
+                    setError("Could not parse parameters from URL")
+                }
+                setSelectedEntities(entitiesFromUrl)
+                setEntities(entitiesFromUrl)
+                setLastEntities(entitiesFromUrl)
             }
         }
     }, [props.location.search]);
@@ -68,8 +72,8 @@ function WikidataExtract(props) {
         setLoading(true);
         setProgressPercent(10)
         const params = {
+            // Pending to process more than the first entity
             entity: entities[0].uri,
-            endpoint: endpoint
         }
         const formData = params2Form(params)
         setProgressPercent(30)
@@ -81,7 +85,7 @@ function WikidataExtract(props) {
             .then(async data => {
                 setResult(data)
                 setProgressPercent(100)
-                setPermalink(await mkPermalink(API.wikidataExtractRoute, params));
+                setPermalink(await mkPermalink(API.wikidataExtractRoute, {entities: JSON.stringify(entities)}));
                 if (cb) cb()
             })
             .catch(function (error) {
@@ -92,20 +96,16 @@ function WikidataExtract(props) {
 
     function setUpHistory() {
         // Store the last search URL in the browser history to allow going back
-        if (lastEntities && entities &&
-            lastEntities.length && entities.length &&
-            lastEntities[0].uri.localeCompare(entities[0].uri) !== 0){
+        if (lastEntities && entities && JSON.stringify(lastEntities) !== JSON.stringify(entities)){
             // eslint-disable-next-line no-restricted-globals
             history.pushState(null, document.title, mkPermalinkLong(API.wikidataExtractRoute, {
-                entity: lastEntities[0].uri,
-                endpoint: endpoint
+                entities: JSON.stringify(lastEntities)
             }))
         }
         // Change current url for shareable links
         // eslint-disable-next-line no-restricted-globals
         history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataExtractRoute, {
-            entity: entities[0].uri,
-            endpoint: endpoint,
+            entities: JSON.stringify(entities)
         }))
 
         setLastEntities(entities)
@@ -115,16 +115,17 @@ function WikidataExtract(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
-        setEndpoint(API.currentEndpoint())
         setProgressPercent(0)
     }
 
 
     return (
        <Container>
-         <h1>Extract schema from Wikibase entities</h1>
-           <h4>Target Wikibase: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
-         <InputEntitiesByText onChange={handleChange} entities={entities} />
+         <h1>Extract schema from Wikidata entities</h1>
+         {/* This functionality only works with wikidata so this typeahead will look for Wikidata entities
+            even if another endpoint was configured
+         */}
+         <InputEntitiesByText endpoint={API.wikidataContact.url} onChange={handleChange} entities={entities} />
          <Table>
              <tbody>
                { selectedEntities.map(e =>
@@ -146,8 +147,9 @@ function WikidataExtract(props) {
          </Form>
           { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null}
           { permalink? <Permalink url={permalink} />: null }
-          { error? <Alert variant="danger">${error}</Alert>: null }
-         <ResultDataExtract result={result} />
+          { error? <Alert variant="danger">{error}</Alert>: null }
+          { result ? <ResultDataExtract result={result} /> : null}
+
        </Container>
     );
 }

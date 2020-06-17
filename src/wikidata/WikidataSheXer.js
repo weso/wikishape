@@ -19,7 +19,6 @@ function WikidataSheXer(props) {
     const [entities,setEntities] = useState([]);
     const [selectedEntities, setSelectedEntities] = useState([]);
     const [lastEntities, setLastEntities] = useState([]);
-    const [endpoint,setEndpoint] = useState(API.currentEndpoint);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
@@ -31,15 +30,18 @@ function WikidataSheXer(props) {
 
     useEffect(() => {
         if (props.location.search) {
-            let params = {};
             const queryParams = qs.parse(props.location.search.substring(1));
-            if (queryParams.endpoint) {
-                setEndpoint(queryParams.endpoint)
-            }
-            if (queryParams.entity) {
-                setSelectedEntities([{"uri": queryParams.entity}])
-                setEntities([{"uri": queryParams.entity}])
-                setLastEntities([{"uri": queryParams.entity}])
+            if (queryParams.entities) {
+                let entitiesFromUrl = []
+                try {
+                    entitiesFromUrl = JSON.parse(queryParams.entities)
+                }
+                catch (e) {
+                    setError("Could not parse parameters from URL")
+                }
+                setSelectedEntities(entitiesFromUrl)
+                setEntities(entitiesFromUrl)
+                setLastEntities(entitiesFromUrl)
             }
         }
     }, [props.location.search]);
@@ -107,10 +109,7 @@ function WikidataSheXer(props) {
     function postExtract(jsonData, cb) {
         setLoading(true);
         setProgressPercent(30)
-        const params = {
-            entity: entities[0].uri,
-            endpoint: endpoint
-        }
+
         axios.post(url,jsonData, { headers: {'Content-type': 'Application/json'}})
             .then (response => {
                 setProgressPercent(70)
@@ -120,7 +119,7 @@ function WikidataSheXer(props) {
                 setResult(data);
                 if (cb) cb()
                 setProgressPercent(90)
-                setPermalink(await mkPermalink(API.wikidataSheXerRoute, params));
+                setPermalink(await mkPermalink(API.wikidataSheXerRoute, {entities: JSON.stringify(entities)}));
                 setProgressPercent(100)
             })
             .catch(function (error) {
@@ -135,16 +134,14 @@ function WikidataSheXer(props) {
             lastEntities.length && entities.length &&
             lastEntities[0].uri.localeCompare(entities[0].uri) !== 0){
             // eslint-disable-next-line no-restricted-globals
-            history.pushState(null, document.title, mkPermalinkLong(API.wikidataExtractRoute, {
-                entity: lastEntities[0].uri,
-                endpoint: endpoint
+            history.pushState(null, document.title, mkPermalinkLong(API.wikidataSheXerRoute, {
+                entities: JSON.stringify(lastEntities)
             }))
         }
         // Change current url for shareable links
         // eslint-disable-next-line no-restricted-globals
-        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataExtractRoute, {
-            entity: entities[0].uri,
-            endpoint: endpoint
+        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataSheXerRoute, {
+            entities: JSON.stringify(entities),
         }))
 
         setLastEntities(entities)
@@ -154,7 +151,6 @@ function WikidataSheXer(props) {
         setResult(null)
         setPermalink(null)
         setError(null)
-        setEndpoint(API.currentEndpoint())
         setProgressPercent(0)
     }
 
@@ -162,8 +158,7 @@ function WikidataSheXer(props) {
     return (
        <Container>
          <h1>Extract schema from Wikibase entities (sheXer)</h1>
-           <h4>Target Wikibase: <a href={API.currentUrl()}>{API.currentUrl()}</a></h4>
-         <InputEntitiesByText onChange={handleChange} entities={entities} />
+         <InputEntitiesByText endpoint={API.wikidataContact.url} onChange={handleChange} entities={entities} />
          <Table>
              <tbody>
                { entities.map(e =>
@@ -185,7 +180,7 @@ function WikidataSheXer(props) {
          </Form>
           { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
           { permalink? <Permalink url={permalink} />: null }
-          { error? <Alert variant="danger">${error}</Alert>: null }
+          { error? <Alert variant="danger">{error}</Alert>: null }
          <ResultDataExtract result={result} />
        </Container>
     );

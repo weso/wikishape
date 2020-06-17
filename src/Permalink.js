@@ -12,9 +12,7 @@ import {ClipboardIcon} from "react-open-iconic-svg";
 // Returns a promise that will return a shortened permalink generated on the server
 // or the full-length permalink if the server response fails
 export function mkPermalink(route, params) {
-    const permalink = getHost() +
-        // "#" + // This one is added for HashBrowser
-        route + "?" + qs.stringify(params)
+    const permalink = mkPermalinkLong(route, params)
 
     return axios.get(API.serverPermalinkEndpoint, {
           params: { 'url': permalink },

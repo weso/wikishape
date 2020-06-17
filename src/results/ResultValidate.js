@@ -116,7 +116,7 @@ function ResultValidate(props) {
     } else
     if (result.error) {
         msg =
-            <div><p>Error: {result.error}</p>
+            <div><Alert variant="danger">Error: {result.error}</Alert>
                 <details><pre>{JSON.stringify(result)}</pre></details>
             </div>
     } else {

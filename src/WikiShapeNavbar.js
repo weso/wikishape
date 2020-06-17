@@ -44,7 +44,7 @@ function WikishapeNavbar() {
                     </Nav>
                     <Nav>
                         <NavDropdown title="Examples" id="basic-nav-dropdown">
-                            <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&node=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ42'>Show entity (Q42)</NavDropdown.Item>
+                            <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&entities=%5B%7B%22label%22%3A%22Douglas%20Adams%22%2C%22id%22%3A%22Q42%22%2C%22uri%22%3A%22http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ42%22%2C%22descr%22%3A%22English%20writer%20and%20humorist%22%7D%5D'>Show entity (Q42)</NavDropdown.Item>
                             {/*<NavDropdown.Item href='/#/wikidataSchemaInfo?id=E42&lang=en'>Show entity schema (E42)</NavDropdown.Item>*/}
                             <NavDropdown.Item href='/wikidataSchemaVisual?id=E42&lang=en'>Visualize entity schema (E42)</NavDropdown.Item>
                             <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&node=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FP31'>Property</NavDropdown.Item>

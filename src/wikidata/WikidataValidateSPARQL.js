@@ -251,7 +251,8 @@ function WikidataValidateSPARQL(props) {
 
     return (
        <Container>
-         <h1>Validate Wikidata entities obtained from SPARQL queries</h1>
+         <h1>Validate Wikibase entities obtained from SPARQL queries</h1>
+           <h4>Target SPARQL endpoint: <a target="_blank" href={API.currentEndpoint()}>{API.currentEndpoint()}</a></h4>
                <Row>
                    <Form onSubmit={handleSubmit}>
                        <QueryForm
