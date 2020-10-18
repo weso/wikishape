@@ -41,6 +41,12 @@ export const SchemaEntities = [
         "descr" : "ShEx記述用のスキーマ",
         "aliases" : ""
       },
+      "ast" : {
+        "lang" : "ast",
+        "label" : "ShExR",
+        "descr" : "esquema de ShEx",
+        "aliases" : ""
+      },
       "hu" : {
         "lang" : "hu",
         "label" : "ShExR",
@@ -107,6 +113,12 @@ export const SchemaEntities = [
         "lang" : "ja",
         "label" : "Wikimedia",
         "descr" : "WikidataにおけるWikimediaプロジェクトを記述するためのスキーマ",
+        "aliases" : ""
+      },
+      "ast" : {
+        "lang" : "ast",
+        "label" : "Wikimedia",
+        "descr" : "esquema pa proyeutos Wikimedia",
         "aliases" : ""
       },
       "hu" : {
@@ -243,22 +255,34 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E6",
     "title" : "Language mappings (E6) - Wikidata",
     "labels" : {
-      "en" : {
-        "lang" : "en",
-        "label" : "Language mappings",
-        "descr" : "Schema for language mappings in Wikidata",
-        "aliases" : ""
-      },
       "it" : {
         "lang" : "it",
         "label" : "Mappatura lingue",
         "descr" : "schema per mappare le lingue",
         "aliases" : ""
       },
+      "zh-Hans" : {
+        "lang" : "zh-Hans",
+        "label" : "语言映射",
+        "descr" : "",
+        "aliases" : ""
+      },
       "ja" : {
         "lang" : "ja",
         "label" : "言語間マップ",
         "descr" : "言語間マップを記述するためのスキーマ",
+        "aliases" : ""
+      },
+      "zh-Hant" : {
+        "lang" : "zh-Hant",
+        "label" : "語言映射",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "en" : {
+        "lang" : "en",
+        "label" : "Language mappings",
+        "descr" : "Schema for language mappings in Wikidata",
         "aliases" : ""
       }
     }
@@ -291,6 +315,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "Citation",
         "descr" : "Schema of a Citation",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "Citación",
+        "descr" : "schema de una citación",
         "aliases" : ""
       },
       "ja" : {
@@ -1072,6 +1102,18 @@ export const SchemaEntities = [
         "label" : "episodio serie TV",
         "descr" : "schema per descrivere un episodio di una serie televisiva (proprietà base, senza identificatori)",
         "aliases" : "episodio serie televisiva"
+      },
+      "nl" : {
+        "lang" : "nl",
+        "label" : "aflevering van televisieserie",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "eo" : {
+        "lang" : "eo",
+        "label" : "televidseria epizodo",
+        "descr" : "",
+        "aliases" : ""
       },
       "da" : {
         "lang" : "da",
@@ -2097,6 +2139,12 @@ export const SchemaEntities = [
         "descr" : "",
         "aliases" : ""
       },
+      "br" : {
+        "lang" : "br",
+        "label" : "oberour",
+        "descr" : "",
+        "aliases" : ""
+      },
       "pt" : {
         "lang" : "pt",
         "label" : "autor",
@@ -2132,6 +2180,12 @@ export const SchemaEntities = [
         "label" : "著者",
         "descr" : "著者用のスキーマ",
         "aliases" : ""
+      },
+      "ast" : {
+        "lang" : "ast",
+        "label" : "autor",
+        "descr" : "esquema p'autores",
+        "aliases" : "autora"
       },
       "el" : {
         "lang" : "el",
@@ -2236,8 +2290,8 @@ export const SchemaEntities = [
       "en" : {
         "lang" : "en",
         "label" : "University Teacher",
-        "descr" : "",
-        "aliases" : "person who teaches at a university"
+        "descr" : "person who teaches at a university",
+        "aliases" : "professor | academic"
       },
       "ja" : {
         "lang" : "ja",
@@ -2309,6 +2363,12 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E46",
     "title" : "chemical element (E46) - Wikidata",
     "labels" : {
+      "fr" : {
+        "lang" : "fr",
+        "label" : "élément chimique",
+        "descr" : "",
+        "aliases" : ""
+      },
       "pt" : {
         "lang" : "pt",
         "label" : "elemento químico",
@@ -3210,6 +3270,12 @@ export const SchemaEntities = [
         "label" : "vernacular names according to the BSL",
         "descr" : "Schema on vernacular sourced from the Belgian Species List",
         "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "BSL（Belgian Species List）に基づくベルギー語の固有名",
+        "descr" : "",
+        "aliases" : ""
       }
     }
   },
@@ -3652,6 +3718,12 @@ export const SchemaEntities = [
         "label" : "ciudad",
         "descr" : "esquema para una localidad",
         "aliases" : ""
+      },
+      "ast" : {
+        "lang" : "ast",
+        "label" : "llocalidá",
+        "descr" : "esquema pa llocalidaes",
+        "aliases" : "ciudá | población | pueblu"
       }
     }
   },
@@ -3707,13 +3779,13 @@ export const SchemaEntities = [
     "id" : "E104",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E104",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E104",
-    "title" : "Wikidata (E104) - Wikidata",
+    "title" : "municipio of Rome (E104) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "Wikidata",
-        "descr" : "Wikidata is a WikiMedia project",
-        "aliases" : "WikiMedia"
+        "label" : "municipio of Rome",
+        "descr" : "schema for Rome's (existing and former) municipi",
+        "aliases" : ""
       }
     }
   },
@@ -3991,12 +4063,12 @@ export const SchemaEntities = [
     "id" : "E121",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E121",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E121",
-    "title" : "0 (E121) - Wikidata",
+    "title" : "[empty schema] (E121) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "0",
-        "descr" : "",
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
         "aliases" : ""
       }
     }
@@ -4005,12 +4077,12 @@ export const SchemaEntities = [
     "id" : "E122",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E122",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E122",
-    "title" : "2147483647 (E122) - Wikidata",
+    "title" : "[empty schema] (E122) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "2147483647",
-        "descr" : "",
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
         "aliases" : ""
       }
     }
@@ -4027,6 +4099,12 @@ export const SchemaEntities = [
         "descr" : "An EntitySchema to try things out, not intended for productive use",
         "aliases" : "test schema"
       },
+      "de" : {
+        "lang" : "de",
+        "label" : "Spielwiese-Schema",
+        "descr" : "",
+        "aliases" : ""
+      },
       "nl" : {
         "lang" : "nl",
         "label" : "zandbak schema",
@@ -4039,12 +4117,12 @@ export const SchemaEntities = [
     "id" : "E124",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E124",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E124",
-    "title" : "2.133.165.110 (E124) - Wikidata",
+    "title" : "[empty schema] (E124) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "2.133.165.110",
-        "descr" : "",
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
         "aliases" : ""
       }
     }
@@ -4787,19 +4865,13 @@ export const SchemaEntities = [
     "id" : "E166",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E166",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E166",
-    "title" : "No label defined (E166) - Wikidata",
+    "title" : "[empty schema] (E166) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "",
-        "descr" : "",
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
         "aliases" : ""
-      },
-      "es" : {
-        "lang" : "es",
-        "label" : "prueba",
-        "descr" : "prueba",
-        "aliases" : "prueba"
       }
     }
   },
@@ -4991,13 +5063,13 @@ export const SchemaEntities = [
     "id" : "E175",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E175",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E175",
-    "title" : "Test_SAW (E175) - Wikidata",
+    "title" : "[empty schema] (E175) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "Test_SAW",
-        "descr" : "Schema MTI 2019, valida entidades de ocupación \"investigadores\" con el atributo \"campo de trabajo\" igual a teacher",
-        "aliases" : "Test_SAW"
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
+        "aliases" : ""
       }
     }
   },
@@ -5073,12 +5145,12 @@ export const SchemaEntities = [
     "id" : "E180",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E180",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E180",
-    "title" : "No label defined (E180) - Wikidata",
+    "title" : "[empty schema] (E180) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "",
-        "descr" : "",
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
         "aliases" : ""
       }
     }
@@ -5087,13 +5159,13 @@ export const SchemaEntities = [
     "id" : "E181",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E181",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E181",
-    "title" : "Chilean soccer players (E181) - Wikidata",
+    "title" : "[empty schema] (E181) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "Chilean soccer players",
-        "descr" : "MUJERES CHILENAS FUTBOLISTAS",
-        "aliases" : "Mujeres Chilenas Futbolistas"
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
+        "aliases" : ""
       }
     }
   },
@@ -5101,12 +5173,12 @@ export const SchemaEntities = [
     "id" : "E182",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E182",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E182",
-    "title" : "PRUEBA (E182) - Wikidata",
+    "title" : "[empty schema] (E182) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "PRUEBA",
-        "descr" : "",
+        "label" : "[empty schema]",
+        "descr" : "[empty schema]",
         "aliases" : ""
       }
     }
@@ -5287,6 +5359,18 @@ export const SchemaEntities = [
         "descr" : "Esquema para hospitais",
         "aliases" : ""
       },
+      "ko" : {
+        "lang" : "ko",
+        "label" : "병원",
+        "descr" : "병원을 설명하는 스키마",
+        "aliases" : ""
+      },
+      "de" : {
+        "lang" : "de",
+        "label" : "Krankenhaus",
+        "descr" : "Entity-Schema für ein Krankenhaus",
+        "aliases" : "Klinik"
+      },
       "da" : {
         "lang" : "da",
         "label" : "hospital",
@@ -5309,6 +5393,12 @@ export const SchemaEntities = [
         "lang" : "ja",
         "label" : "病院",
         "descr" : "病院を記述するためのスキーマ",
+        "aliases" : ""
+      },
+      "ast" : {
+        "lang" : "ast",
+        "label" : "hospital",
+        "descr" : "esquema para hospitales",
         "aliases" : ""
       }
     }
@@ -5333,8 +5423,8 @@ export const SchemaEntities = [
       },
       "es" : {
         "lang" : "es",
-        "label" : "Brote local pandémico coronavirus 2020",
-        "descr" : "Esquema de brote local pandémico coronavirus 2020",
+        "label" : "Brote local de la pandemia de coronavirus de 2020",
+        "descr" : "Esquema de brote local de la pandemia de coronavirus de 2020",
         "aliases" : ""
       },
       "ja" : {
@@ -5611,11 +5701,11 @@ export const SchemaEntities = [
     "id" : "E203",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E203",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E203",
-    "title" : "No label defined (E203) - Wikidata",
+    "title" : "school unit (E203) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "",
+        "label" : "school unit",
         "descr" : "",
         "aliases" : ""
       },
@@ -5659,17 +5749,29 @@ export const SchemaEntities = [
     "id" : "E206",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E206",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E206",
-    "title" : "No label defined (E206) - Wikidata",
+    "title" : "stumbling stones (E206) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "",
+        "label" : "stumbling stones",
         "descr" : "",
         "aliases" : ""
       },
       "de" : {
         "lang" : "de",
         "label" : "Stolpersteine",
+        "descr" : "Schema für Objekte über Stolpersteine und Stolperschwellen",
+        "aliases" : ""
+      },
+      "it" : {
+        "lang" : "it",
+        "label" : "pietre di inciampo",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "nb" : {
+        "lang" : "nb",
+        "label" : "snublesteiner",
         "descr" : "",
         "aliases" : ""
       }
@@ -5716,5 +5818,495 @@ export const SchemaEntities = [
         "aliases" : "entity schema of items with API endpoint"
       }
     }
+  },
+  {
+    "id" : "E210",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E210",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E210",
+    "title" : "hospital (Malayalam) (E210) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "hospital (Malayalam)",
+        "descr" : "entity schema of hospital (Malayalam)",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E211",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E211",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E211",
+    "title" : "hospitals (E211) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "hospitals",
+        "descr" : "schema for hospitals",
+        "aliases" : ""
+      },
+      "ja" : {
+        "lang" : "ja",
+        "label" : "病院",
+        "descr" : "病院を記述するための日本語のスキーマ",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E212",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E212",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E212",
+    "title" : "emergency measure (E212) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "emergency measure",
+        "descr" : "emergency measure",
+        "aliases" : ""
+      },
+      "pt-BR" : {
+        "lang" : "pt-BR",
+        "label" : "medida emergencial",
+        "descr" : "medida emergencial",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E213",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E213",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E213",
+    "title" : "spaceport (E213) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "spaceport",
+        "descr" : "schema for spaceports",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E215",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E215",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E215",
+    "title" : "same-sex marriage (E215) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "same-sex marriage",
+        "descr" : "entity schema of same-sex marriage",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E216",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E216",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E216",
+    "title" : "public sculpture (E216) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "public sculpture",
+        "descr" : "entity schema of a public sculpture",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E217",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E217",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E217",
+    "title" : "HTML element (E217) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "HTML element",
+        "descr" : "entity schema of a HTML element",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E218",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E218",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E218",
+    "title" : "Orienteer (E218) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Orienteer",
+        "descr" : "schema for orienteers",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E220",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E220",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E220",
+    "title" : "member of the Instituto Universitario de Análisis y Aplicaciones Textuales (E220) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "member of the Instituto Universitario de Análisis y Aplicaciones Textuales",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "es" : {
+        "lang" : "es",
+        "label" : "miembro del Instituto Universitario de Análisis y Aplicaciones Textuales",
+        "descr" : "miembro de un instituto universitario",
+        "aliases" : "miembro del IATEXT"
+      }
+    }
+  },
+  {
+    "id" : "E221",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E221",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E221",
+    "title" : "YouTube (E221) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "YouTube",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E223",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E223",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E223",
+    "title" : "EuropeanProject (E223) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "EuropeanProject",
+        "descr" : "An european project",
+        "aliases" : "euproject"
+      }
+    }
+  },
+  {
+    "id" : "E224",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E224",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E224",
+    "title" : "EuropeanReport (E224) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "EuropeanReport",
+        "descr" : "A european report",
+        "aliases" : "eureport"
+      }
+    }
+  },
+  {
+    "id" : "E225",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E225",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E225",
+    "title" : "EuropeanResearcher (E225) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "EuropeanResearcher",
+        "descr" : "a researcher",
+        "aliases" : "euresearcher"
+      }
+    }
+  },
+  {
+    "id" : "E226",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E226",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E226",
+    "title" : "Swedish Academy Chair (E226) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Swedish Academy Chair",
+        "descr" : "ShEx for a Chair in the Swedish Academy",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "Svenska Akademin - stol",
+        "descr" : "ShEx för en Stol i Svenska Akademin",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E227",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E227",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E227",
+    "title" : "Gender (E227) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Gender",
+        "descr" : "Schema for gender",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E228",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E228",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E228",
+    "title" : "United Kingdom Member of Parliament (E228) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "United Kingdom Member of Parliament",
+        "descr" : "member of the United Kingdom parliament",
+        "aliases" : "UK MP | UK Member of Parliament | United Kingdom MP"
+      }
+    }
+  },
+  {
+    "id" : "E229",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E229",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E229",
+    "title" : "decision from the Supreme Court of Sweden (E229) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "decision from the Supreme Court of Sweden",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "avgörande från Högsta domstolen i Sverige",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E230",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E230",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E230",
+    "title" : "Swedish Academy introduction speach (E230) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Swedish Academy introduction speach",
+        "descr" : "the speach every member of the Academy deliver on day 1",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "Svenska Akademin - introduktionstal",
+        "descr" : "introduktionstal till Svenska Akademin",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E231",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E231",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E231",
+    "title" : "Swedish Academy member (E231) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Swedish Academy member",
+        "descr" : "member of the Swedish Academy",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "Svenska Akademin - medlem",
+        "descr" : "medlem i Svenska Akademin",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E232",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E232",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E232",
+    "title" : "lipid (E232) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "lipid",
+        "descr" : "class of chemical compounds",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E233",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E233",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E233",
+    "title" : "protein family (E233) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "protein family",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E234",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E234",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E234",
+    "title" : "auto race track (E234) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "auto race track",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E235",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E235",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E235",
+    "title" : "auto racing event (E235) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "auto racing event",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E236",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E236",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E236",
+    "title" : "Member of the Oireachtas (E236) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Member of the Oireachtas",
+        "descr" : "member of the Irish parliament",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E237",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E237",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E237",
+    "title" : "File format with identification pattern (E237) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "File format with identification pattern",
+        "descr" : "schema for a file format that includes signature information",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E238",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E238",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E238",
+    "title" : "racing automobile driver (E238) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "racing automobile driver",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E239",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E239",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E239",
+    "title" : "chemical compound (E239) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "chemical compound",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E240",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E240",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E240",
+    "title" : "natural product (E240) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "natural product",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E241",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E241",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E241",
+    "title" : "stereoisomer (E241) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "stereoisomer",
+        "descr" : "chemical compound with a particular stereochemistry",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E242",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E242",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E242",
+    "title" : "Configured Software Environment (E242) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Configured Software Environment",
+        "descr" : "Schema about a software environment",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E243",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E243",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E243",
+    "title" : "cell type (E243) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "cell type",
+        "descr" : "Schema for cell types",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E244",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E244",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E244",
+    "title" : "Act of the Oireachtas (E244) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Act of the Oireachtas",
+        "descr" : "primary legislation of the government of Ireland",
+        "aliases" : ""
+      }
+    }
   }
-]
+] ;

@@ -61,18 +61,14 @@ function WikidataValidateDeref(props) {
 
     useEffect(() => {
         if (props.location.search) {
-/*          try { */
-              const params = qs.parse(props.location.search);
-              const shExParams = shExParamsFromQueryParams(params);
-              console.log(`ShExParams: ${JSON.stringify(shExParams)}`);
-              dispatchShEx({ type: 'set-params', value: shExParams});
-              let validateParams = validateParamsFromQueryParams(params);
+            const params = qs.parse(props.location.search);
+            const shExParams = shExParamsFromQueryParams(params);
+            console.log(`ShExParams: ${JSON.stringify(shExParams)}`);
+            dispatchShEx({ type: 'set-params', value: shExParams});
+            let validateParams = validateParamsFromQueryParams(params);
               // let validateParams = params ;
-              validateParams = {...validateParams, shEx: shExParams};
-              validate(validateParams);
-       /*   } catch(error) {
-              setError(`Error initializing from parameters: ${error.message}`);
-          } */
+            validateParams = {...validateParams, shEx: shExParams};
+            validate(validateParams);
         }
     },
         [props.location.search]
@@ -111,6 +107,20 @@ function WikidataValidateDeref(props) {
         setResult('');
     }
 
+    function updateShapeLabel() {
+        const newShapeLabel = shapeList && shapeList.length? shapeList[0] :  '';
+        console.log(`updateShapeLabel: ${JSON.stringify(newShapeLabel)}`);
+        setShapeLabel(newShapeLabel);
+    }
+
+    function updateShapes(shapes) {
+        const newShapes = ["Start"].concat(shapes);
+        const newShapesQualified = newShapes.map(sl => showQualify(sl,shapesPrefixMap).str)
+        setShapeList(newShapesQualified);
+        console.log(`updateShapes| NewShapesQualified: ${JSON.stringify(newShapesQualified)}`);
+        updateShapeLabel();
+    }
+
     function handleSchemaEntityChange(e) {
         console.log(`Change schema entity: ${JSON.stringify(e)}`);
         if (e && e.length) {
@@ -130,18 +140,7 @@ function WikidataValidateDeref(props) {
                 .then(response => response.data)
                 .then(result => {
                     console.log(`Result of schema info: ${JSON.stringify(result)}`);
-                    /* let shapes = [] ;
-                    if (result && result.shapes && result.shapes.length) {
-                        shapes = result.shapes
-                    } else shapes = [ 'START'] ; */
-                    const newShapes = ["Start"].concat(result.shapes);
-                    const newShapesQualified = newShapes.map(sl => showQualify(sl,shapesPrefixMap).str)
-                    setShapeList(newShapesQualified);
-                    console.log(`NewShapesQualified: ${JSON.stringify(newShapesQualified)}`);
-                    const newShapeLabel = shapeList && shapeList.length? shapeList[0] :  '';
-                    console.log(`NewShapeLabel: ${JSON.stringify(newShapeLabel)}`);
-                    setShapeLabel(newShapeLabel);
-
+                    updateShapes(result.shapes);
                     setShapesPrefixMap(result.shapesPrefixMap);
                     setLoading(false);
                 })
@@ -238,12 +237,12 @@ function WikidataValidateDeref(props) {
     }
 
     function validate(validateParams) {
-        console.log(`Validate\nvalidateParams: ${JSON.stringify(validateParams)}`)
+        console.log(`Validate| validateParams: ${JSON.stringify(validateParams)}`)
         const initialResult = resultFromEntities(validateParams.entities, validateParams.shapeLabel);
         setResult(initialResult);
 
         const schemaActiveTab = validateParams.schemaActiveTab;
-        console.log(`schemaActiveTab: ${schemaActiveTab}`);
+        console.log(`validate| schemaActiveTab: ${schemaActiveTab}`);
         let paramsSchema = null;
         if (schemaActiveTab === 'BySchema')
              paramsSchema = paramsFromSchema(validateParams.entitySchema);
@@ -338,11 +337,7 @@ function WikidataValidateDeref(props) {
             .then(response => response.data)
             .then(result => {
                 console.log(`Result of schema info: ${JSON.stringify(result)}`);
-                let newShapes;
-                if (result.shapes && result.shapes.length) newShapes = result.shapes;
-                else newShapes = ["Start"];
-                console.log(`NewShapes from ShEx: ${newShapes}`);
-                setShapeList(newShapes);
+                updateShapes(result.shapes);
                 setShapesPrefixMap(result.prefixMap);
             })
             .catch(error => {
@@ -420,5 +415,7 @@ function WikidataValidateDeref(props) {
            </Container>
    );
 }
+
+
 
 export default WikidataValidateDeref;

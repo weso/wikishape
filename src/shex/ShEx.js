@@ -10,9 +10,19 @@ export const initialShExStatus = {
 
 export function shExParamsFromQueryParams(params) {
     let newParams = {};
-    if (params.schema) newParams["schema"] = params.schema ;
-    if (params.schemaFormat) newParams["schemaFormat"] = params.schemaFormat ;
-    if (params.schemaUrl) newParams["schemaUrl"] = params.schemaUrl ;
+    if (params.activeSchemaTab) newParams['activeTab'] = params.activeSchemaTab ;
+    if (params.schema) newParams["shExTextArea"] = params.schema ;
+    if (params.schemaFormat) newParams["shExFormat"] = params.schemaFormat ;
+    if (params.schemaUrl) newParams["shExUrl"] = params.schemaUrl ;
+    return newParams;
+}
+
+export function formParamsFromShExParams(shExParams) {
+    let newParams = {};
+    if (shExParams.activeTab) newParams['activeSchemaTab'] = shExParams.activeTab ;
+    if (shExParams.shExTextArea) newParams["schema"] = shExParams.shExTextArea ;
+    if (shExParams.shExFormat) newParams["schemaFormat"] = shExParams.shExFormat ;
+    if (shExParams.shExUrl) newParams["schemaUrl"] = shExParams.shExUrl ;
     return newParams;
 }
 
@@ -43,15 +53,12 @@ export function shExReducer(status,action) {
 }
 
 export function paramsFromShEx(shExStatus) {
+    console.log(`paramsFromShEx| shExStatus = ${JSON.stringify(shExStatus)}`);
     let params = {};
     params['activeSchemaTab'] = convertTabSchema(shExStatus.shExActiveTab);
     params['schemaEmbedded'] = false;
     params['schemaFormat'] = shExStatus.shExFormat;
     switch (shExStatus.shExActiveTab) {
-        case API.byTextTab:
-            params['schema'] = shExStatus.shExTextArea;
-            params['schemaFormatTextArea'] = shExStatus.shExFormat;
-            break;
         case API.byUrlTab:
             params['schemaURL'] = shExStatus.shExUrl;
             params['schemaFormatUrl'] = shExStatus.shExFormat;
@@ -60,8 +67,16 @@ export function paramsFromShEx(shExStatus) {
             params['schemaFile'] = shExStatus.shExFile;
             params['schemaFormatFile'] = shExStatus.shExFormat;
             break;
+        case API.byTextTab:
+            params['schema'] = shExStatus.shExTextArea;
+            params['schemaFormatTextArea'] = shExStatus.shExFormat;
+            break;
         default:
+            console.log(`Unknown shExStatus.activeSchemaTab: ${shExStatus.activeSchemaTab}`);
+            params['schema'] = shExStatus.shExTextArea;
+            params['schemaFormatTextArea'] = shExStatus.shExFormat;
+            break;
     }
-    console.log(`paramsShEx: ${JSON.stringify(params)}`)
+    console.log(`paramsFromShEx| params = ${JSON.stringify(params)}`)
     return params;
 }
