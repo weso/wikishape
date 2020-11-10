@@ -47,7 +47,7 @@ function WikishapeNavbar() {
                             <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&entities=%5B%7B%22label%22%3A%22Douglas%20Adams%22%2C%22id%22%3A%22Q42%22%2C%22uri%22%3A%22http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ42%22%2C%22descr%22%3A%22English%20writer%20and%20humorist%22%7D%5D'>Show entity (Q42)</NavDropdown.Item>
                             {/*<NavDropdown.Item href='/#/wikidataSchemaInfo?id=E42&lang=en'>Show entity schema (E42)</NavDropdown.Item>*/}
                             <NavDropdown.Item href='/wikidataSchemaVisual?id=E42&lang=en'>Visualize entity schema (E42)</NavDropdown.Item>
-                            <NavDropdown.Item href='/wikidataOutgoing?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&node=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FP31'>Property</NavDropdown.Item>
+                            <NavDropdown.Item href='/wikidataPropertyInfo?endpoint=https%3A%2F%2Fquery.wikidata.org%2Fsparql&entities=%5B%7B"label"%3A"instance%20of"%2C"id"%3A"P31"%2C"uri"%3A"http%3A%2F%2Fwww.wikidata.org%2Fentity%2FP31"%2C"descr"%3A"that%20class%20of%20which%20this%20subject%20is%20a%20particular%20example%20and%20member"%7D%5D'>Show property (P31)</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Settings" id="basic-nav-dropdown">
                             <NavDropdown.Item href={mkHash(API.changeWikibaseURLRoute)}>Change target Wikibase</NavDropdown.Item>
