@@ -4,13 +4,14 @@ import Alert from "react-bootstrap/Alert";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import {mkPermalink, params2Form, Permalink} from "../Permalink";
+import {mkPermalink, mkPermalinkLong, Permalink} from "../Permalink";
 import axios from "axios";
-import Pace from "react-pace-progress";
 import ShExForm from "../shex/ShExForm";
 import qs from "query-string";
 import {SchemaEntities} from "../resources/schemaEntities";
 import API from "../API";
+import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function paramsFromQueryParams(params) {
     let newParams = {};
@@ -30,22 +31,57 @@ function WikidataSchemaInfo(props) {
     const [error,setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [schemaEntity,setSchemaEntity] = useState([]);
+    const [lastSchemaEntity, setLastSchemaEntity] = useState([]);
+    const [selectedEntity,setSelectedEntity] = useState([]);
+    const [progressPercent,setProgressPercent] = useState(0);
 
     useEffect(() => {
             if (props.location.search) {
                 const queryParams = qs.parse(props.location.search);
                 let params = paramsFromQueryParams(queryParams);
-                console.log(`Params in location search: ${JSON.stringify(params)}| ${JSON.stringify(props.location.search)}`)
-                const e = getSchemaEntity(params);
-                fetchSchemaEntity(e);
+                if (params['id']) {
+                    const schemaEntity = getSchemaEntity(params);
+                    if (schemaEntity) {
+                        setSchemaEntity(schemaEntity)
+                        setLastSchemaEntity(schemaEntity)
+                    }
+                    else setError("Required GET parameter 'ID'")
+                }
             }
         },
         [props.location.search]
     );
 
+    useEffect( () => {
+        if (schemaEntity) {
+            if (schemaEntity.length > 0) {
+                // Remove results / errors / permalink from previous query
+                resetState()
+                // Update history
+                setUpHistory()
+                fetchSchemaEntity(schemaEntity)
+            }
+        }
+        else {
+            setError(`No entity selected, SchemaEntity: ${JSON.stringify(schemaEntity)}`)
+        }
+    }, [schemaEntity])
+
+    function getSchemaEntity(params) {
+        const id = params['id']
+        const lang = params['lang'] ? params['lang'] : 'en'
+        const e = SchemaEntities.find(e => e.id === id)
+        if (e) {
+            console.log(`found entity: ${JSON.stringify(e)}`)
+            return mkSchemaEntity(e,lang)
+        } else {
+            setError(`Entity with supplied ID '${id}' not found`)
+        }
+    }
+
     function mkSchemaEntity(e, lang) {
         if (e && e.labels) {
-            const labelRecord = e.labels[lang]? e.labels[lang]: e.labels['en'] ;
+            const labelRecord = e.labels[lang]? e.labels[lang]: e.labels['en']
             return [{
                 id: e.id,
                 label: labelRecord.label,
@@ -54,97 +90,91 @@ function WikidataSchemaInfo(props) {
                 webUri: e.webUri,
                 lang: lang
             }]
-        } else return null;
+        } else return null
     }
 
-    function getSchemaEntity(params) {
-        const id = params['id'];
-        const lang = params['lang'] ? params['lang'] : 'en'
-        const e = SchemaEntities.find(e => e.id === id)
-        if (e) {
-            console.log(`found entity: ${JSON.stringify(e)}`);
-            return mkSchemaEntity(e,lang);
-        } else {
-            setError(`Entity with id ${id} not found`)
+    const fetchSchemaEntity = async () => {
+        console.log(`fetchSchemaEntity(${JSON.stringify(schemaEntity)})`)
+        setLoading(true)
+        setProgressPercent(10)
+        try {
+            const entity = schemaEntity[0]
+            setProgressPercent(30)
+            const schema = await axios.get(entity.conceptUri)
+            setProgressPercent(80)
+            setSchemaId(entity.id)
+            setSchemaLabel(entity.label)
+            setSchemaDescr(entity.descr)
+            setSchemaWebUri(entity.webUri)
+            setShExContent(schema.data)
+            setPermalink(await mkPermalink(API.wikidataSchemaInfoRoute, {id: entity.id, lang: entity.lang}))
+            setProgressPercent(100)
+        } catch(error) {
+            setError(`Error doing request SchemaEntity: ${JSON.stringify(schemaEntity)}: ${error.message}`)
         }
-    }
-
-
-    const fetchSchemaEntity = async (e) => {
-        console.log(`fetchSchemaEntity(${JSON.stringify(e)})`)
-        setError(null);
-        setLoading(true);
-        if (e && e.length) {
-            try {  const entity = e[0];
-                const schema = await axios.get(entity.conceptUri);
-                const schemaStr = schema.data ;
-                console.log(`Returning from get Entity: ${JSON.stringify(schemaStr)}`)
-                setPermalink(mkPermalink(API.wikidataSchemaInfoRoute, {id: entity.id, lang: entity.lang}))
-                setLoading(false);
-                setSchemaEntity(e)
-                setSchemaId(entity.id);
-                setSchemaLabel(entity.label);
-                setSchemaDescr(entity.descr);
-                setSchemaWebUri(entity.webUri);
-                setShExContent(schemaStr);
-            } catch(error) {
-                setLoading(false);
-                setError(`Error doing request SchemaEntity: ${JSON.stringify(schemaEntity)}: ${error.message}`)
-            };
-        } else {
-            setLoading(false);
-            setError(`No entity selected, SchemaEntity: ${JSON.stringify(schemaEntity)}`)
+        finally {
+            setLoading(false)
         }
     }
 
     function handleSubmit(e) {
-        e.preventDefault();
-        fetchSchemaEntity(schemaEntity);
+        e.preventDefault()
+        setSchemaEntity(selectedEntity)
+    }
 
-/*        setError(null);
-        setLoading(true);
-        if (schemaEntity && schemaEntity.length) {
-            const entity = schemaEntity[0];
-            axios.get(entity.conceptUri)
-                .then(result => result.data)
-                .then(result => {
-                    setLoading(false);
-                    setSchemaId(entity.id);
-                    setSchemaLabel(entity.label);
-                    setSchemaDescr(entity.descr);
-                    setSchemaWebUri(entity.webUri);
-                    setSchemaConceptUri(entity.conceptUri);
-                    setShExContent(result)
-                })
-                .catch((error) => {
-                    setLoading(false);
-                    setError(`Error doing request to ${entity}`)
-                });
-        } else {
-            setError("No entity selected")
-        } */
+    function setUpHistory() {
+        // Store the last search URL in the browser history to allow going back
+        if (lastSchemaEntity && schemaEntity &&
+            lastSchemaEntity.length && schemaEntity.length &&
+            lastSchemaEntity[0].id.localeCompare(schemaEntity[0].id) !== 0){
+            // eslint-disable-next-line no-restricted-globals
+            history.pushState(null, document.title, mkPermalinkLong(API.wikidataSchemaInfoRoute, {
+                id: lastSchemaEntity[0].id,
+                lang: lastSchemaEntity[0].lang
+            }))
+        }
+        // Change current url for shareable links
+        // eslint-disable-next-line no-restricted-globals
+        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataSchemaInfoRoute, {
+            id: schemaEntity[0].id,
+            lang: schemaEntity[0].lang
+        }))
+
+        setLastSchemaEntity(schemaEntity)
+
+    }
+
+    function resetState() {
+        setShExContent(null)
+        setPermalink(null)
+        setError(null)
+        setProgressPercent(0)
     }
 
     return (
        <Container>
          <h1>Info about Wikidata Schema entity</h1>
-         <InputSchemaEntityByText onChange={setSchemaEntity} entity={schemaEntity} />
+         <InputSchemaEntityByText endpoint={API.wikidataContact.url} onChange={setSelectedEntity} entity={selectedEntity} />
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Info about schema entity</Button>
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Get schema info
+                 <ReloadIcon className="white-icon"/>
+             </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
+          { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null }
+          { permalink? <Permalink url={permalink} />: null }
           { error? <Alert variant="danger">{error}</Alert>: null }
           { shExContent?
               <div>
                   <h1>{schemaId} - {schemaLabel}</h1>
                   <p>{schemaDescr}</p>
-                  <p><code><a href={schemaWebUri}>{schemaWebUri}</a></code></p>
+                  <p><code><a target="_blank" href={schemaWebUri}>{schemaWebUri}</a></code></p>
                   <p>Raw schema uri: <code><a href={schemaConceptUri}>{schemaConceptUri}</a></code></p>
               <ShExForm onChange={()=>null} placeholder={''} readonly={true} value={shExContent} />
               </div>
               : null
           }
-          { permalink? <Permalink url={permalink} />: null }
        </Container>
     );
 }

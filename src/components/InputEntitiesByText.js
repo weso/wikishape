@@ -19,26 +19,32 @@ function InputEntitiesByText(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
     const [selected, setSelected] = useState(props.entities);
+    const [endpoint] = useState(props.endpoint || API.currentUrl());
     const [language,setLanguage] = useState(defaultLanguage);
 
     function makeAndHandleRequest(label, language, page = 0) {
         const lang = language[0] ? language[0].label : "en" ;
-        return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
+        return fetch(`${SEARCH_URI}?endpoint=${endpoint}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
-                // console.log(`Response for ${label}: ${JSON.stringify(json)}`);
                 return json;
-            });
+            })
+            .catch( () => [])
     }
 
 
     function handleSearch(query) {
         setIsLoading(true);
-        console.log(`before MakeAndHandleRequest: ${JSON.stringify(language)}`);
         makeAndHandleRequest(query, language, 0)
             .then((resp) => {
                 // console.log(`handleSearch, Response: ${JSON.stringify(resp)}`);
                 setIsLoading(false);
+
+                // Prune bad formatted results
+                for (const it of resp){
+                    if (!it.label || typeof it.label != 'string') it.label = ''
+                    if (!it.descr || typeof it.descr != 'string') it.descr = ''
+                }
                 setOptions(resp);
             });
     }
@@ -63,7 +69,6 @@ function InputEntitiesByText(props) {
 
     return (
         <Container fluid={true}>
-        {/*<Row>{JSON.stringify(language)}</Row>*/}
         <Row>
             <Col>
             <AsyncTypeahead
@@ -85,7 +90,6 @@ function InputEntitiesByText(props) {
                 useCache={false}
                 selected={selected}
                 onChange={(selected) => {
-                    console.log(`Selected: ${JSON.stringify(selected)}`);
                     props.onChange(selected);
                     setSelected(selected)
                 }}

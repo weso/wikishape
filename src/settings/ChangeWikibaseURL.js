@@ -170,7 +170,7 @@ function ChangeWikibaseURL(props) {
                 <span style={messageUrlStyle}>{messageUrl}</span><br/>
 
 
-                <Form.Label>Custom Wikibase Endpoint</Form.Label>
+                <Form.Label>Custom Wikibase SPARQL Endpoint</Form.Label>
                 <Form.Control as="input"
                               type="url"
                               placeholder="https://..."

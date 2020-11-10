@@ -1,7 +1,8 @@
 // import React from 'react';
 import API from "../API";
-import React, {Fragment} from "react";
+import React from "react";
 import {ExternalLinkIcon} from "react-open-iconic-svg";
+import {Slide} from "react-toastify";
 
 // const { Module, render } = require('viz.js/full.render.js');
 
@@ -52,6 +53,19 @@ export function maybeAdd(maybe,name,obj) {
     return obj;
 }
 
+export const notificationSettings = {
+    permalinkText: 'Link copied to clipboard!',
+    position: 'bottom-right',
+    autoClose: 2500,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnFocusLoss: false,
+    pauseOnHover: true,
+    closeButton: false,
+    transition: Slide,
+    limit: 1
+}
+
 // export const internalPrefixes = ["prn", "prv", "pqv", "pq", "pr", "psn", "psv", "ps", "wdata", "wdno", "wdref", "wds", "wdt", "wdtn", "wdv", "wd", "p"];
 
 /**
@@ -64,7 +78,7 @@ export function maybeAdd(maybe,name,obj) {
     prefix: string,
     type: string,
     uri: any
- }
+ }}
  */
 export function showQualify(node, prefixMap) {
     // console.log(`node: ${JSON.stringify(node)}`)
@@ -126,8 +140,7 @@ export function showQualify(node, prefixMap) {
                     node: node
                 };
             }
-     // const matchString =
-     const datatypeLiteralRegex = /\"(.*)\"\^\^(.*)/g
+     const datatypeLiteralRegex = /"(.*)"\^\^(.*)/g
      const matchDatatypeLiteral = datatypeLiteralRegex.exec(node);
      if (matchDatatypeLiteral) {
        const literal = matchDatatypeLiteral[1];
@@ -144,7 +157,7 @@ export function showQualify(node, prefixMap) {
           node: node
        }
      }
-     const langLiteralRegex = /\"(.*)\"@(.*)/g;
+     const langLiteralRegex = /"(.*)"@(.*)/g;
      const matchLangLiteral = langLiteralRegex.exec(node);
      if (matchLangLiteral) {
        const literal = matchLangLiteral[1];
@@ -158,7 +171,19 @@ export function showQualify(node, prefixMap) {
                     node: node
                 }
      }
-     const literalRegex = /\"(.*)\"/g;
+    const intLiteralRegex = /^(-?[0-9]+(\.[0-9]+)?)$/g;
+    const matchIntLiteral = intLiteralRegex.exec(node);
+    if (matchIntLiteral) {
+        return {
+            type: 'IntLiteral',
+            prefix: '',
+            localName: '',
+            str: node,
+            datatype: null,
+            node: node
+        }
+    }
+     const literalRegex = /"(.*)"/g;
      const matchLiteral = literalRegex.exec(node);
      if (matchLiteral) return {
        type: 'Literal',
@@ -200,10 +225,7 @@ export function showQualified(qualified, prefixes) {
         case 'QualifiedName':
             // console.log(`QualifiedName: ${qualified.prefix}`)
             if (prefixes[qualified.prefix]) {
-                return <Fragment>
-                    <a href={"#" + API.wikidataOutgoingRoute + "?node=" + encodeURIComponent(qualified.uri)}>{qualified.str}</a>
-                    <a href={qualified.uri}><ExternalLinkIcon /></a>
-                </Fragment>
+                return <a target="_blank" href={qualified.uri}>{qualified.str} <ExternalLinkIcon /></a>
             } else {
                 return <fragment>{qualified.str} <a href={qualified.uri}><ExternalLinkIcon/></a></fragment>
             }
@@ -211,9 +233,10 @@ export function showQualified(qualified, prefixes) {
         case 'DatatypeLiteral' : return <span>{qualified.str}^^<a href={qualified.datatype}>&lt;{qualified.datatype}&gt;</a></span>;
         case 'Literal' : return <span>{qualified.str}</span>;
         case 'LangLiteral' : return <span>{qualified.str}</span>;
+        case 'IntLiteral' : return <span>{qualified.str}</span>;
         case 'START' : return <span>{qualified.str}</span>;
         default:
-            console.error(`Unknown type for qualified value`);
+            console.error(`Unknown type for qualified value ${qualified.str}`);
             return <span>{qualified.str}</span>
     }
 }

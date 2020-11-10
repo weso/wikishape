@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 function NotFound() {
  return (
-     <Jumbotron>
+     <Jumbotron className={"white-background"}>
          <h1>Not found</h1>
              <Button variant="primary" href="/">Go Home</Button>
      </Jumbotron>

@@ -61,6 +61,8 @@ class API {
     static currentEndpoint = () => localStorage.getItem("endpoint") || API.wikidataContact.endpoint;
     static currentUrl = () => localStorage.getItem("url") || API.wikidataContact.url;
 
+    static serverPermalinkEndpoint = API.rootApi + 'permalink/generate'
+
     static wikidataUrl =  "https://query.wikidata.org/sparql";
     // static wikidataUrlFetch =  "https://www.wikidata.org/sparql";
 

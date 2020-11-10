@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import PropTypes from "prop-types";
-import {AsyncTypeahead, Typeahead, Token} from 'react-bootstrap-typeahead';
+import {AsyncTypeahead, Token} from 'react-bootstrap-typeahead';
 import API from "../API";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
@@ -23,12 +23,13 @@ function InputPropertiesByText(props) {
 
     function makeAndHandleRequest(label, language, page = 0) {
         const lang = language[0] ? language[0].label : "en" ;
-        return fetch(`${SEARCH_URI}?endpoint=${localStorage.getItem("url") || API.wikidataContact.url}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
+        return fetch(`${SEARCH_URI}?endpoint=${API.currentUrl()}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page * PER_PAGE}`)
             .then((resp) => resp.json())
             .then((json) => {
                 console.log(`Response for ${label}: ${JSON.stringify(json)}`);
                 return json;
-            });
+            })
+            .catch( () => []);
     }
 
 
@@ -67,6 +68,7 @@ function InputPropertiesByText(props) {
         <Row>
             <Col>
             <AsyncTypeahead
+                id='type-ahead'
                 filterBy={['id','label','descr']}
                 labelKey="id"
                 multiple={props.multiple}
@@ -78,7 +80,7 @@ function InputPropertiesByText(props) {
                 onSearch={handleSearch}
                 renderToken={customRenderToken}
                 placeholder="P.. or label"
-                renderMenuItemChildren={(option, props) => (
+                renderMenuItemChildren={(option) => (
                     <MenuItem key={option.id} item={option}/>
                 )}
                 useCache={false}

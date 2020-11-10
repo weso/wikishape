@@ -18,8 +18,7 @@ function ResultQuery(props)  {
                 <details><pre>{JSON.stringify(result)}</pre></details>
             </div>
     } else {
-        const prefixes = wikidataPrefixes ;
-        const table = parseData(result.result, prefixes);
+        const table = parseData(result.result, wikidataPrefixes);
 //      console.log(`ResultQuery. Table = ${JSON.stringify(table)}`);
         msg = <div>
             <BootstrapTable

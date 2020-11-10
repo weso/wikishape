@@ -1,15 +1,13 @@
-import React, {useState, useReducer, useEffect} from 'react';
+import React, {useReducer, useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Pace from "react-pace-progress";
 import {mkPermalink, params2Form, Permalink} from "../Permalink";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ShExTabs from "../shex/ShExTabs";
 import API from "../API"
-import {convertTabSchema, showQualify} from "../utils/Utils";
+import {showQualify} from "../utils/Utils";
 import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import InputShapeLabel from "../components/InputShapeLabel";
@@ -21,6 +19,8 @@ import { paramsFromShEx, initialShExStatus, shExReducer, shExParamsFromQueryPara
 import { mergeResult } from "../results/ResultValidate";
 import {wikidataPrefixes} from "../resources/wikidataPrefixes";
 import qs from "query-string";
+import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataValidate(props) {
 
@@ -40,6 +40,9 @@ function WikidataValidate(props) {
 
     const [status, dispatch] = useReducer(statusReducer, initialStatus);
     const [shEx, dispatchShEx] = useReducer(shExReducer, initialShExStatus);
+    const [progressPercent,setProgressPercent] = useState(0);
+    const [progressLabel,setProgressLabel] = useState('');
+
     const urlServer = API.schemaValidate;
 
     useEffect(() => {
@@ -74,17 +77,19 @@ function WikidataValidate(props) {
         console.log(`Change schema entity: ${JSON.stringify(e)}`);
         if (e && e.length) {
             const schemaEntity = e[0]
-            dispatch({type: 'set-loading'});
+            dispatch({type: 'set-loading', value: true})
+            setProgressPercent(90)
+            setProgressLabel("Retrieving schema info...")
             let params = {}
-            params['schemaURL'] = schemaEntity.conceptUri;
-            params['schemaFormat'] = 'ShExC';
-            params['schemaEngine'] = 'ShEx';
+            params['schemaURL'] = schemaEntity.conceptUri
+            params['schemaFormat'] = 'ShExC'
+            params['schemaEngine'] = 'ShEx'
             axios.post(API.schemaInfo, params2Form(params), {
                 headers: {'Access-Control-Allow-Origin': '*'}
             })
                 .then(response => response.data)
                 .then(result => {
-                    console.log(`Result of schema info: ${JSON.stringify(result)}`);
+                    console.log(`Result of schema info: ${JSON.stringify(result)}`)
                     dispatch({
                         type: 'set-shapeList',
                         value: {
@@ -95,6 +100,11 @@ function WikidataValidate(props) {
                 .catch(error => {
                     dispatch({type: 'set-error', value: error.message})
                 })
+                .finally( () => {
+                    dispatch({type: 'set-loading', value: false});
+                    setProgressLabel('')
+                    setProgressPercent(0)
+                })
             dispatch({type: 'set-schemaEntity', value: e});
         }
     }
@@ -102,7 +112,7 @@ function WikidataValidate(props) {
     function statusReducer(status,action) {
         switch (action.type) {
             case "set-loading":
-              return { ...status, loading: true, error: false};
+              return { ...status, loading: action.value, error: false};
             case "set-permalink":
                 return {...status, permalink: action.value }
             case "set-params":
@@ -120,7 +130,6 @@ function WikidataValidate(props) {
                     error: false,
                     result: mergeResult(status.result, action.value, status.shapesPrefixMap)};
             case "unset-result":
-                console.log(`unset-result to null!!`);
                 return { ...status, result: null };
             case "set-shapeLabel":
                 return { ...status, shapeLabel: action.value }
@@ -160,7 +169,6 @@ function WikidataValidate(props) {
         return {
             valid: false,
             type: 'Result',
-            message: 'Validating...',
             shapeMap: resultMap,
             errors: [],
             nodesPrefixMap: wikidataPrefixes, // The prefix map for nodes is wikidata endpoint
@@ -179,7 +187,7 @@ function WikidataValidate(props) {
         return params;
     }
 
-    function validate() {
+    async function validate() {
         console.log(`Validate: entities: ${JSON.stringify(status.entities)}, shape: ${JSON.stringify(status.shapeLabel)}`)
         const initialResult = resultFromEntities(status.entities, status.shapeLabel);
         console.log(`schemaActiveTab: ${status.schemaActiveTab}`);
@@ -193,7 +201,7 @@ function WikidataValidate(props) {
         const paramsPermalink = {...paramsShEx,
             nodes: status.entities,
             shape: status.shapeLabel};
-        dispatch({type: "set-permalink", value: mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
+        dispatch({type: "set-permalink", value: await mkPermalink(API.wikidataValidateRoute, paramsPermalink)});
         dispatch({type: "set-result", value: initialResult});
         status.entities.forEach(e => {
             const paramsEndpoint = { endpoint: localStorage.getItem("url") || API.wikidataContact.url };
@@ -209,21 +217,42 @@ function WikidataValidate(props) {
 
     function handleSubmit(event) {
         event.preventDefault();
-        validate();
+        resetState()
+        console.log("Validate buttons! Entities: " + status.entities)
+        if (status.entities && status.entities.length) {
+            validate()
+        }
+        else {
+            dispatch({
+                type: 'set-error',
+                value: `No entities selected`
+            });
+        }
+
     }
 
     function postValidate(url, formData, e) {
 //        dispatch({type: 'set-loading'} );
-        axios.post(url,formData).then (response => response.data)
+        dispatch({type: 'set-loading', value: true})
+        setProgressPercent(15)
+        axios.post(url,formData).then (response => {
+            setProgressPercent(65)
+            return response.data
+        })
             .then((data) => {
                 console.log(`Return from ${e}`);
                 dispatch({type: 'set-result', value: data});
+                setProgressPercent(100)
             })
             .catch(function (error) {
                 dispatch({
                     type: 'set-error',
                     value: `Error validating ${e} ${url} ${JSON.stringify(formData)}: ${error}`
                 });
+            })
+            .finally( () => {
+                dispatch({type: 'set-loading', value: false})
+                setProgressPercent(0)
             })
     }
 
@@ -237,55 +266,72 @@ function WikidataValidate(props) {
         dispatch({type: 'set-schemaActiveTab', value: e});
     }
 
+    function resetState() {
+        dispatch({type: 'unset-result'});
+        dispatch({type: 'set-permalink', value: ''})
+        dispatch({type: 'set-error', value: ''})
+        dispatch({type: 'set-loading', value: false})
+        setProgressPercent(0)
+        setProgressLabel('')
+    }
+
     return (
        <Container>
-         <h1>Validate Wikidata entities (through SPARQL endpoint)</h1>
-                   { status.result || status.loading || status.error ?
-                       <Row>
-                           {status.loading ? <Pace color="#27ae60"/> :
-                            status.error? <Alert variant="danger">{status.error}</Alert> :
-                            status.result ?
-                              <ResultValidate result={status.result} /> : null
-                           }
-                           { status.permalink &&  <Col><Permalink url={status.permalink} /> </Col>}
-                       </Row> : null
+         <h1>Validate Wikibase entities (through SPARQL endpoint)</h1>
+           <h4>Target Wikibase: <a target="_blank" href={API.currentUrl()}>{API.currentUrl()}</a></h4>
+           <Row>
+               <Form onSubmit={handleSubmit}>
+                   <InputEntitiesByText onChange={handleChange} entities={status.entities} />
+                   <Tabs activeKey={status.schemaActiveTab}
+                         transition={false}
+                         id="SchemaTabs"
+                         onSelect={handleTabChange}
+                   >
+                   <Tab eventKey="BySchema" title="Wikidata schema">
+                       <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={status.schemaEntity} />
+                    </Tab>
+                    <Tab eventKey="ByShExTab" title="ShEx">
+                       <ShExTabs activeTab={shEx.shExActiveTab}
+                             handleTabChange={handleShExTabChange}
+
+                             textAreaValue={shEx.shExTextArea}
+                             handleByTextChange={handleShExByTextChange}
+
+                             shExUrl={shEx.shExUrl}
+                             handleShExUrlChange={handleShExUrlChange}
+
+                             handleFileUpload={handleShExFileUpload}
+
+                             dataFormat={shEx.shExFormat}
+                             handleShExFormatChange={handleShExFormatChange} />
+                        </Tab>
+                   </Tabs>
+                   <InputShapeLabel onChange={handleShapeLabelChange}
+                                    value={status.shapeLabel}
+                                    shapeList={status.shapeList}/>
+                   <Button className={"btn-with-icon " + (status.loading ? "disabled" : "")}
+                           variant="primary" type="submit" disabled={status.loading}>
+                       Validate entities
+                       <ReloadIcon className="white-icon"/>
+                   </Button>
+               </Form>
+           </Row>
+           { status.result || status.loading || status.error ?
+               <Row style={{display: 'block'}}>
+                   {
+                       status.loading ? <ProgressBar style={{width: "100%"}} striped animated
+                                                     variant="info" now={progressPercent} label={progressLabel}/> : null
                    }
-                   <Row>
-                       <Form onSubmit={handleSubmit}>
-                           <InputEntitiesByText onChange={handleChange} entities={status.entities} />
-                           <Tabs activeKey={status.schemaActiveTab}
-                                 transition={false}
-                                 id="SchemaTabs"
-                                 onSelect={handleTabChange}
-                           >
-                           <Tab eventKey="BySchema" title="Wikidata schema">
-                               <InputSchemaEntityByText onChange={handleSchemaEntityChange} entity={status.schemaEntity} />
-                            </Tab>
-                            <Tab eventKey="ByShExTab" title="ShEx">
-                               <ShExTabs activeTab={shEx.shExActiveTab}
-                                     handleTabChange={handleShExTabChange}
-
-                                     textAreaValue={shEx.shExTextArea}
-                                     handleByTextChange={handleShExByTextChange}
-
-                                     shExUrl={shEx.shExUrl}
-                                     handleShExUrlChange={handleShExUrlChange}
-
-                                     handleFileUpload={handleShExFileUpload}
-
-                                     dataFormat={shEx.shExFormat}
-                                     handleShExFormatChange={handleShExFormatChange} />
-                                </Tab>
-                           </Tabs>
-                           <InputShapeLabel onChange={handleShapeLabelChange}
-                                            value={status.shapeLabel}
-                                            shapeList={status.shapeList}/>
-                           <Button variant="primary"
-                                   type="submit">Validate wikidata entities</Button>
-                       </Form>
-
-                   </Row>
-           </Container>
+                   {
+                       status.error? <Alert variant="danger">{status.error}</Alert> :
+                       status.result ? <ResultValidate result={status.result} /> : null
+                   }
+                   {
+                       status.permalink ? <Permalink url={status.permalink} /> : null
+                   }
+               </Row> : null
+           }
+       </Container>
    );
 }
 

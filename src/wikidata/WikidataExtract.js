@@ -6,92 +6,150 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import API from "../API";
-import {mkPermalink, params2Form, Permalink} from "../Permalink";
+import {mkPermalink, mkPermalinkLong, params2Form, Permalink} from "../Permalink";
 import axios from "axios";
 import ResultDataExtract from "../results/ResultDataExtract";
-import Pace from "react-pace-progress";
 import * as qs from "qs";
+import {ReloadIcon} from "react-open-iconic-svg";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function WikidataExtract(props) {
 
     const [entities,setEntities] = useState([]);
+    const [selectedEntities, setSelectedEntities] = useState([]);
+    const [lastEntities, setLastEntities] = useState([]);
     const [permalink,setPermalink] = useState('');
     const [result,setResult] = useState('');
     const [error,setError] = useState(null);
     const [loading,setLoading] = useState(false);
-    const url = API.dataExtract;
+    const [progressPercent,setProgressPercent] = useState(0);
 
-    function handleChange(es) {
-        setEntities(es);
-    }
+    const url = API.dataExtract;
 
     useEffect(() => {
         if (props.location.search) {
-            let params = {};
-            const queryParams = qs.parse(props.location.search);
-            params['entity'] = queryParams.entity;
-            const formData = params2Form(params);
-            postExtract(url, formData, () => {
-                setEntities(updateEntities(params,entities));
-            });
+            const queryParams = qs.parse(props.location.search.substring(1));
+            if (queryParams.entities) {
+                let entitiesFromUrl = []
+                try {
+                    entitiesFromUrl = JSON.parse(queryParams.entities)
+                }
+                catch (e) {
+                    setError("Could not parse parameters from URL")
+                }
+                setSelectedEntities(entitiesFromUrl)
+                setEntities(entitiesFromUrl)
+                setLastEntities(entitiesFromUrl)
+            }
         }
     }, [props.location.search]);
 
-    function updateEntities(params, entities) {
-        if (params['entity']) {
-            return [ params['entity'] ]
-        } else {
-            return entities
+    useEffect( () => {
+        if (entities) {
+            if (entities.length && entities[0].uri) {
+                // Remove results / errors / permalink from previous query
+                resetState()
+                // Update history
+                setUpHistory()
+                postExtract()
+            }
         }
-    }
+        else {
+            setError(`No entities selected, SchemaEntity: ${JSON.stringify(entities)}`)
+        }
+    }, [entities])
 
-    function postExtract(url, formData, cb) {
-        setLoading(true);
-        axios.post(url,formData)
-            .then (response => response.data)
-            .then((data) => {
-                setLoading(false);
-                setResult(data)
-                if (cb) cb()
-            })
-            .catch(function (error) {
-                setLoading(false);
-                setError(`Error in request: ${url}: ${error.message}`);
-            });
+    function handleChange(es) {
+        setSelectedEntities(es)
     }
 
     function handleSubmit(event) {
         event.preventDefault();
-        let params={}
-        params['endpoint'] = localStorage.getItem("endpoint") || API.wikidataContact.endpoint ;
-        if (entities && entities.length > 0 && entities[0].uri ) {
-            const nodeSelector = entities[0].uri
-            // params['nodeSelector'] = "<" + nodeSelector + ">";
-            params['entity'] = nodeSelector ;
-            console.log(`Node selector: ${nodeSelector}`);
-            setPermalink(mkPermalink(API.wikidataExtractRoute, params));
-            let formData = params2Form(params);
-            postExtract(url,formData);
-        } else {
-            setError(`No entities selected`)
+        setEntities(selectedEntities)
+    }
+
+    function postExtract(cb) {
+        setLoading(true);
+        setProgressPercent(10)
+        const params = {
+            // Pending to process more than the first entity
+            entity: entities[0].uri,
         }
+        const formData = params2Form(params)
+        setProgressPercent(30)
+        axios.post(url, formData)
+            .then (response => {
+                setProgressPercent(70)
+                return response.data
+            })
+            .then(async data => {
+                setResult(data)
+                setProgressPercent(100)
+                setPermalink(await mkPermalink(API.wikidataExtractRoute, {entities: JSON.stringify(entities)}));
+                if (cb) cb()
+            })
+            .catch(function (error) {
+                setError(`Error in request: ${url}: ${error.message}`);
+            })
+            .finally( () => setLoading(false));
+    }
+
+    function setUpHistory() {
+        // Store the last search URL in the browser history to allow going back
+        if (lastEntities && entities && JSON.stringify(lastEntities) !== JSON.stringify(entities)){
+            // eslint-disable-next-line no-restricted-globals
+            history.pushState(null, document.title, mkPermalinkLong(API.wikidataExtractRoute, {
+                entities: JSON.stringify(lastEntities)
+            }))
+        }
+        // Change current url for shareable links
+        // eslint-disable-next-line no-restricted-globals
+        history.replaceState(null, document.title ,mkPermalinkLong(API.wikidataExtractRoute, {
+            entities: JSON.stringify(entities)
+        }))
+
+        setLastEntities(entities)
+    }
+
+    function resetState() {
+        setResult(null)
+        setPermalink(null)
+        setError(null)
+        setProgressPercent(0)
     }
 
 
     return (
        <Container>
          <h1>Extract schema from Wikidata entities</h1>
-         <InputEntitiesByText onChange={handleChange} entities={entities} />
+         {/* This functionality only works with wikidata so this typeahead will look for Wikidata entities
+            even if another endpoint was configured
+         */}
+         <InputEntitiesByText endpoint={API.wikidataContact.url} onChange={handleChange} entities={entities} />
          <Table>
-               { entities.map(e => <tr><td>{e.label}</td><td>{e.uri}</td><td>{e.descr}</td></tr>)}
+             <tbody>
+               { selectedEntities.map(e =>
+                   <tr key={e.id || e.uri}>
+                       <td>{e.label || "Unknown label"}</td>
+                       <td>{<a target="_blank" href={e.uri}>{e.uri}</a> || "Unknown URI"}</td>
+                       <td>{e.descr || "No description provided"}</td>
+                   </tr>
+               )
+               }
+             </tbody>
          </Table>
          <Form onSubmit={handleSubmit}>
-               <Button variant="primary" type="submit">Extract Schema</Button>
+             <Button className={"btn-with-icon " + (loading ? "disabled" : "")}
+                     variant="primary" type="submit" disabled={loading}>
+                 Extract schema
+                 <ReloadIcon className="white-icon"/>
+             </Button>
          </Form>
-          {loading ? <Pace color="#27ae60"/> : null }
-          { error? <Alert variant="danger">${error}</Alert>: null }
-         <ResultDataExtract result={result} />
-         { permalink? <Permalink url={permalink} />: null }
+          { loading ? <ProgressBar striped animated variant="info" now={progressPercent}/> : null}
+          { permalink? <Permalink url={permalink} />: null }
+          { error? <Alert variant="danger">{error}</Alert>: null }
+          { result ? <ResultDataExtract result={result} /> : null}
+
        </Container>
     );
 }

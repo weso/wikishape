@@ -1,20 +1,19 @@
 import React from 'react';
 import Code from '../components/Code'
-import { mkMode } from "../utils/Utils"
+import Alert from "react-bootstrap/Alert";
 
 function ResultDataExtract(props) {
      const result = props.result
      let msg ;
-     if (result === "") {
+     if (!result) {
          msg = null
      } else
      if (result.error) {
          msg =
-             <div><p>Error: {result.error}</p>
-                </div>
+             <div><Alert variant="danger">Error: {result.error}</Alert></div>
      } else {
          msg = <div>
-             <p>{result.entity}</p>
+             <p>{<a target="_blank" href={result.entity}>{result.entity}</a>}</p>
              {result.result && (
                  <Code
                      value={result.result}

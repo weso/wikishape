@@ -1,14 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
-import {Typeahead, Token} from 'react-bootstrap-typeahead';
+import {Token, Typeahead} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.min.css';
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SelectLanguage from "./SelectLanguage";
-import { SchemaEntities } from "../resources/schemaEntities"
+import {SchemaEntities} from "../resources/schemaEntities"
 import InputGroup from "react-bootstrap/InputGroup";
+import API from "../API";
 
 
 const defaultLanguage = [{label: 'en', name:'English'}];
@@ -16,6 +17,7 @@ const defaultLanguage = [{label: 'en', name:'English'}];
 function InputSchemaEntityByText(props) {
     const [language,setLanguage] = useState(defaultLanguage);
     const [options, setOptions] = useState([]);
+    const [endpoint] = useState(props.endpoint || API.currentUrl());
 
     useEffect(() => {
          console.log(`Changing language to ${JSON.stringify(language[0])}`)
@@ -27,9 +29,9 @@ function InputSchemaEntityByText(props) {
     );
 
     function optionsFromSchemaEntities(lang) {
-        const ses = SchemaEntities.map(e => {
+        return SchemaEntities.map(e => {
             const labels = e.labels
-            let labelRecord = null ;
+            let labelRecord;
             if (lang && labels[lang]) {
                 labelRecord = labels[lang]
             } else {
@@ -39,13 +41,11 @@ function InputSchemaEntityByText(props) {
                 id: e.id,
                 label: labelRecord.label,
                 descr: labelRecord.descr,
-                conceptUri : e.conceptUri,
+                conceptUri: e.conceptUri,
                 webUri: e.webUri,
                 lang: lang
             }
-        });
-        // console.log(`entities(${lang}: ${JSON.stringify(ses)}`)
-        return ses
+        })
     }
 
     const MenuItem = ({item}) => (

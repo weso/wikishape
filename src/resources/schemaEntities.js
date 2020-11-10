@@ -1859,7 +1859,7 @@ export const SchemaEntities = [
     "labels" : {
       "fr" : {
         "lang" : "fr",
-        "label" : "édition d'une oeuvre écrite",
+        "label" : "édition d'une œuvre écrite",
         "descr" : "",
         "aliases" : ""
       },
@@ -2671,6 +2671,12 @@ export const SchemaEntities = [
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E56",
     "title" : "Danish verb (E56) - Wikidata",
     "labels" : {
+      "fr" : {
+        "lang" : "fr",
+        "label" : "verbe danois",
+        "descr" : "",
+        "aliases" : ""
+      },
       "pt" : {
         "lang" : "pt",
         "label" : "verbo (danês)",
@@ -3705,6 +3711,12 @@ export const SchemaEntities = [
         "lang" : "de",
         "label" : "Stadt",
         "descr" : "Schema für eine Stadt",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "stad",
+        "descr" : "schema för en stad",
         "aliases" : ""
       },
       "en" : {
@@ -5438,6 +5450,12 @@ export const SchemaEntities = [
         "label" : "2020 koronaviruspandemian paikallinen epidemia",
         "descr" : "",
         "aliases" : ""
+      },
+      "ms" : {
+        "lang" : "ms",
+        "label" : "kerebakan tempatan pandemik koronavirus 2020",
+        "descr" : "skema entiti kerebakan tempatan pandemik koronavirus 2020",
+        "aliases" : ""
       }
     }
   },
@@ -5451,6 +5469,12 @@ export const SchemaEntities = [
         "lang" : "en",
         "label" : "clinical trial",
         "descr" : "Entity Schema for a clinical trial",
+        "aliases" : ""
+      },
+      "fr" : {
+        "lang" : "fr",
+        "label" : "essai clinique",
+        "descr" : "schéma pour un essai clinique",
         "aliases" : ""
       },
       "ja" : {
@@ -5692,6 +5716,12 @@ export const SchemaEntities = [
       "en" : {
         "lang" : "en",
         "label" : "German verb",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "fr" : {
+        "lang" : "fr",
+        "label" : "verbe allemand",
         "descr" : "",
         "aliases" : ""
       }
@@ -6299,12 +6329,252 @@ export const SchemaEntities = [
     "id" : "E244",
     "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E244",
     "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E244",
-    "title" : "Act of the Oireachtas (E244) - Wikidata",
+    "title" : "Legislation of the Oireachtas (E244) - Wikidata",
     "labels" : {
       "en" : {
         "lang" : "en",
-        "label" : "Act of the Oireachtas",
-        "descr" : "primary legislation of the government of Ireland",
+        "label" : "Legislation of the Oireachtas",
+        "descr" : "legislation of the government of Ireland",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E245",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E245",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E245",
+    "title" : "Unicode plane (E245) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Unicode plane",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E246",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E246",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E246",
+    "title" : "Unicode block (E246) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Unicode block",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E247",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E247",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E247",
+    "title" : "Unicode character (E247) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Unicode character",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E248",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E248",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E248",
+    "title" : "album (E248) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "album",
+        "descr" : "simple schema for albums",
+        "aliases" : "audio album | music album | record album"
+      },
+      "nb" : {
+        "lang" : "nb",
+        "label" : "album",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E249",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E249",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E249",
+    "title" : "embassy (E249) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "embassy",
+        "descr" : "schema for embassies",
+        "aliases" : ""
+      },
+      "fr" : {
+        "lang" : "fr",
+        "label" : "ambassade",
+        "descr" : "schéma pour un ambassade",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E250",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E250",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E250",
+    "title" : "Swedish municipal (E250) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Swedish municipal",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "sv" : {
+        "lang" : "sv",
+        "label" : "Svensk kommun",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E251",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E251",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E251",
+    "title" : "non-coding RNA (E251) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "non-coding RNA",
+        "descr" : "general schema describing non-coding RNA items",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E252",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E252",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E252",
+    "title" : "non-coding RNA gene (E252) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "non-coding RNA gene",
+        "descr" : "general schema describing non-coding RNA gene items",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E253",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E253",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E253",
+    "title" : "Breton verb (E253) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Breton verb",
+        "descr" : "basic schema for regular Breton verbs",
+        "aliases" : "regular Breton verb | Breton regular verb"
+      },
+      "br" : {
+        "lang" : "br",
+        "label" : "verb e brezhoneg",
+        "descr" : "",
+        "aliases" : ""
+      },
+      "fr" : {
+        "lang" : "fr",
+        "label" : "verbe breton",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E254",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E254",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E254",
+    "title" : "Bengali adjectives (E254) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Bengali adjectives",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E255",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E255",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E255",
+    "title" : "Bengali verbs (E255) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Bengali verbs",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E256",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E256",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E256",
+    "title" : "Bengali adverbs (E256) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Bengali adverbs",
+        "descr" : "",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E257",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E257",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E257",
+    "title" : "politician (E257) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "politician",
+        "descr" : "simple schema for validating a politician",
+        "aliases" : "political figure | political leader"
+      }
+    }
+  },
+  {
+    "id" : "E258",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E258",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E258",
+    "title" : "Genewiki schema (E258) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Genewiki schema",
+        "descr" : "GeneWiki schema from https://doi.org/10.7554/eLife.52614",
+        "aliases" : ""
+      }
+    }
+  },
+  {
+    "id" : "E259",
+    "conceptUri" : "https://www.wikidata.org/wiki/Special:EntitySchemaText/E259",
+    "webUri" : "https://www.wikidata.org/wiki/EntitySchema:E259",
+    "title" : "Wikibase property (E259) - Wikidata",
+    "labels" : {
+      "en" : {
+        "lang" : "en",
+        "label" : "Wikibase property",
+        "descr" : "Schema description of properties in Wikibase/Wikidata",
         "aliases" : ""
       }
     }
