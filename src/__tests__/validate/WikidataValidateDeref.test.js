@@ -57,7 +57,7 @@ test("WikidataValidateDeref - submit data and show results after data submit", a
   fireEvent.click(shexTab);
 
   // submit form
-  const submitBtn = queryByText(/^Validate wikidata entities$/i);
+  const submitBtn = queryByText(/^Validate entities$/i);
   fireEvent.click(submitBtn);
   expect(axios.post).toHaveBeenCalledTimes(0); // uses get request
 

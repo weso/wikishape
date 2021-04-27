@@ -5,7 +5,6 @@ import React from "react";
 import { addCreateTextRangePolyfill } from "../../utils/TestPolyfill";
 import WikidataValidate from "../../wikidata/WikidataValidate";
 
-
 function before() {
   addCreateTextRangePolyfill();
   return { search: "" };
@@ -17,9 +16,7 @@ test("WikidataValidate - shows data", async () => {
     <WikidataValidate location={location} />
   );
   // Page title
-  const title = await waitForElement(() =>
-    findAllByText(/Validate Wikidata entities/i)
-  );
+  const title = await waitForElement(() => findAllByText(/Validate entities/i));
   title.forEach((t) => expect(t).toBeInTheDocument());
 
   // 2 visible input tabs
@@ -49,12 +46,9 @@ test("WikidataValidate - submit data and show results after data submit", async 
   fireEvent.click(shexTab);
 
   // submit form
-  fireEvent.click(queryByText(/^Validate wikidata entities$/));
+  fireEvent.click(queryByText(/^Validate entities$/));
 
   // expect an alert with the validation status
   const alerts = await waitForElement(() => queryAllByRole("alert"));
   expect(alerts.length).toEqual(1);
-
-  // Expect permalink
-  expect(queryByText(/permalink/i)).toBeInTheDocument();
 });
