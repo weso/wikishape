@@ -1,6 +1,14 @@
+import environmentConfiguration from "./EnvironmentConfig";
+
+console.log(
+  "ENV: ",
+  environmentConfiguration,
+  environmentConfiguration.rdfShapeHost
+);
+
 class API {
   // Routes in server
-  static rootApi = process.env.REACT_APP_RDFSHAPE_HOST + "/api/";
+  static rootApi = environmentConfiguration.rdfShapeHost + "/api/";
 
   static dataInfo = API.rootApi + "data/info";
   static dataOutgoing = API.rootApi + "endpoint/outgoing";

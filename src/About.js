@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 import Container from "react-bootstrap/Container";
 import API from "./API";
+import environmentConfiguration from "./EnvironmentConfig";
 
 class About extends React.Component {
   render() {
@@ -31,7 +32,8 @@ class About extends React.Component {
         </p>
         <ul>
           <li>
-            Version {process.env.REACT_APP_VERSION} [{process.env.NODE_ENV}]
+            Version {environmentConfiguration.appVersion} [
+            {process.env.NODE_ENV}]
           </li>
           <li>
             Server host:{" "}

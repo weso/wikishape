@@ -10,6 +10,7 @@ import Table from "react-bootstrap/Table";
 import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
+import environmentConfiguration from "../EnvironmentConfig";
 import { mkPermalinkLong } from "../Permalink";
 import ResultDataExtract from "../results/ResultDataExtract";
 
@@ -23,7 +24,8 @@ function WikidataSheXer(props) {
   const [loading, setLoading] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
 
-  const url = "http://156.35.94.158:8081/shexer";
+  // Shexer web service location
+  const url = environmentConfiguration.shexerHost;
 
   useEffect(() => {
     if (props.location.search) {

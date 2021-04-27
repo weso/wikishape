@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Token, Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead-bs4.min.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
+import API from "../API";
 
 const defaultLanguage = { label: "en", name: "English" };
 
@@ -13,8 +14,7 @@ function SelectLanguage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const LANGS_URI =
-        process.env.REACT_APP_RDFSHAPE_HOST + "/api/wikidata/languages";
+      const LANGS_URI = API.wikidataLanguages;
       const result = await axios.get(LANGS_URI, {
         headers: {
           "Access-Control-Allow-Origin": "*",
