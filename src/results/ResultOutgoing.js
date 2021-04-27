@@ -1,93 +1,125 @@
-import React from 'react';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import {showQualified, showQualify} from "../utils/Utils";
-import { wikidataPrefixes} from "../resources/wikidataPrefixes";
-import BootstrapTable from 'react-bootstrap-table-next';
-import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
+import React, { Fragment } from "react";
+import { Table } from "react-bootstrap";
+import BootstrapTable from "react-bootstrap-table-next";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import Alert from "react-bootstrap/Alert";
+import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
+import { Permalink } from "../Permalink";
+import { wikidataPrefixes } from "../resources/wikidataPrefixes";
+import { showQualified, showQualify } from "../utils/Utils";
 
-function ResultOutgoing(props) {
-    const result = props.result
-    let msg ;
-     if (!result || result === '') {
-         msg = null
-     } else
-     if (result.error) {
-         msg =
-             <div><Alert variant="danger">Error: {result.error}</Alert></div>
-     } else {
-         const outgoing = result.children.map(r => {
-             const qualifiedPred = showQualify(r.pred,wikidataPrefixes);
-             return  {
-                 id: r.pred,
-                 pred: showQualified(qualifiedPred, wikidataPrefixes),
-                 prefPrefix: qualifiedPred.prefix,
-                 localNamePrefix: qualifiedPred.localName,
-                 values: r.values.map(v =>
-                     showQualified(showQualify(v,wikidataPrefixes), wikidataPrefixes)
-                )
-             }
-         });
+function ResultOutgoing({ entities, result, permalink, disabled }) {
+  let msg;
+  if (!result || result === "") {
+    msg = null;
+  } else if (result.error) {
+    msg = (
+      <div>
+        <Alert variant="danger">Error: {result.error}</Alert>
+        <details>
+          <pre>{JSON.stringify(result)}</pre>
+        </details>
+      </div>
+    );
+  } else {
+    const outgoing = result.children.map((resultItem, idx) => {
+      const qualifiedPred = showQualify(resultItem.pred, wikidataPrefixes);
+      return {
+        id: resultItem.pred,
+        pred: showQualified(qualifiedPred, wikidataPrefixes),
+        prefPrefix: qualifiedPred.prefix,
+        localNamePrefix: qualifiedPred.localName,
+        values: resultItem.values.map((v) =>
+          showQualified(showQualify(v, wikidataPrefixes), wikidataPrefixes)
+        ),
+      };
+    });
 
-         const columns = [{
-             dataField: 'pred',
-             text: 'Predicate',
-             sort: true,
-             sortFunc: (a, b, order, dataField, rowA, rowB) => {
-                 if (!rowA.id || !rowB.id) return 0
-                 let ret = 0
-                 if (!rowA.id.includes("prop")) ret = 1
-                 else if (!rowB.id.includes("prop")) ret = -1
+    const columns = [
+      {
+        dataField: "pred",
+        text: "Predicate",
+        sort: true,
+        sortFunc: (a, b, order, dataField, rowA, rowB) => {
+          if (!rowA.id || !rowB.id) return 0;
+          let ret = 0;
+          if (!rowA.id.includes("prop")) ret = 1;
+          else if (!rowB.id.includes("prop")) ret = -1;
+          else {
+            let idA = rowA.id.replace("/direct", "").split("prop/")[1];
+            let idB = rowB.id.replace("/direct", "").split("prop/")[1];
+            if (idA && idB) {
+              idA = idA.substring(1, idA.length - 1);
+              idB = idB.substring(1, idB.length - 1);
+              try {
+                idA = parseInt(idA);
+                idB = parseInt(idB);
+                if (idA > idB) ret = 1;
+                if (idA < idB) ret = -1;
+                else ret = rowA.id.localeCompare(rowB.id);
+              } catch {
+                ret = 0;
+              }
+            } else ret = rowA.id.localeCompare(rowB.id);
+          }
 
-                 else {
-                     let idA = rowA.id.replace("/direct", "").split('prop/')[1]
-                     let idB = rowB.id.replace("/direct", "").split('prop/')[1]
-                     if (idA && idB) {
-                         idA = idA.substring(1, idA.length - 1);
-                         idB = idB.substring(1, idB.length - 1);
-                         try {
-                             idA = parseInt(idA)
-                             idB = parseInt(idB)
-                             if (idA > idB) ret = 1
-                             if (idA < idB) ret = -1
-                             else ret = rowA.id.localeCompare(rowB.id)
-                         }
-                         catch {
-                             ret = 0
-                         }
-                     }
-                     else ret = rowA.id.localeCompare(rowB.id)
-                 }
-                 // else ret = rowA.id.localeCompare(rowB.id)
-                 // console.log(idA, idB)
+          if (order === "asc") ret *= -1;
+          return ret;
+        },
+      },
+      {
+        dataField: "values",
+        text: "Value",
+      },
+    ];
 
-                 if (order === 'asc') ret *=-1
-                 return ret
-             }
-         }, {
-             dataField: 'values',
-             text: 'Value',
-         }];
+    msg = (
+      <Fragment>
+        <Table>
+          <tbody>
+            {entities.map(({ id, uri, label, descr }) => (
+              <tr key={id || uri}>
+                <td>{label || "Unknown label"}</td>
+                <td>
+                  {(
+                    <a target="_blank" rel="noopener noreferrer" href={uri}>
+                      {uri}
+                      <ExternalLinkIcon />
+                    </a>
+                  ) || "Unknown URI"}
+                </td>
+                <td>{descr || "No description provided"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <div className="results-summary">
+          <details>
+            <pre>{JSON.stringify(result)}</pre>
+          </details>
+          {permalink && <Permalink url={permalink} disabled={disabled} />}
+        </div>
 
-         msg = <div>
-             <p>Link to entity: {showQualified(showQualify(result.node, wikidataPrefixes), wikidataPrefixes)}</p>
-             <BootstrapTable keyField="id"
-                             data={ outgoing }
-                             columns={ columns }
-                             bootstrap4
-                             striped
-                             hover
-                             condensed
-             />
-             </div>
-     }
+        <BootstrapTable
+          keyField="id"
+          data={outgoing}
+          columns={columns}
+          bootstrap4
+          striped
+          hover
+          condensed
+          classes="results-table"
+        />
+      </Fragment>
+    );
+  }
 
-     return (
-         <div>
-             { result && <details><pre>{JSON.stringify(result)}</pre></details> }
-             {msg}
-         </div>
-     );
+  return <div>{msg}</div>;
 }
+
+ResultOutgoing.defaultProps = {
+  disabled: false,
+};
 
 export default ResultOutgoing;
