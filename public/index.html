@@ -1,14 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- ENV -->
+    <script src="%PUBLIC_URL%/env-config.js"></script>
+    <!-- CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src *; script-src * 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src * data: blob:; child-src 'none'; object-src 'none';"
+    />
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="WikiShape" />
+    <meta name="description" content="Wikishape client" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-<!--    <script src="%PUBLIC_URL%/codemirror/mode/shex/shex.js"></script> -->
-    <title>WikiShape</title>
+
+    <!-- Meta Tags -->
+    <title>WikiShape — Playground for Wikidata and Wikibase</title>
+    <meta
+      name="title"
+      content="WikiShape — Playground for Wikidata and Wikibase"
+    />
+    <meta
+      name="description"
+      content="Wikishape is a playground customized for Wikidata and Wikibase instances."
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rdfshape.weso.es/" />
+    <meta
+      property="og:title"
+      content="WikiShape — Playground for Wikidata and Wikibase"
+    />
+    <meta
+      property="og:description"
+      content="Wikishape is a playground customized for Wikidata and Wikibase instances."
+    />
+    <meta property="og:image" content="%PUBLIC_URL%/img/meta.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://rdfshape.weso.es/" />
+    <meta
+      property="twitter:title"
+      content="WikiShape — Playground for Wikidata and Wikibase"
+    />
+    <meta
+      property="twitter:description"
+      content="Wikishape is a playground customized for Wikidata and Wikibase instances.."
+    />
+    <meta property="twitter:image" content="%PUBLIC_URL%/img/meta.png" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

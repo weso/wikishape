@@ -1,7 +1,7 @@
-import React from 'react';
-import {Controlled as CodeMirror} from "react-codemirror2";
+import "codemirror/addon/display/placeholder";
 import PropTypes from "prop-types";
-import 'codemirror/addon/display/placeholder';
+import React from "react";
+import { Controlled as CodeMirror } from "react-codemirror2";
 import ShExForm from "../shex/ShExForm";
 
 require("codemirror/lib/codemirror.css");
@@ -12,54 +12,57 @@ require("codemirror/mode/javascript/javascript.js");
 require("codemirror/theme/midnight.css");
 
 function Code(props) {
+  const options = {
+    mode: props.mode,
+    theme: props.theme,
+    lineNumbers: props.linenumbers,
+    readonly: props.readonly,
+    placeholder: props.placeholder,
+  };
 
-    const options = {
-        mode: props.mode,
-        theme: props.theme,
-        lineNumbers: props.linenumbers,
-        readonly: props.readonly,
-        placeholder: props.placeholder
-    };
+  let code = null;
+  switch (props.mode.toLowerCase()) {
+    case "shexc":
+      code = (
+        <ShExForm
+          value={props.value}
+          theme={props.theme}
+          onChange={() => null}
+          options={options}
+        />
+      );
+      break;
+    default:
+      code = (
+        <CodeMirror
+          value={props.value}
+          options={options}
+          onBeforeChange={(_editor, _data, val) => {
+            props.onChange(val);
+          }}
+        />
+      );
+  }
 
-
-    let code = null ;
-    switch (props.mode.toLowerCase()) {
-        case "shexc": code = <ShExForm value={props.value}
-                                       theme={props.theme}
-                                       onChange={()=> null}
-                                       options={options} />
-          break;
-        default: code =
-            <CodeMirror
-             value={props.value}
-             options={options}
-             onBeforeChange={(_editor, _data, val) => {
-                props.onChange(val);
-             }}
-            />
-
-    }
-
-    return code ;
-
+  return code;
 }
 
 Code.propTypes = {
-    value: PropTypes.string,
-    mode: PropTypes.string,
-    linenumbers: PropTypes.bool,
-    readonly: PropTypes.bool,
-    theme: PropTypes.string,
-    onChange: PropTypes.func,
-    placeholder: PropTypes.string
+  value: PropTypes.string,
+  mode: PropTypes.string,
+  linenumbers: PropTypes.bool,
+  readonly: PropTypes.bool,
+  theme: PropTypes.string,
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
 };
 
 Code.defaultProps = {
-    mode: 'turtle',
-    value: '',
-    theme: 'default',
-    linenumbers: true,
-    readonly: true
+  mode: "turtle",
+  value: "",
+  theme: "default",
+  linenumbers: true,
+  readonly: true,
 };
 
-export default Code
+export default Code;

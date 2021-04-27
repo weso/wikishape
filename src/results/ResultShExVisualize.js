@@ -1,19 +1,21 @@
-import React from 'react';
 import PropTypes from "prop-types";
+import React from "react";
 import PrintJson from "../utils/PrintJson";
 import PrintSVG from "../utils/PrintSVG";
 
 function ResultShExVisualize(props) {
-    return (
-       <div>
-         <PrintSVG svg={props.result.svg}/>
-         <details><PrintJson json={props.result} /></details>
-       </div>
-    )
+  return (
+    <div>
+      <PrintSVG svg={props.result.svg} />
+      <details>
+        <PrintJson json={props.result} />
+      </details>
+    </div>
+  );
 }
 
 ResultShExVisualize.propTypes = {
-    result: PropTypes.object,
+  result: PropTypes.object,
 };
 
 export default ResultShExVisualize;
