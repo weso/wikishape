@@ -4,7 +4,6 @@ React web client for [RDFShape API](https://github.com/weso/rdfshape-api) used t
 
 It also features software from [WESO](https://www.weso.es) such as [sheXer](https://github.com/DaniFdezAlvarez/shexer).
 
-
 [![Continuous Integration](https://github.com/weso/rdfshape-client/actions/workflows/build_test.yml/badge.svg)](https://github.com/weso/wikishape/actions/workflows/build_test.yml)
 [![Docker build](https://github.com/weso/rdfshape-client/actions/workflows/publish_docker.yml/badge.svg)](https://github.com/weso/wikishape/actions/workflows/publish_docker.yml)
 
