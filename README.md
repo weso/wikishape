@@ -1,6 +1,6 @@
 # Wikishape
 
-React web client for [RDFShape API](https://github.com/weso/rdfshape-api) used to operate the API in a human-friendly way. Differs from [RDFShape Client](https://github.com/weso/rdfshape-client)in that it is more limited and made for operating Wikidata and Wikibase instances.
+React web client for [RDFShape API](https://github.com/weso/rdfshape-api) used to operate the API in a human-friendly way. Differs from [RDFShape Client](https://github.com/weso/rdfshape-client) in that it is more limited and made for operating Wikidata and Wikibase instances.
 
 It also features software from [WESO](https://www.weso.es) such as [sheXer](https://github.com/DaniFdezAlvarez/shexer).
 
