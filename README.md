@@ -29,7 +29,7 @@ This client is already deployed [here](http://wikishape.weso.es/).
 4. Start a development server via `npm start`
 5. When ready, build the app for production with `npm run build`. The ouput will be located in the _build_ folder
 
-> This app was bootstrapped via Create React App, refer to [their website](https://create-react-app.dev/) to learn more.
+This app was bootstrapped via Create React App, refer to [their website](https://create-react-app.dev/) to learn more.
 
 ## Deploy with Docker
 * Use the provided Dockerfile to build rdfshape or pull from [Github Container Registry](https://github.com/orgs/weso/packages/container/package/wikishape).
