@@ -18,6 +18,7 @@ RUN npm run build
 
 ## Prod environment.
 FROM nginx:stable-alpine as prod
+LABEL org.opencontainers.image.source="https://github.com/weso/wikishape"
 WORKDIR /usr/share/nginx/html
 
 # Add bash
