@@ -49,9 +49,7 @@ This app was bootstrapped via Create React App, refer to [their website](https:/
 
 
 # Contribution and issues
-
 Contributions are greatly appreciated. Please fork this repository and open a pull request to add more features or submit issues:
-
 * [Issues about Wikishape](https://github.com/weso/wikishape/issues)
 
 <a href="https://github.com/weso/wikishape/graphs/contributors">
