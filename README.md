@@ -10,7 +10,7 @@ It also features software from [WESO](https://www.weso.es) such as [sheXer](http
 
 # Deployed versions of Wikishape
 
-This client is already deployed [here](http://wikishape.weso.es/).
+This client is already deployed [here](https://wikishape.weso.es/).
 
 # Quick reference
 
