@@ -1,9 +1,8 @@
 # Wikishape
 
-React web client for [RDFShape API](https://github.com/weso/rdfshape-api) used to operate the API in a human-friendly way. Differs from [RDFShape Client](https://github.com/weso/rdfshape-client): it is more limited and for operating Wikidata and Wikibase instances.
+React web client for [RDFShape API](https://github.com/weso/rdfshape-api) used to operate the API in a human-friendly way. Differs from [RDFShape Client](https://github.com/weso/rdfshape-client) in that it is more limited and made for operating Wikidata and Wikibase instances.
 
 It also features software from [WESO](https://www.weso.es) such as [sheXer](https://github.com/DaniFdezAlvarez/shexer).
-
 
 [![Continuous Integration](https://github.com/weso/rdfshape-client/actions/workflows/build_test.yml/badge.svg)](https://github.com/weso/wikishape/actions/workflows/build_test.yml)
 [![Docker build](https://github.com/weso/rdfshape-client/actions/workflows/publish_docker.yml/badge.svg)](https://github.com/weso/wikishape/actions/workflows/publish_docker.yml)
@@ -29,7 +28,7 @@ This client is already deployed [here](http://wikishape.weso.es/).
 4. Start a development server via `npm start`
 5. When ready, build the app for production with `npm run build`. The ouput will be located in the _build_ folder
 
-> This app was bootstrapped via Create React App, refer to [their website](https://create-react-app.dev/) to learn more.
+This app was bootstrapped via Create React App, refer to [their website](https://create-react-app.dev/) to learn more.
 
 ## Deploy with Docker
 * Use the provided Dockerfile to build rdfshape or pull from [Github Container Registry](https://github.com/orgs/weso/packages/container/package/wikishape).
@@ -49,9 +48,7 @@ This client is already deployed [here](http://wikishape.weso.es/).
 
 
 # Contribution and issues
-
 Contributions are greatly appreciated. Please fork this repository and open a pull request to add more features or submit issues:
-
 * [Issues about Wikishape](https://github.com/weso/wikishape/issues)
 
 <a href="https://github.com/weso/wikishape/graphs/contributors">
