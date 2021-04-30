@@ -2,7 +2,7 @@
 // Fallback to .env values
 const environmentConfiguration = {
   rdfShapeHost:
-    window?._env_?.RDFSHAPE_HOST,
+    window?._env_?.RDFSHAPE_HOST || process.env.REACT_APP_RDFSHAPE_HOST,
   shexerHost: window?._env_?.SHEXER_HOST || process.env.REACT_APP_SHEXER_HOST,
   appVersion: window?._env_?.VERSION || process.env.REACT_APP_VERSION,
 };

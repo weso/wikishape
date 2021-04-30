@@ -1,11 +1,5 @@
 import environmentConfiguration from "./EnvironmentConfig";
 
-console.log(
-  "ENV: ",
-  environmentConfiguration,
-  environmentConfiguration.rdfShapeHost
-);
-
 class API {
   // Routes in server
   static rootApi = environmentConfiguration.rdfShapeHost + "/api/";
