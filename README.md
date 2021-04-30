@@ -39,7 +39,7 @@ This app was bootstrapped via Create React App, refer to [their website](https:/
 ### Running containers
 * When running a container, you may provide the following environment variables
   via `--env`:
-    * **RDFSHAPE_HOST** [optional]: Location where this client will look for the RDFShape API. Defaults to our current deployment at https://rdfshape.weso.es:8080.
+    * **RDFSHAPE_HOST** [optional]: Location where this client will look for the RDFShape API. Defaults to our current deployment at https://api.rdfshape.weso.es.
     * **SHEXER_HOST** [optional]: Location where this client will look for the sheXer API. Defaults to our current deployment at http://156.35.94.158:8081/shexer.
 
 ### Supported tags
