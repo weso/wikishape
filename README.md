@@ -14,9 +14,9 @@ This client is already deployed [here](https://wikishape.weso.es/).
 
 # Quick reference
 
-- Maintained by: [WESO Research Group](https://weso.es)
-- Wikibase project: https://wikiba.se/
-- SheXer: http://shexer.weso.es/
+- [WESO Research Group](https://weso.es)
+- [Wikibase project](https://wikiba.se/)
+- [SheXer](http://shexer.weso.es/)
 
 # Installation
 
@@ -50,6 +50,7 @@ This app was bootstrapped via Create React App, refer to [their website](https:/
 # Contribution and issues
 Contributions are greatly appreciated. Please fork this repository and open a pull request to add more features or submit issues:
 * [Issues about Wikishape](https://github.com/weso/wikishape/issues)
+* [Issues about RDFShape API](https://github.com/weso/rdfshape-api/issues)
 
 <a href="https://github.com/weso/wikishape/graphs/contributors">
   <img src="https://contributors-img.web.app/image?repo=weso/wikishape" />
