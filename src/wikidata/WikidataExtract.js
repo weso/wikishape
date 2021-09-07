@@ -92,7 +92,8 @@ function WikidataExtract(props) {
         if (cb) cb();
       })
       .catch(function(error) {
-        setError(`Error in request: ${url}: ${error.message}`);
+        const errorCause = error.response?.data?.error || error;
+        setError(`Error response from ${url}: ${errorCause}`);
       })
       .finally(() => setLoading(false));
   }

@@ -4,7 +4,7 @@ import React, {
   useEffect,
   // useState,
   useReducer,
-  useState
+  useState,
 } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -26,7 +26,7 @@ import {
   initialShExStatus,
   paramsFromShEx,
   shExParamsFromQueryParams,
-  shExReducer
+  shExReducer,
 } from "../shex/ShEx";
 import ShExTabs from "../shex/ShExTabs";
 import { showQualify } from "../utils/Utils";
@@ -220,7 +220,7 @@ function WikidataValidateDeref(props) {
       const paramsEndpoint = { endpoint: API.currentUrl() };
       let params = { ...paramsEndpoint, ...paramsSchema };
       params["schemaEngine"] = "ShEx";
-      params["item"] = e;
+      params["entity"] = e;
       params["shape"] = validateParams.shapeLabel;
       const formData = params2Form(params);
 
@@ -262,9 +262,8 @@ function WikidataValidateDeref(props) {
         setProgressPercent(100);
       })
       .catch((error) => {
-        setError(
-          `Error validating ${e} ${url} ${JSON.stringify(formData)}: ${error}`
-        );
+        const errorCause = error.response?.data?.error || error;
+        setError(`Error response from ${url}: ${errorCause}`);
       })
       .finally(() => {
         setLoading(false);
