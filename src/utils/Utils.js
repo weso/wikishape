@@ -133,7 +133,7 @@ export function showQualify(node, prefixMap) {
       uri: rawNode,
       prefix: "",
       localName: "",
-      str: `<${rawNode}>`,
+      str: `<${rawNode.split("/").slice(-1)[0]}>`,
       node: node,
     };
   }
@@ -323,7 +323,7 @@ export function paramsFromStateData(state) {
       params["dataFormatTextArea"] = dataFormat;
       break;
     case API.byUrlTab:
-      params["dataURL"] = dataUrl;
+      params["dataUrl"] = dataUrl;
       params["dataFormatUrl"] = dataFormat;
       break;
     case API.byFileTab:
@@ -357,7 +357,7 @@ export function paramsFromStateShEx(state) {
       params["schemaFormatTextArea"] = format;
       break;
     case API.byUrlTab:
-      params["schemaURL"] = url;
+      params["schemaUrl"] = url;
       params["schemaFormatUrl"] = format;
       break;
     case API.byFileTab:
@@ -384,7 +384,7 @@ export function paramsFromStateShapeMap(state) {
       params["shapeMapFormatTextArea"] = format;
       break;
     case "byURL":
-      params["shapeMapURL"] = url;
+      params["shapeMapUrl"] = url;
       params["shapeMapFormatURL"] = format;
       break;
     case "byFile":
@@ -405,7 +405,7 @@ export function paramsFromStateQuery(state) {
       params["query"] = state.queryTextArea;
       break;
     case "byURL":
-      params["queryURL"] = state.queryUrl;
+      params["queryUrl"] = state.queryUrl;
       break;
     case "byFile":
       params["queryFile"] = state.queryFile;
@@ -505,3 +505,60 @@ const regexUrl = new RegExp(
 export function validateURL(receivedUrl) {
   return !!regexUrl.test(receivedUrl);
 }
+
+export const equalsIgnoreCase = (str1, str2, exact = false) => {
+  return exact
+    ? str1.toLowerCase() === str2.toLowerCase()
+    : str1.toLowerCase() == str2.toLowerCase();
+};
+
+// Shortcut to all the settings that must be included in a Yashe object to prevent buttons
+export const yasheNoButtonsOptions = {
+  showTooltip: false,
+  showUploadButton: false,
+  showDownloadButton: false,
+  showCopyButton: false,
+  showDeleteButton: false,
+  showShareButton: false,
+  showThemeButton: false,
+  showFullScreenButton: false,
+};
+
+// Shortcut to all the settings that must be included in a Yashe object to show minimal buttons
+export const yasheMinButtonsOptions = {
+  showUploadButton: false,
+  showDeleteButton: false,
+  showShareButton: false,
+  showThemeButton: false,
+
+  showTooltip: true,
+  showDownloadButton: true,
+  showCopyButton: true,
+  showFullScreenButton: true,
+};
+
+// Function generating the symbol for ordering data in a table
+export const sortCaretGen = (order) => (
+  <button className="discrete">{order === "desc" ? "↓" : "↑"}</button>
+);
+// Prefixes for prefix map tables
+export const prefixMapTableColumns = [
+  {
+    dataField: "prefixName",
+    text: "Name",
+    sort: true,
+    sortCaret: sortCaretGen,
+  },
+  {
+    dataField: "prefixIRI",
+    text: "IRI",
+  },
+];
+
+// Function for reading Files from the client and extracting their text contents
+export const getFileContents = async (file) =>
+  await new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result);
+    reader.readAsText(file);
+  });

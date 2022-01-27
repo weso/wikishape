@@ -1,64 +1,60 @@
 import "codemirror/addon/display/placeholder";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Yasqe from "yasgui-yasqe/dist/yasqe.bundled.min";
 import "yasgui-yasqe/dist/yasqe.min.css";
-import API from "../API";
 
 function QueryForm(props) {
-  const { value, onChange, placeholder, readonly, prefixes } = props;
   const [yasqe, setYasqe] = useState(null);
-  // const textAreaRef = useRef(null)
+  const textAreaRef = useRef(null);
 
   useEffect(() => {
     if (!yasqe) {
       const options = {
-        sparql: { showQueryButton: false },
-        createShareLink: null,
-        placeholder: placeholder,
-        readonly: readonly,
-        autofocus: true,
-        requestConfig: {
-          endpoint:
-            localStorage.getItem("endpoint") || API.wikidataContact.endpoint,
+        sparql: {
+          showQueryButton: false,
         },
+        createShareLink: null,
+        placeholder: props.placeholder,
+        readonly: props.readonly,
       };
-      //            const y = Yasqe.fromTextArea(textAreaRef, options);
-      const y = Yasqe.fromTextArea(
-        document.getElementById("SPARQL-TextArea"),
-        options
-      );
+      const y = Yasqe.fromTextArea(textAreaRef.current, options);
+      if (props.setCodeMirror) props.setCodeMirror(y);
       y.on("change", (cm, change) => {
-        onChange(cm.getValue());
+        props.onChange(cm.getValue(), y);
       });
-
-      //             y.addPrefixes(prefixes);
-      y.setValue(value);
+      console.info(props.value)
+      y.setValue(props.value);
       y.refresh();
       setYasqe(y);
+    } else if (props.fromParams) {
+      yasqe.setValue(props.value);
+      props.resetFromParams();
     }
-  }, [yasqe, placeholder, value]);
+  }, [
+    yasqe,
+    props.onChange,
+    props.placeholder,
+    props.fromParams,
+    props.resetFromParams,
+    props.value,
+  ]);
 
-  return (
-    <div>
-      <textarea id="SPARQL-TextArea" />
-      {/*  For some reason, it doesn't work with references as Yashe  <textarea ref={textAreaRef}/>*/}
-    </div>
-  );
+  return <textarea ref={textAreaRef} />;
 }
 
 QueryForm.propTypes = {
   value: PropTypes.string,
-  autocomplete: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   readonly: PropTypes.bool,
-  prefixes: PropTypes.object,
+  fromParams: PropTypes.bool,
+  resetFromParams: PropTypes.func,
 };
 
 QueryForm.defaultProps = {
   value: "",
-  prefixes: {},
+  readonly: false,
 };
 
 export default QueryForm;

@@ -7,53 +7,79 @@ import Home from "./Home.js";
 import NotFound from "./NotFound.js";
 import PermalinkReceiver from "./PermalinkReceiver.js";
 import ChangeWikibaseURL from "./settings/ChangeWikibaseURL";
-import WikidataExtract from "./wikidata/WikidataExtract";
-import WikidataOutgoing from "./wikidata/WikidataOutgoing";
-import WikidataProperty from "./wikidata/WikidataProperty";
-import WikidataQuery from "./wikidata/WikidataQuery";
-import WikidataSchemaInfo from "./wikidata/WikidataSchemaInfo";
-import WikidataSchemaVisual from "./wikidata/WikidataSchemaVisual";
-import WikidataSheXer from "./wikidata/WikidataSheXer";
-import WikidataValidate from "./wikidata/WikidataValidate";
-import WikidataValidateDeref from "./wikidata/WikidataValidateDeref";
-import WikidataValidateSPARQL from "./wikidata/WikidataValidateSPARQL";
+import WikibaseExtract from "./wikibase/WikibaseExtract";
+import WikibaseItem from "./wikibase/WikibaseItem";
+import WikibaseQuery from "./wikibase/WikibaseQuery";
+import WikibaseSchemaInfo from "./wikibase/WikibaseSchemaInfo";
+import WikibaseSheXer from "./wikibase/WikibaseSheXer";
+import WikibaseValidate from "./wikibase/WikibaseValidate";
+import WikibaseValidateSPARQL from "./wikibase/WikibaseValidateSPARQL";
 
 function Routes() {
+  const renderComponent = (Component, props) => {
+    // eslint-disable-next-line no-restricted-globals
+    const loc = location;
+    return (
+      <>
+        <Component location={loc} {...props} />
+      </>
+    );
+  };
+
   return (
     <Router basename="/">
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path={API.aboutRoute} component={About} />
+        <Route path={API.routes.client.about} component={About} />
         <Route
-          path={API.wikidataSchemaInfoRoute}
-          component={WikidataSchemaInfo}
+          path={API.routes.client.wikibaseItem}
+          render={() =>
+            renderComponent(WikibaseItem, {
+              [API.wbEntityTypes.propName]: API.wbEntityTypes.item,
+            })
+          }
         />
         <Route
-          path={API.wikidataSchemaVisualRoute}
-          component={WikidataSchemaVisual}
-        />
-        <Route path={API.wikidataQueryRoute} component={WikidataQuery} />
-        <Route path={API.wikidataValidateRoute} component={WikidataValidate} />
-        <Route
-          path={API.wikidataValidateDerefRoute}
-          component={WikidataValidateDeref}
-        />
-        <Route path={API.wikidataExtractRoute} component={WikidataExtract} />
-        <Route path={API.wikidataSheXerRoute} component={WikidataSheXer} />
-        <Route path={API.wikidataOutgoingRoute} component={WikidataOutgoing} />
-        <Route
-          path={API.wikidataPropertyInfoRoute}
-          component={WikidataProperty}
+          path={API.routes.client.wikibasePropertyInfo}
+          render={() =>
+            renderComponent(WikibaseItem, {
+              [API.wbEntityTypes.propName]: API.wbEntityTypes.property,
+            })
+          }
         />
         <Route
-          path={API.wikidataValidateSPARQLRoute}
-          component={WikidataValidateSPARQL}
+          path={API.routes.client.wikibaseSchemaInfo}
+          component={WikibaseSchemaInfo}
         />
         <Route
-          path={API.changeWikibaseURLRoute}
+          path={API.routes.client.wikibaseQuery}
+          component={WikibaseQuery}
+        />
+        <Route
+          path={API.routes.client.wikibaseValidate}
+          component={WikibaseValidate}
+        />
+        <Route
+          path={API.routes.client.wikibaseExtract}
+          component={WikibaseExtract}
+        />
+        <Route
+          path={API.routes.client.wikibaseSheXer}
+          component={WikibaseSheXer}
+        />
+
+        <Route
+          path={API.routes.client.wikibaseValidateSparql}
+          component={WikibaseValidateSPARQL}
+        />
+        <Route
+          path={API.routes.client.changeWikibaseUrl}
           component={ChangeWikibaseURL}
         />
-        <Route path={API.permalinkRoute} component={PermalinkReceiver} />
+        <Route
+          path={API.routes.client.permalink}
+          component={PermalinkReceiver}
+        />
         <Route component={NotFound} />
       </Switch>
     </Router>

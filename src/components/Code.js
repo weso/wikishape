@@ -1,68 +1,68 @@
 import "codemirror/addon/display/placeholder";
+import "codemirror/addon/edit/closetag";
+import "codemirror/lib/codemirror.css";
+import "codemirror/mode/htmlmixed/htmlmixed";
+import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/sparql/sparql.js";
+import "codemirror/mode/turtle/turtle.js";
+import "codemirror/mode/xml/xml.js";
+import "codemirror/theme/material.css";
+import "codemirror/theme/midnight.css";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import ShExForm from "../shex/ShExForm";
 
-require("codemirror/lib/codemirror.css");
-require("codemirror/mode/xml/xml.js");
-require("codemirror/mode/turtle/turtle.js");
-require("codemirror/mode/sparql/sparql.js");
-require("codemirror/mode/javascript/javascript.js");
-require("codemirror/theme/midnight.css");
+const ThemeList = ["default", "material", "midnight"];
+const DefaultTheme = "default";
 
 function Code(props) {
+  const [editor, setEditor] = useState(null);
+
   const options = {
-    mode: props.mode,
-    theme: props.theme,
-    lineNumbers: props.linenumbers,
-    readonly: props.readonly,
-    placeholder: props.placeholder,
+    mode: "turtle",
+    theme: "default",
+    lineNumbers: true,
+    readOnly: "nocursor",
+    lineWrapping: true,
+    autoCloseTags: true,
+    ...props.options, // Override defaults with user settings when necessary
   };
 
-  let code = null;
-  switch (props.mode.toLowerCase()) {
-    case "shexc":
-      code = (
-        <ShExForm
-          value={props.value}
-          theme={props.theme}
-          onChange={() => null}
-          options={options}
-        />
-      );
-      break;
-    default:
-      code = (
-        <CodeMirror
-          value={props.value}
-          options={options}
-          onBeforeChange={(_editor, _data, val) => {
-            props.onChange(val);
-          }}
-        />
-      );
-  }
+  useEffect(() => {
+    if (editor) {
+      if (props.fromParams) {
+        editor.setValue(props.value);
+        props.resetFromParams && props.resetFromParams();
+      }
+    }
+  }, [props.value, props.fromParams, props.resetFromParams]);
 
-  return code;
+  return (
+    <React.Fragment>
+      <CodeMirror
+        value={props.value}
+        options={options}
+        onBeforeChange={(_editor, _data, val) => {
+          props.onChange(val);
+        }}
+        editorDidMount={(editor) => {
+          setEditor(editor);
+        }}
+      />
+    </React.Fragment>
+  );
 }
 
 Code.propTypes = {
   value: PropTypes.string,
-  mode: PropTypes.string,
-  linenumbers: PropTypes.bool,
-  readonly: PropTypes.bool,
-  theme: PropTypes.string,
+  options: PropTypes.object,
   onChange: PropTypes.func,
-  placeholder: PropTypes.string,
+  fromParams: PropTypes.bool,
 };
 
 Code.defaultProps = {
-  mode: "turtle",
   value: "",
-  theme: "default",
-  linenumbers: true,
-  readonly: true,
+  fromParams: false,
 };
 
 export default Code;

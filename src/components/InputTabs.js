@@ -1,41 +1,45 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import API from "../API";
+import { yasheMinButtonsOptions } from "../utils/Utils";
 import ByFile from "./ByFile";
 import ByText from "./ByText";
 import ByURL from "./ByURL";
 
 function InputTabs(props) {
-  const [activeTab, setActiveTab] = useState(props.activeTab);
+  const [activeSource, setActiveSource] = useState(props.activeSource);
+
+  useEffect(() => {
+    handleTabChange(props.activeSource);
+  }, [props.activeSource]);
 
   function handleTabChange(e) {
-    setActiveTab(e);
+    setActiveSource(e);
     props.handleTabChange(e);
   }
 
   return (
     <Form.Group>
-      <Form.Label>{props.name}</Form.Label>
-      <Tabs
-        activeKey={activeTab}
-        transition={false}
-        id="dataTabs"
-        onSelect={handleTabChange}
-      >
-        <Tab eventKey={API.byTextTab} title="by Input">
+      <Form.Label style={{ fontWeight: "bold" }}>{props.name}</Form.Label>
+      <Tabs activeKey={activeSource} id="dataTabs" onSelect={handleTabChange}>
+        <Tab eventKey={API.sources.byText} title="Text">
           <ByText
             name={props.byTextName}
             textAreaValue={props.textAreaValue}
             placeholder={props.byTextPlaceholder}
             handleByTextChange={props.handleByTextChange}
             textFormat={props.textFormat}
-            inputForm={props.inputForm}
+            textEngine={props.textEngine}
+            setCodeMirror={props.setCodeMirror}
+            fromParams={props.fromParams}
+            resetFromParams={props.resetFromParams}
+            options={{ readOnly: false, ...yasheMinButtonsOptions }}
           />
         </Tab>
-        <Tab eventKey={API.byUrlTab} title="By URL">
+        <Tab eventKey={API.sources.byUrl} title="URL">
           <ByURL
             name={props.byURLName}
             urlValue={props.urlValue}
@@ -43,7 +47,7 @@ function InputTabs(props) {
             placeholder={props.byURLPlaceholder}
           />
         </Tab>
-        <Tab eventKey={API.byFileTab} title="By File">
+        <Tab eventKey={API.sources.byFile} title="File">
           <ByFile
             name={props.byFileName}
             handleFileUpload={props.handleFileUpload}
@@ -56,7 +60,14 @@ function InputTabs(props) {
 
 InputTabs.propTypes = {
   name: PropTypes.string.isRequired,
-  activeTab: PropTypes.string,
+
+  /** Specific text input form that can be provided to replace the default one */
+  inputForm: PropTypes.node,
+
+  /** Callback to get a handler of the codeMirror instance */
+  setCodeMirror: PropTypes.func,
+
+  activeSource: PropTypes.string,
   handleTabChange: PropTypes.func.isRequired,
   byTextName: PropTypes.string,
   textFormat: PropTypes.string,
@@ -69,14 +80,17 @@ InputTabs.propTypes = {
   byURLPlaceholder: PropTypes.string,
   byFileName: PropTypes.string,
   handleFileUpload: PropTypes.func.isRequired,
+
+  resetFromParams: PropTypes.func.isRequired,
+  fromParams: PropTypes.bool.isRequired,
 };
 
 InputTabs.defaultProps = {
-  activeTab: API.defaultTab,
+  activeSource: API.sources.default,
   byTextName: "",
   byTextPlaceholder: "",
   byUrlName: "",
-  byURLPlaceholder: "http://...",
+  byURLPlaceholder: API.texts.placeholders.url,
   byFileName: "",
 };
 

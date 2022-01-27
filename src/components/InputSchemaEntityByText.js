@@ -16,6 +16,8 @@ const defaultLanguage = [{ label: "en", name: "English" }];
 function InputSchemaEntityByText(props) {
   const [language, setLanguage] = useState(defaultLanguage);
   const [options, setOptions] = useState([]);
+
+  // To be used when mediaWiki's API accepts searching for schemas
   const [endpoint] = useState(props.endpoint || API.currentUrl());
 
   useEffect(() => {

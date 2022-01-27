@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
+import API from "../API";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 import ShowShapeMap from "../shapeMap/ShowShapeMap";
-import { showQualify } from "../utils/Utils";
+import PrintJson from "../utils/PrintJson";
+import { equalsIgnoreCase, showQualify } from "../utils/Utils";
+
+export const conformant = "conformant"; // Status of conformant nodes
+export const nonConformant = "nonconformant"; // Status of non-conformant nodes
+export const unknown = "?"; // Status of non-conformant nodes
 
 function showStatus(status) {
   switch (status) {
-    case "conformant":
+    case conformant:
       return "";
-    case "nonconformant":
+    case nonConformant:
       return "!";
-    case "?":
+    case unknown:
       return "?";
     default:
       return status;
@@ -128,46 +134,62 @@ export function mergeResult(result, newResult, shapesPrefixMap) {
   }
 }
 
-function ResultValidate({ result }) {
-  let msg;
-  if (result === "") {
-    msg = null;
-  } else if (result.error) {
-    msg = (
-      <div>
-        <Alert variant="danger">Error: {result.error}</Alert>
-        <details>
-          <pre>{JSON.stringify(result)}</pre>
-        </details>
-      </div>
-    );
-  } else {
-    const {
-      message,
+function ResultValidate({ result: validateResponse }) {
+  // Destructure the items nested in the API response
+  const { operationData, wikibase, result: validateResult } = validateResponse;
+
+  const { entity: validatedEntity, result: apiResult } = validateResult;
+
+  const {
+    data,
+    schema,
+    trigger,
+    result: {
+      valid,
       errors,
-      shapeMap,
+      shapeMap: resultsMap,
       nodesPrefixMap,
       shapesPrefixMap,
-    } = result;
-    msg = (
-      <div>
-        {message && <Alert variant="success">{message} </Alert>}
-        {errors && <div> {showErrors(errors)} </div>}
-        {shapeMap && (
+    },
+  } = apiResult;
+
+  // Store the resulting nodes in state, plus the invalid ones
+  const [nodes] = useState(resultsMap);
+  const [invalidNodes, setInvalidNodes] = useState([]);
+
+  // Scroll results into view
+  useEffect(() => {
+    const resultElement = document.getElementById("results-container");
+    resultElement &&
+      resultElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  // Update invalid nodes on node changes
+  useEffect(() => {
+    const nonConformantNodes = nodes.filter((node) =>
+      equalsIgnoreCase(node.status, nonConformant)
+    );
+    setInvalidNodes(nonConformantNodes);
+  }, [nodes]);
+
+  if (validateResponse) {
+    return (
+      <div id="results-container">
+        {nodes?.length && (
           <ShowShapeMap
-            shapeMap={shapeMap}
+            shapeMap={resultsMap}
             nodesPrefixMap={nodesPrefixMap}
             shapesPrefixMap={shapesPrefixMap}
           />
         )}
+
         <details>
-          <pre>{JSON.stringify(result)}</pre>
+          <summary>{API.texts.responseSummaryText}</summary>
+          <PrintJson json={validateResponse} />
         </details>
       </div>
     );
   }
-
-  return <div style={{ width: "100%" }}>{msg}</div>;
 }
 
 function showErrors(es) {

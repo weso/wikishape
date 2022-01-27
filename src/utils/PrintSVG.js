@@ -10,7 +10,7 @@ const PrintSVG = React.memo(({ svg }) => (
 ));
 
 PrintSVG.propTypes = {
-  svg: PropTypes.isRequired,
+  svg: PropTypes.string.isRequired,
 };
 
 export default PrintSVG;

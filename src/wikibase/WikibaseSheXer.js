@@ -6,13 +6,14 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import Table from "react-bootstrap/Table";
 import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import ResultDataExtract from "../results/ResultDataExtract";
 
-function WikidataExtract(props) {
+function WikibaseSheXer(props) {
   const [entities, setEntities] = useState([]);
   const [selectedEntities, setSelectedEntities] = useState([]);
   const [lastEntities, setLastEntities] = useState([]);
@@ -22,7 +23,10 @@ function WikidataExtract(props) {
   const [loading, setLoading] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
 
-  const url = API.dataExtract;
+  // Shexer web service location
+  // const url = environmentConfiguration.shexerHost;
+  // API interface for contacting SheXer
+  const url = API.wikibaseExtractShexer
 
   useEffect(() => {
     if (props.location.search) {
@@ -48,7 +52,7 @@ function WikidataExtract(props) {
         resetState();
         // Update history
         setUpHistory();
-        postExtract();
+        postExtract(sheXerParams(entities[0].uri));
       }
     } else {
       setError(
@@ -56,6 +60,14 @@ function WikidataExtract(props) {
       );
     }
   }, [entities]);
+
+  function sheXerParams(entity) {
+    // TODO: send additional parameters to the API to customize SheXer operations
+    return {
+      [API.queryParameters.endpoint]: API.wikidataContact.endpoint,
+      [API.queryParameters.payload]: entity, // URL of the entity in the wikibase
+    };
+  }
 
   function handleChange(es) {
     setSelectedEntities(es);
@@ -66,30 +78,28 @@ function WikidataExtract(props) {
     setEntities(selectedEntities);
   }
 
-  function postExtract(cb) {
+  function postExtract(jsonData, cb) {
     setLoading(true);
-    setProgressPercent(10);
-    const params = {
-      // Pending to process more than the first entity
-      entity: entities[0].uri,
-    };
-    const formData = params2Form(params);
     setProgressPercent(30);
+
+    const params = params2Form(jsonData)
+
     axios
-      .post(url, formData)
+      .post(url, params)
       .then((response) => {
         setProgressPercent(70);
         return response.data;
       })
       .then(async (data) => {
         setResult(data);
-        setProgressPercent(100);
+        if (cb) cb();
+        setProgressPercent(90);
         setPermalink(
-          mkPermalinkLong(API.wikidataExtractRoute, {
+          mkPermalinkLong(API.routes.client.wikidataSheXer, {
             entities: JSON.stringify(entities),
           })
         );
-        if (cb) cb();
+        setProgressPercent(100);
       })
       .catch(function(error) {
         const errorCause = error.response?.data?.error || error;
@@ -103,13 +113,15 @@ function WikidataExtract(props) {
     if (
       lastEntities &&
       entities &&
-      JSON.stringify(lastEntities) !== JSON.stringify(entities)
+      lastEntities.length &&
+      entities.length &&
+      lastEntities[0].uri.localeCompare(entities[0].uri) !== 0
     ) {
       // eslint-disable-next-line no-restricted-globals
       history.pushState(
         null,
         document.title,
-        mkPermalinkLong(API.wikidataExtractRoute, {
+        mkPermalinkLong(API.routes.client.wikidataSheXer, {
           entities: JSON.stringify(lastEntities),
         })
       );
@@ -119,7 +131,7 @@ function WikidataExtract(props) {
     history.replaceState(
       null,
       document.title,
-      mkPermalinkLong(API.wikidataExtractRoute, {
+      mkPermalinkLong(API.routes.client.wikidataSheXer, {
         entities: JSON.stringify(entities),
       })
     );
@@ -136,16 +148,29 @@ function WikidataExtract(props) {
 
   return (
     <Container>
-      <h1>Extract schema from Wikidata entities</h1>
-      {/* This functionality only works with wikidata so this typeahead will look for Wikidata entities
-            even if another endpoint was configured
-         */}
+      <h1>Extract schema from Wikidata entities (sheXer)</h1>
       <InputEntitiesByText
         endpoint={API.wikidataContact.url}
         onChange={handleChange}
         entities={entities}
       />
-
+      <Table>
+        <tbody>
+          {entities.map((e) => (
+            <tr key={e.id || e.uri}>
+              <td>{e.label || "Unknown label"}</td>
+              <td>
+                {(
+                  <a target="_blank" rel="noopener noreferrer" href={e.uri}>
+                    {e.uri}
+                  </a>
+                ) || "Unknown URI"}
+              </td>
+              <td>{e.descr || "No description provided"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
       <Form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
         <Button
           className={"btn-with-icon " + (loading ? "disabled" : "")}
@@ -172,4 +197,4 @@ function WikidataExtract(props) {
   );
 }
 
-export default WikidataExtract;
+export default WikibaseSheXer;

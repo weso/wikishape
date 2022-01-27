@@ -1,15 +1,24 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import Alert from "react-bootstrap/Alert";
 import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
+import API from "../API";
 import { Permalink } from "../Permalink";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
+import PrintJson from "../utils/PrintJson";
 import { showQualified, showQualify } from "../utils/Utils";
 
 function ResultOutgoing({ entities, result, permalink, disabled }) {
+  // Scroll results into view
+  useEffect(() => {
+    const resultElement = document.getElementById("results-container");
+    resultElement &&
+      resultElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   let msg;
   if (!result || result === "") {
     msg = null;
@@ -75,43 +84,47 @@ function ResultOutgoing({ entities, result, permalink, disabled }) {
     ];
 
     msg = (
-      <Fragment>
-        <Table>
-          <tbody>
-            {entities.map(({ id, uri, label, descr }) => (
-              <tr key={id || uri}>
-                <td>{label || "Unknown label"}</td>
-                <td>
-                  {(
-                    <a target="_blank" rel="noopener noreferrer" href={uri}>
-                      {uri}
-                      <ExternalLinkIcon />
-                    </a>
-                  ) || "Unknown URI"}
-                </td>
-                <td>{descr || "No description provided"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <div className="results-summary">
-          <details>
-            <pre>{JSON.stringify(result)}</pre>
-          </details>
-          {permalink && <Permalink url={permalink} disabled={disabled} />}
-        </div>
+      <div id="results-container">
+        <Fragment>
+          <Table>
+            <tbody>
+              {entities.map(({ id, uri, label, descr }) => (
+                <tr key={id || uri}>
+                  <td>{label || "Unknown label"}</td>
+                  <td>
+                    {(
+                      <a target="_blank" rel="noopener noreferrer" href={uri}>
+                        {uri}
+                        <ExternalLinkIcon />
+                      </a>
+                    ) || "Unknown URI"}
+                  </td>
+                  <td>{descr || "No description provided"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <div id="results-summary">
+            {permalink && <Permalink url={permalink} disabled={disabled} />}
+          </div>
 
-        <BootstrapTable
-          keyField="id"
-          data={outgoing}
-          columns={columns}
-          bootstrap4
-          striped
-          hover
-          condensed
-          classes="results-table"
-        />
-      </Fragment>
+          <BootstrapTable
+            keyField="id"
+            data={outgoing}
+            columns={columns}
+            bootstrap4
+            striped
+            hover
+            condensed
+            classes="results-table"
+          />
+
+          <details>
+            <summary>{API.texts.responseSummaryText}</summary>
+            <PrintJson json={result} />
+          </details>
+        </Fragment>
+      </div>
     );
   }
 

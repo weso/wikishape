@@ -30,7 +30,7 @@ function InputShapeLabel(props) {
 
 InputShapeLabel.propTypes = {
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   shapeList: PropTypes.array.isRequired,
 };
 

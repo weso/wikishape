@@ -13,8 +13,6 @@ import QueryForm from "../query/QueryForm";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 import { cnvValueFromSPARQL } from "../utils/Utils";
 
-const QUERY_URI = API.wikidataQuery;
-
 function parseData(data) {
   if (data.head && data.head.vars && data.head.vars.length) {
     const varName = data.head.vars[0];
@@ -28,7 +26,10 @@ function parseData(data) {
   }
 }
 
+// To be used
 function InputEntitiesBySPARQL(props) {
+  const queryUrl = API.wikidataSparqlUrl;
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
@@ -55,7 +56,7 @@ function InputEntitiesBySPARQL(props) {
     let params = {};
     params["query"] = query;
     const formData = params2Form(params);
-    resolveQuery(QUERY_URI, formData);
+    resolveQuery(queryUrl, formData);
   }
 
   return (

@@ -1,5 +1,6 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
+import API from "./API.js";
 
 class Home extends React.Component {
   render() {
@@ -13,22 +14,21 @@ class Home extends React.Component {
         <p>With Wikishape, you can do the following:</p>
         <ul>
           <li>
-            Get information about <a href="/wikidataOutgoing">entities</a>,{" "}
-            <a href="/wikidataPropertyInfo">properties</a> and entity{" "}
-            <a href="/wikidataSchemaInfo">schemas</a>.
+            Get information about{" "}
+            <a href={API.routes.client.wikibaseItem}>entities</a>,{" "}
+            <a href={API.routes.client.wikidataPropertyInfo}>properties</a> and
+            entity <a href={API.routes.client.wikibaseSchemaInfo}>schemas</a>.
           </li>
           <li>
-            <a href="/wikidataSchemaVisual">Visualize</a> entity schemas.
+            <a href={API.routes.client.wikibaseQuery}>Query</a> entities.
           </li>
           <li>
-            <a href="/wikidataQuery">Query</a> entities.
+            <a href={API.routes.client.wikibaseValidate}>Validate</a> entities
+            with entity schemas (ShEx).
           </li>
           <li>
-            <a href="/wikidataValidateDeref">Validate</a> entities with entity
-            schemas (ShEx).
-          </li>
-          <li>
-            <a href="/wikidataExtract">Extract</a> schemas from entities.
+            <a href={API.routes.client.wikibaseExtract}>Extract</a> schemas from
+            entities.
           </li>
         </ul>
 

@@ -21,20 +21,16 @@ function InputEntity(props) {
   }, [status.url, status.language]);
 
   function findEntityLabel(entity, language) {
+    const params = {
+      [API.queryParameters.payload]: entity,
+      [API.queryParameters.language]: language,
+    };
+
     axios
-      .get(API.wikidataEntityLabel, {
-        params: {
-          wdEntity: entity,
-          language: language,
-        },
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      })
+      .get(API.wikibaseEntityLabel, params)
       .then((response) => response.data)
-      .then((data) => {
-        const label = data.entities[entity].labels[language].value;
+      .then(({result}) => {
+        const label = result.entities[entity].labels[language].value;
         dispatch({ type: "setLabel", value: label });
       })
       .catch((error) => {
