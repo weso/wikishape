@@ -93,3 +93,14 @@ table td {
   width: 100%;
   overflow: auto;
 }
+
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1100;
+  background-color: white;
+}

@@ -36,6 +36,7 @@ class API {
   // Routes in client
   static wikidataSchemaInfoRoute = "/wikidataSchemaInfo";
   static wikidataSchemaVisualRoute = "/wikidataSchemaVisual";
+  static wikidataSchemaUMLRoute = "/wikidataSchemaUML";
   static wikidataQueryRoute = "/wikidataQuery";
   static wikidataValidateRoute = "/wikidataValidate";
   static wikidataValidateDerefRoute = "/wikidataValidateDeref";

@@ -13,6 +13,7 @@ import WikidataProperty from "./wikidata/WikidataProperty";
 import WikidataQuery from "./wikidata/WikidataQuery";
 import WikidataSchemaInfo from "./wikidata/WikidataSchemaInfo";
 import WikidataSchemaVisual from "./wikidata/WikidataSchemaVisual";
+import WikidataSchemaUML from "./wikidata/WikidataSchemaUML";
 import WikidataSheXer from "./wikidata/WikidataSheXer";
 import WikidataValidate from "./wikidata/WikidataValidate";
 import WikidataValidateDeref from "./wikidata/WikidataValidateDeref";
@@ -31,6 +32,10 @@ function Routes() {
         <Route
           path={API.wikidataSchemaVisualRoute}
           component={WikidataSchemaVisual}
+        />
+		<Route
+          path={API.wikidataSchemaUMLRoute}
+          component={WikidataSchemaUML}
         />
         <Route path={API.wikidataQueryRoute} component={WikidataQuery} />
         <Route path={API.wikidataValidateRoute} component={WikidataValidate} />

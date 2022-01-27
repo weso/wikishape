@@ -29,6 +29,9 @@ function WikishapeNavbar() {
             <NavDropdown.Item href={mkHash(API.wikidataSchemaVisualRoute)}>
               Visualize entity schema
             </NavDropdown.Item>
+			<NavDropdown.Item href={mkHash(API.wikidataSchemaUMLRoute)}>
+              Generate UML from entity schema
+            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Property" id="basic-nav-dropdown">
             <NavDropdown.Item href={mkHash(API.wikidataPropertyInfoRoute)}>
