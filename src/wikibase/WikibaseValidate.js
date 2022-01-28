@@ -1,6 +1,7 @@
 import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -10,6 +11,7 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { ReloadIcon } from "react-open-iconic-svg";
+import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
@@ -28,7 +30,7 @@ import { sanitizeQualify, showQualify } from "../utils/Utils";
 
 function WikibaseValidate(props) {
   // User selected entity and schema (either from wikidata schemas or custom shex)
-  const [entities, setEntities] = useState(null);
+  const [entities, setEntities] = useState([]);
   const [endpoint, setEndpoint] = useState(API.currentUrl());
   const [wikidataSchemaEntity, setWikidataSchemaEntity] = useState(null);
   const [userSchema, setUserSchema] = useState(InitialShex);
@@ -65,7 +67,11 @@ function WikibaseValidate(props) {
         urlParams[API.queryParameters.endpoint]
       ) {
         const tab = urlParams[API.queryParameters.tab] || schemaTab;
-        const pEntities = urlParams[API.queryParameters.payload].split("|");
+        const pEntities = urlParams[API.queryParameters.payload]
+          .split("|")
+          .map((ent) => ({
+            uri: ent,
+          }));
         setEntities(pEntities);
 
         const finalSchema =
@@ -133,7 +139,7 @@ function WikibaseValidate(props) {
   }, [params]);
 
   const handleChangeEntities = (entities) => {
-    setEntities(entities.map((ent) => `${ent.uri}`));
+    setEntities(entities);
   };
 
   const handleChangeShapeLabel = (label) => {
@@ -220,7 +226,7 @@ function WikibaseValidate(props) {
 
     return {
       [API.queryParameters.endpoint]: pEndpoint || API.wikidataContact.url,
-      [API.queryParameters.payload]: pEntities.join("|"), // List of entities joined by "|"
+      [API.queryParameters.payload]: pEntities.map((ent) => ent.uri).join("|"), // List of entities joined by "|"
       [API.queryParameters.tab]: pSchemaTab,
       [API.queryParameters.schema.label]: pShapeLabel,
       ...paramsSchema,
@@ -299,9 +305,31 @@ function WikibaseValidate(props) {
         <Form onSubmit={handleSubmit}>
           <InputEntitiesByText
             onChange={handleChangeEntities}
-            multiple={false}
+            multiple={true}
             entities={entities}
           />
+          {/* Table with the entities being validated. Information for the user */}
+          <Table>
+            <tbody>
+              {entities.map(({ id, uri, label, descr: description }) => (
+                <tr key={id || uri}>
+                  {label && <td>{label}</td>}
+                  <td>
+                    {(
+                      <a target="_blank" rel="noopener noreferrer" href={uri}>
+                        {uri}
+                        <ExternalLinkIcon />
+                      </a>
+                    ) || "Unknown URI"}
+                  </td>
+                  {description && (
+                    <td>{description || "No description provided"}</td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <hr />
           <Tabs
             activeKey={schemaTab}
             id="SchemaTabs"
@@ -350,14 +378,18 @@ function WikibaseValidate(props) {
           ) : error ? (
             <Alert variant="danger">{error}</Alert>
           ) : result ? (
-            <ResultValidate
-              result={result}
-              options={{
-                defaultSearch:
-                  schemaTab === API.tabs.wdSchema ? shapeLabel : "",
-              }}
-              permalink={permalink}
-            />
+            <>
+              <hr />
+              <ResultValidate
+                result={result}
+                entities={entities}
+                options={{
+                  defaultSearch:
+                    schemaTab === API.tabs.wdSchema ? shapeLabel : "",
+                }}
+                permalink={permalink}
+              />
+            </>
           ) : null}
         </Row>
       ) : null}

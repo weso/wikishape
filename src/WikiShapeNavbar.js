@@ -78,9 +78,9 @@ function WikishapeNavbar() {
               Inspect schema (E42)
             </NavDropdown.Item>
             <NavDropdown.Item
-              href={`${API.routes.client.wikibasePropertyInfo}?${API.queryParameters.endpoint}=https%3A%2F%2Fquery.wikidata.org%2Fsparql&${API.queryParameters.entities}=%5B%7B"label"%3A"instance%20of"%2C"id"%3A"P31"%2C"uri"%3A"http%3A%2F%2Fwww.wikidata.org%2Fentity%2FP31"%2C"descr"%3A"that%20class%20of%20which%20this%20subject%20is%20a%20particular%20example%20and%20member"%7D%5D`}
+              href={`${API.routes.client.wikibaseValidateSparql}?${API.queryParameters.endpoint}=https%3A%2F%2Fwww.wikidata.org&${API.queryParameters.query.query}=SELECT%20%3Fitem%20%3FitemLabel%0AWHERE%0A%7B%0A%20%20%3Fitem%20wdt%3AP31%20wd%3AQ16917.%20%23%20Must%20be%20hospital%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cen%22.%20%7D%0A%7D%20LIMIT%205&${API.queryParameters.query.source}=byText&${API.queryParameters.schema.schema}=https%3A%2F%2Fwww.wikidata.org%2Fwiki%2FSpecial%3AEntitySchemaText%2FE187&${API.queryParameters.schema.engine}=ShEx&${API.queryParameters.schema.format}=ShExC&${API.queryParameters.schema.label}=Hospital&${API.queryParameters.schema.source}=byUrl&${API.queryParameters.tab}=bySchema`}
             >
-              Show property (P31)
+              Validate entities (SPARQL)
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Settings" id="basic-nav-dropdown">

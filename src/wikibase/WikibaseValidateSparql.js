@@ -1,6 +1,7 @@
 import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
+import { Col } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -51,7 +52,8 @@ function WikibaseValidateSparql(props) {
   const [permalink, setPermalink] = useState(null);
   const [result, setResult] = useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loadingResult, setLoadingResult] = useState(false);
+  const [loadingSchema, setLoadingSchema] = useState(false);
   const [error, setError] = useState(null);
 
   // Progress bar controls
@@ -128,7 +130,7 @@ function WikibaseValidateSparql(props) {
 
   // On params changed, submit request
   useEffect(() => {
-    if (params && !loading) {
+    if (params && !loadingResult) {
       if (
         !(
           params[API.queryParameters.query.query] &&
@@ -167,10 +169,7 @@ function WikibaseValidateSparql(props) {
   function handleWikidataSchemaChange(e) {
     if (Array.isArray(e) && e.length > 0) {
       const schemaEntity = e[0];
-      resetState();
-      setLoading(true);
-      setProgressPercent(50);
-      setProgressLabel("Retrieving schema info...");
+      setLoadingSchema(true);
 
       // Query the API for the schema info
       const params = {
@@ -194,9 +193,9 @@ function WikibaseValidateSparql(props) {
           setShapeLabel(shapeLabel);
         })
         .catch((error) => {
-          setError(error.message);
+          setError(mkError(error.message, urlServerValidate));
         })
-        .finally(resetProgressBar);
+        .finally(setLoadingSchema(false));
 
       // Set wikidata schema entity
       setWikidataSchemaEntity(e[0]);
@@ -204,7 +203,7 @@ function WikibaseValidateSparql(props) {
   }
 
   const resetProgressBar = (newLoading = false) => {
-    setLoading(newLoading);
+    setLoadingResult(newLoading);
     setProgressLabel("");
     setProgressPercent(0);
   };
@@ -248,7 +247,7 @@ function WikibaseValidateSparql(props) {
   }
 
   async function postValidate() {
-    setLoading(true);
+    setLoadingResult(true);
     setProgressPercent(15);
     // Make server params
     const reqParams = params2Form(params);
@@ -339,78 +338,91 @@ function WikibaseValidateSparql(props) {
   }
 
   return (
-    <Container>
-      <h1>Validate Wikibase entity</h1>
-      <h4>
-        Target Wikibase:{" "}
-        <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
-          {API.currentUrl()}
-        </a>
-      </h4>
+    <Container fluid={true}>
       <Row>
-        <Form onSubmit={handleSubmit}>
-          {mkQueryTabs(query, setQuery)}
-          <hr />
-          <Tabs
-            activeKey={schemaTab}
-            id="SchemaTabs"
-            onSelect={handleTabChange}
-          >
-            <Tab eventKey={API.tabs.wdSchema} title="Wikidata schema">
-              <InputSchemaEntityByText
-                onChange={handleWikidataSchemaChange}
-                entity={wikidataSchemaEntity}
-              />
-              {wikidataSchemaEntity && shapeList?.length != 0 && (
-                <InputShapeLabel
-                  onChange={handleChangeShapeLabel}
-                  value={shapeLabel}
-                  shapeList={shapeList}
-                />
-              )}
-            </Tab>
-            <Tab eventKey={API.tabs.shexSchema} title="ShEx">
-              {mkShexTabs(userSchema, setUserSchema, "")}
-            </Tab>
-          </Tabs>
-
-          <Button
-            className={"btn-with-icon " + (loading ? "disabled" : "")}
-            variant="primary"
-            type="submit"
-            disabled={loading}
-          >
-            Validate entities
-            <ReloadIcon className="white-icon" />
-          </Button>
-        </Form>
+        <h1>Validate Wikibase entities from SPARQL query</h1>
       </Row>
-      {result || loading || error ? (
-        <Row style={{ display: "block" }}>
-          <br />
-          {loading ? (
-            <ProgressBar
-              style={{ width: "100%" }}
-              striped
-              animated
-              variant="info"
-              now={progressPercent}
-              label={progressLabel}
-            />
-          ) : error ? (
-            <Alert variant="danger">{error}</Alert>
-          ) : result ? (
-            <ResultValidate
-              result={result}
-              options={{
-                defaultSearch:
-                  schemaTab === API.tabs.wdSchema ? shapeLabel : "",
-              }}
-              permalink={permalink}
-            />
+      <Row>
+        <Col className={"half-col border-right"}>
+          <h4>
+            Target Wikibase:{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={API.currentUrl()}
+            >
+              {API.currentUrl()}
+            </a>
+          </h4>
+          <Form onSubmit={handleSubmit}>
+            {mkQueryTabs(query, setQuery)}
+            <hr />
+            <Tabs
+              activeKey={schemaTab}
+              id="SchemaTabs"
+              onSelect={handleTabChange}
+            >
+              <Tab eventKey={API.tabs.wdSchema} title="Wikidata schema">
+                <InputSchemaEntityByText
+                  onChange={handleWikidataSchemaChange}
+                  entity={wikidataSchemaEntity}
+                />
+                {wikidataSchemaEntity && shapeList?.length != 0 && (
+                  <InputShapeLabel
+                    onChange={handleChangeShapeLabel}
+                    value={shapeLabel}
+                    shapeList={shapeList}
+                  />
+                )}
+              </Tab>
+              <Tab eventKey={API.tabs.shexSchema} title="ShEx">
+                {mkShexTabs(userSchema, setUserSchema, "")}
+              </Tab>
+            </Tabs>
+
+            <Button
+              className={
+                "btn-with-icon " +
+                (loadingResult || loadingSchema ? "disabled" : "")
+              }
+              variant="primary"
+              type="submit"
+              disabled={loadingResult || loadingSchema ? true : false}
+            >
+              Validate entities
+              <ReloadIcon className="white-icon" />
+            </Button>
+          </Form>
+        </Col>
+
+        <Col className={"half-col"}>
+          {result || loadingResult || error ? (
+            <>
+              {loadingResult ? (
+                <ProgressBar
+                  style={{ width: "100%" }}
+                  striped
+                  animated
+                  variant="info"
+                  now={progressPercent}
+                  label={progressLabel}
+                />
+              ) : error ? (
+                <Alert variant="danger">{error}</Alert>
+              ) : result ? (
+                <ResultValidate
+                  result={result}
+                  options={{
+                    defaultSearch:
+                      schemaTab === API.tabs.wdSchema ? shapeLabel : "",
+                  }}
+                  permalink={permalink}
+                />
+              ) : null}
+            </>
           ) : null}
-        </Row>
-      ) : null}
+        </Col>
+      </Row>
     </Container>
   );
 }

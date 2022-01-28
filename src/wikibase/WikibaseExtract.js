@@ -22,7 +22,7 @@ function WikibaseExtract(props) {
   const [loading, setLoading] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
 
-  const url = API.wikibaseExtract;
+  const url = API.routes.server.wikibaseExtract;
 
   useEffect(() => {
     if (props.location.search) {
@@ -82,7 +82,7 @@ function WikibaseExtract(props) {
         setProgressPercent(70);
         return response.data;
       })
-      .then(async ({result}) => {
+      .then(async ({ result }) => {
         setResult(result);
         setProgressPercent(100);
         setPermalink(

@@ -119,7 +119,7 @@ export function mergeResult(result, newResult, shapesPrefixMap) {
   }
 }
 
-function ResultValidate({ result: validateResponse, options }) {
+function ResultValidate({ result: validateResponse, options, entities }) {
   // Destructure the items nested in the API response
   const { operationData, wikibase, result: validateResult } = validateResponse;
 

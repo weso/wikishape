@@ -26,7 +26,7 @@ function WikibaseSheXer(props) {
   // Shexer web service location
   // const url = environmentConfiguration.shexerHost;
   // API interface for contacting SheXer
-  const url = API.wikibaseExtractShexer
+  const url = API.routes.server.wikibaseExtractShexer;
 
   useEffect(() => {
     if (props.location.search) {
@@ -82,7 +82,7 @@ function WikibaseSheXer(props) {
     setLoading(true);
     setProgressPercent(30);
 
-    const params = params2Form(jsonData)
+    const params = params2Form(jsonData);
 
     axios
       .post(url, params)
