@@ -85,7 +85,7 @@ function WikishapeNavbar() {
           </NavDropdown>
           <NavDropdown title="Settings" id="basic-nav-dropdown">
             <NavDropdown.Item
-              href={mkHash(API.routes.client.changeWikibaseUrl)}
+              href={mkHash(API.routes.client.changeWikibaseInputUrl)}
             >
               Change target Wikibase
             </NavDropdown.Item>

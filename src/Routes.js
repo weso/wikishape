@@ -13,7 +13,7 @@ import WikibaseQuery from "./wikibase/WikibaseQuery";
 import WikibaseSchemaInfo from "./wikibase/WikibaseSchemaInfo";
 import WikibaseSheXer from "./wikibase/WikibaseSheXer";
 import WikibaseValidate from "./wikibase/WikibaseValidate";
-import WikibaseValidateSPARQL from "./wikibase/WikibaseValidateSPARQL";
+import WikibaseValidateSparql from "./wikibase/WikibaseValidateSparql.js";
 
 function Routes() {
   const renderComponent = (Component, props) => {
@@ -70,10 +70,10 @@ function Routes() {
 
         <Route
           path={API.routes.client.wikibaseValidateSparql}
-          component={WikibaseValidateSPARQL}
+          component={WikibaseValidateSparql}
         />
         <Route
-          path={API.routes.client.changeWikibaseUrl}
+          path={API.routes.client.changeWikibaseInputUrl}
           component={ChangeWikibaseURL}
         />
         <Route

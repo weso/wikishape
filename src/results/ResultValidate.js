@@ -88,27 +88,14 @@ export function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
 
 export function mergeResult(result, newResult, shapesPrefixMap) {
   if (!result) {
-    console.log(
-      `No previous result?: returning newResult: ${showResult(
-        newResult,
-        "New"
-      )}`
-    );
     return newResult;
   }
   if (newResult) {
-    console.log(
-      `Merging. ${showResult(result, "Previous")}\nNew: \n${showResult(
-        newResult,
-        "New"
-      )}`
-    );
     const mergedShapeMap = mergeShapeMap(
       result.shapeMap,
       newResult.shapeMap,
       shapesPrefixMap
     );
-    console.log(`newResult error ${newResult}`);
     let newErrors;
     if (newResult.error) {
       newErrors = [newResult.error];
@@ -126,15 +113,13 @@ export function mergeResult(result, newResult, shapesPrefixMap) {
       nodesPrefixMap: wikidataPrefixes,
       shapesPrefixMap: newResult.shapesPrefixMap,
     };
-    console.log(`${showResult(mergedResult, "Merged")}`);
     return mergedResult;
   } else {
-    console.log(`Previous result=null! ${showResult(result, "New")}`);
     return result;
   }
 }
 
-function ResultValidate({ result: validateResponse }) {
+function ResultValidate({ result: validateResponse, options }) {
   // Destructure the items nested in the API response
   const { operationData, wikibase, result: validateResult } = validateResponse;
 
@@ -180,6 +165,7 @@ function ResultValidate({ result: validateResponse }) {
             shapeMap={resultsMap}
             nodesPrefixMap={nodesPrefixMap}
             shapesPrefixMap={shapesPrefixMap}
+            options={options}
           />
         )}
 
@@ -196,7 +182,6 @@ function showErrors(es) {
   if (Array.isArray(es)) {
     es.map((e, idx) => {
       let msgErr;
-      console.error(`Errors: ${es} e: ${e}`);
       if (e.type) {
         msgErr = (
           <Alert id={idx} variant="danger">

@@ -95,7 +95,7 @@ export const sortCaretGen = (order) => (
   <button className="discrete">{order === "desc" ? "↓" : "↑"}</button>
 );
 
-function ShowShapeMap({ shapeMap, nodesPrefixMap, shapesPrefixMap }) {
+function ShowShapeMap({ shapeMap, nodesPrefixMap, shapesPrefixMap, options }) {
   // Given the shapeMap resulting from a schema validation, map each result to an object
   // compatible with Bootstrap table
   function mkTableItems(shapeMap) {
@@ -219,7 +219,9 @@ function ShowShapeMap({ shapeMap, nodesPrefixMap, shapesPrefixMap }) {
   };
 
   // Settings for searching the results
-  const searchSettings = {};
+  const searchSettings = {
+    defaultSearch: options.defaultSearch || "",
+  };
 
   return (
     <>
@@ -253,6 +255,13 @@ function ShowShapeMap({ shapeMap, nodesPrefixMap, shapesPrefixMap }) {
               expandRow={rowExpandSettings}
               rowClasses={rowClassesFn}
               pagination={paginationFactory(paginationSettings)}
+              noDataIndication={() => {
+                const searchValue = document.querySelector(".search-form")
+                  ?.value;
+                return `No data available ${
+                  searchValue ? `for "${searchValue}"` : ""
+                }`;
+              }}
               condensed
               responsive
               tabIndexCell={true}
@@ -263,5 +272,12 @@ function ShowShapeMap({ shapeMap, nodesPrefixMap, shapesPrefixMap }) {
     </>
   );
 }
+
+ShowShapeMap.defaultProps = {
+  // The ShapeMap results may be passed additional settings. These are the defaults
+  options: {
+    defaultSearch: "", // Default search to be performed when rendering the table
+  },
+};
 
 export default ShowShapeMap;

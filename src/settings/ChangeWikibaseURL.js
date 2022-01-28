@@ -177,25 +177,35 @@ function ChangeWikibaseURL(props) {
         <br />
 
         <Form.Label>Custom Wikibase SPARQL Endpoint</Form.Label>
-        <Form.Control
-          as="input"
-          type="url"
-          placeholder="https://..."
-          value={endpoint}
-          onChange={handleOnChangeEndpoint}
-        />
-        <span style={messageEndpointStyle}>{messageEndpoint}</span>
+        <div
+          // Style div to position the dropdown along with the form
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "end",
+          }}
+        >
+          <Form.Control
+            as="input"
+            type="url"
+            placeholder="https://..."
+            value={endpoint}
+            onChange={handleOnChangeEndpoint}
+          />
+          <span style={messageEndpointStyle}>{messageEndpoint}</span>
 
-        <hr />
-        <Dropdown onSelect={handleOnSelect}>
-          <DropdownButton
-            alignRight
-            title="Common Wikibase Instances"
-            id="select-endpoint"
-          >
-            {dropDownItems}
-          </DropdownButton>
-        </Dropdown>
+          <Dropdown onSelect={handleOnSelect}>
+            <div>
+              <DropdownButton
+                alignRight
+                title="Common Wikibase Instances"
+                id="select-endpoint"
+              >
+                {dropDownItems}
+              </DropdownButton>
+            </div>
+          </Dropdown>
+        </div>
       </Form.Group>
     </Container>
   );

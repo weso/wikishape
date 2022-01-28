@@ -13,6 +13,7 @@ import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
+import InputShapeLabel from "../components/InputShapeLabel";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
 import ResultValidate from "../results/ResultValidate";
@@ -23,11 +24,11 @@ import {
   updateStateShex
 } from "../shex/Shex";
 import { mkError } from "../utils/ResponseError";
-import { showQualify } from "../utils/Utils";
+import { sanitizeQualify, showQualify } from "../utils/Utils";
 
 function WikibaseValidate(props) {
   // User selected entity and schema (either from wikidata schemas or custom shex)
-  const [entities, setEntities] = useState([]);
+  const [entities, setEntities] = useState(null);
   const [endpoint, setEndpoint] = useState(API.currentUrl());
   const [wikidataSchemaEntity, setWikidataSchemaEntity] = useState(null);
   const [userSchema, setUserSchema] = useState(InitialShex);
@@ -64,8 +65,8 @@ function WikibaseValidate(props) {
         urlParams[API.queryParameters.endpoint]
       ) {
         const tab = urlParams[API.queryParameters.tab] || schemaTab;
-        const entities = urlParams[API.queryParameters.payload]; // Single entity, no need to parse JSON
-        setEntities([entities]);
+        const pEntities = urlParams[API.queryParameters.payload].split("|");
+        setEntities(pEntities);
 
         const finalSchema =
           updateStateShex(urlParams, userSchema) || userSchema;
@@ -73,7 +74,9 @@ function WikibaseValidate(props) {
         const pEndpoint = urlParams[API.queryParameters.endpoint || endpoint];
         setEndpoint(pEndpoint);
 
-        // ------------------------------------- IN PROGRESS
+        const pShapeLabel =
+          urlParams[API.queryParameters.schema.label || shapeLabel];
+        setShapeLabel(pShapeLabel);
 
         const wdSchemaInUrl = SchemaEntities.find(
           (e) => e.conceptUri === finalSchema.url
@@ -92,8 +95,15 @@ function WikibaseValidate(props) {
 
         // Set new params accordingly
         const newParams = wdSchemaInUrl
-          ? mkParams([entities], tab, wdSchemaInUrl, null, pEndpoint)
-          : mkParams([entities], tab, null, finalSchema, pEndpoint);
+          ? mkParams(
+              pEntities,
+              tab,
+              wdSchemaInUrl,
+              null,
+              pEndpoint,
+              pShapeLabel
+            )
+          : mkParams(pEntities, tab, null, finalSchema, pEndpoint, pShapeLabel);
 
         setParams(newParams);
         setLastParams(newParams);
@@ -155,7 +165,9 @@ function WikibaseValidate(props) {
         .post(API.routes.server.schemaInfo, params2Form(params))
         .then((response) => response.data)
         .then(({ result: { prefixMap, shapes } }) => {
-          const shapeList = shapes.map((sl) => showQualify(sl, prefixMap).str);
+          const shapeList = shapes
+            .map((sl) => showQualify(sl, prefixMap).str)
+            .map((e) => sanitizeQualify(e));
           const shapeLabel = Array.isArray(shapeList) ? shapeList[0] : "";
 
           setShapeList(shapeList);
@@ -198,7 +210,8 @@ function WikibaseValidate(props) {
     pSchemaTab = schemaTab,
     wdSchema = wikidataSchemaEntity,
     uSchema = userSchema,
-    pEndpoint = endpoint
+    pEndpoint = endpoint,
+    pShapeLabel = shapeLabel
   ) {
     const paramsSchema =
       pSchemaTab === API.tabs.wdSchema
@@ -207,8 +220,9 @@ function WikibaseValidate(props) {
 
     return {
       [API.queryParameters.endpoint]: pEndpoint || API.wikidataContact.url,
-      [API.queryParameters.payload]: pEntities[0],
+      [API.queryParameters.payload]: pEntities.join("|"), // List of entities joined by "|"
       [API.queryParameters.tab]: pSchemaTab,
+      [API.queryParameters.schema.label]: pShapeLabel,
       ...paramsSchema,
     };
   }
@@ -303,15 +317,13 @@ function WikibaseValidate(props) {
               {mkShexTabs(userSchema, setUserSchema, "")}
             </Tab>
           </Tabs>
-          {/*
-          Ready to specify a shape along with params
-          {wikidataSchemaEntity && (
+          {wikidataSchemaEntity && shapeList?.length != 0 && (
             <InputShapeLabel
               onChange={handleChangeShapeLabel}
               value={shapeLabel}
               shapeList={shapeList}
             />
-          )} */}
+          )}
           <Button
             className={"btn-with-icon " + (loading ? "disabled" : "")}
             variant="primary"
@@ -338,7 +350,14 @@ function WikibaseValidate(props) {
           ) : error ? (
             <Alert variant="danger">{error}</Alert>
           ) : result ? (
-            <ResultValidate result={result} permalink={permalink} />
+            <ResultValidate
+              result={result}
+              options={{
+                defaultSearch:
+                  schemaTab === API.tabs.wdSchema ? shapeLabel : "",
+              }}
+              permalink={permalink}
+            />
           ) : null}
         </Row>
       ) : null}

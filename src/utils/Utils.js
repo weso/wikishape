@@ -261,6 +261,12 @@ export function showQualified(qualified, prefixes) {
   }
 }
 
+// Given a string, remove the specified characters and return it
+export function sanitizeQualify(name, badChars = ["<", ">", "#"]) {
+  const nameChars = Array.from(name);
+  return nameChars.filter((char) => !badChars.includes(char)).join("");
+}
+
 /* Converts SPARQL representation to Turtle representation */
 export function cnvValueFromSPARQL(value) {
   switch (value.type) {

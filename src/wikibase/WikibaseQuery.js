@@ -145,8 +145,6 @@ function WikibaseQuery(props) {
       const queryRaw = await getQueryRaw(query);
       if (!queryRaw) throw "Could not fetch the query data";
 
-      console.info(queryRaw);
-
       const reqParams = {
         [API.queryParameters.endpoint]: endpoint,
         [API.queryParameters.payload]: queryRaw,
@@ -155,6 +153,8 @@ function WikibaseQuery(props) {
         serverUrl,
         params2Form(reqParams)
       );
+
+      console.info(queryResult);
 
       // If successful, set result and permalink
       setResult(queryResult);

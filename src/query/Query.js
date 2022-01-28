@@ -3,7 +3,6 @@ import React from "react";
 import API from "../API";
 import { getFileContents } from "../utils/Utils";
 import QueryTabs from "./QueryTabs";
-// import ShExTabs from "../shex/ShExTabs";
 
 export const InitialQuery = {
   activeSource: API.defaultTab,

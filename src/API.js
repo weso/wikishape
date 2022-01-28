@@ -46,15 +46,18 @@ class API {
       wikibaseLanguages: this.rootApi + "wikibase/languages",
     },
     client: {
-      wikibaseSchemaInfo: "/wikibaseSchemaInfo",
-      wikibaseQuery: "/wikibaseQuery",
-      wikibaseValidate: "/wikibaseValidate",
-      wikibaseExtract: "/wikibaseExtract",
-      wikibaseSheXer: "/wikibaseSheXer",
-      wikibaseItem: "/wikibaseItem",
-      wikibasePropertyInfo: "/wikibasePropertyInfo",
-      wikibaseValidateSparql: "/wikibaseValidateSparql",
-      changeWikibasInputeUrl: "/changeWikibaseUrl",
+      wikibaseItem: "/item",
+      wikibasePropertyInfo: "/property",
+      wikibaseSchemaInfo: "/schema",
+
+      wikibaseQuery: "/query",
+
+      wikibaseValidate: "/validate",
+      wikibaseValidateSparql: "/validateSparql",
+
+      wikibaseExtract: "/extract",
+      wikibaseSheXer: "/shexer",
+      changeWikibaseInputUrl: "/wikibaseUrl",
       about: "/about",
       permalink: "/link/:urlCode",
 
