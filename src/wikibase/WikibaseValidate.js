@@ -120,7 +120,8 @@ function WikibaseValidate(props) {
   // On params changed, submit request
   useEffect(() => {
     if (params && !loading) {
-      if (!params[API.queryParameters.payload]) setError("Entity not provided");
+      if (!params[API.queryParameters.payload])
+        setError(API.texts.noProvidedEntity);
       else if (
         !(
           params[API.queryParameters.schema.schema] &&
@@ -129,7 +130,7 @@ function WikibaseValidate(props) {
             : true)
         )
       )
-        setError("Schema not provided");
+        setError(API.texts.noProvidedSchema);
       else {
         resetState();
         setUpHistory();

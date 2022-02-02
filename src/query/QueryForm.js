@@ -23,7 +23,6 @@ function QueryForm(props) {
       y.on("change", (cm, change) => {
         props.onChange(cm.getValue(), y);
       });
-      console.info(props.value)
       y.setValue(props.value);
       y.refresh();
       setYasqe(y);

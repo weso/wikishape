@@ -1,22 +1,27 @@
+import PropTypes from "prop-types";
 import React, { Fragment, useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
 import API from "../API";
 import { Permalink } from "../Permalink";
 import ShExForm from "../shex/ShexForm";
 import PrintJson from "../utils/PrintJson";
-import PrintSVG from "../utils/PrintSVG";
+import { mkInlineSvg } from "../utils/shumlex/shumlexUtils";
 import { prefixMapTableColumns } from "../utils/Utils";
+import ShowVisualization, {
+  visualizationTypes
+} from "../utils/visualization/ShowVisualization";
 
 const WikibaseSchemaResults = ({
   result: apiResponse,
-  schema: localSchemaData,
   permalink,
   disabled,
+  doUml,
 }) => {
+  // For cases where the UML is created, have it in state
+  const [svgUml, setSvgUml] = useState(null);
+
   // Scroll results into view
   useEffect(() => {
     const resultElement = document.getElementById("results-container");
@@ -36,29 +41,10 @@ const WikibaseSchemaResults = ({
     },
   } = apiResponse;
 
-  const { id, label, descr: description, webUri } = localSchemaData;
-
   if (apiResponse) {
     return (
       <div id="results-container">
         <Fragment>
-          <Table>
-            <tbody>
-              <tr key={id}>
-                <td>{label || "Unknown label"}</td>
-                <td>
-                  {(
-                    <a target="_blank" rel="noopener noreferrer" href={webUri}>
-                      {webUri}
-                      <ExternalLinkIcon />
-                    </a>
-                  ) || "Unknown URI"}
-                </td>
-                <td>{description || "No description provided"}</td>
-              </tr>
-            </tbody>
-          </Table>
-
           <div className="results-summary">
             {permalink && <Permalink url={permalink} disabled={disabled} />}
           </div>
@@ -66,25 +52,59 @@ const WikibaseSchemaResults = ({
           {/* Return visualization, form and prefix map */}
 
           <Tabs activeKey={resultTab} id="resultTabs" onSelect={setResultTab}>
-            <Tab eventKey={API.tabs.text} title="Textual">
-              <ShExForm
-                onChange={() => null}
-                placeholder={""}
-                readonly={true}
-                value={shexContent}
-              />
-            </Tab>
-            <Tab eventKey={API.tabs.visualization} title="Visualization">
-              <PrintSVG svg={schemaSvg} />
-            </Tab>
-            <Tab eventKey={API.tabs.prefixMap} title="Prefix Map">
-              <BootstrapTable
-                classes="results-table"
-                keyField="prefixName"
-                data={prefixMap}
-                columns={prefixMapTableColumns}
-              ></BootstrapTable>
-            </Tab>
+            {/* Schema text */}
+            {shexContent && (
+              <Tab eventKey={API.tabs.text} title="Textual">
+                <ShExForm
+                  onChange={() => null}
+                  placeholder={""}
+                  readonly={true}
+                  value={shexContent}
+                />
+              </Tab>
+            )}
+            {/* Schema visualize */}
+            {schemaSvg && (
+              <Tab eventKey={API.tabs.visualization} title="Visualization">
+                {/* <PrintSVG svg={schemaSvg} controls={true} /> */}
+                <ShowVisualization
+                  data={schemaSvg}
+                  type={visualizationTypes.svgRaw}
+                  raw={false}
+                  controls={true}
+                  embedLink={false}
+                  disabledLinks={disabled}
+                />
+              </Tab>
+            )}
+            {/* Schema prefix map */}
+            {prefixMap && (
+              <Tab eventKey={API.tabs.prefixMap} title="Prefix Map">
+                <BootstrapTable
+                  classes="results-table"
+                  keyField="prefixName"
+                  data={prefixMap}
+                  columns={prefixMapTableColumns}
+                ></BootstrapTable>
+              </Tab>
+            )}
+            {/* Schema UML */}
+            {schemaSvg && doUml && (
+              <Tab
+                eventKey={API.tabs.uml}
+                title="UML"
+                onEnter={() => !svgUml && setSvgUml(mkInlineSvg(shexContent))}
+              >
+                <ShowVisualization
+                  data={svgUml}
+                  type={visualizationTypes.svgRaw}
+                  raw={false}
+                  controls={true}
+                  embedLink={false}
+                  disabledLinks={disabled}
+                />
+              </Tab>
+            )}
           </Tabs>
           <hr />
           <details>
@@ -97,8 +117,15 @@ const WikibaseSchemaResults = ({
   }
 };
 
+WikibaseSchemaResults.propTypes = {
+  result: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
+  doUml: PropTypes.bool,
+};
+
 WikibaseSchemaResults.defaultProps = {
   disabled: false,
+  doUml: true,
 };
 
 export default WikibaseSchemaResults;

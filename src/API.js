@@ -258,13 +258,17 @@ class API {
     targetDecls: "TargetDecls",
   };
 
-  // Wikibase entity types
-  static wbEntityTypes = {
-    propName: "wbEntityType",
+  // Prop names
+  static propNames = {
+    useShexer: "useShexer",
+    // Wikibase entity types
+    wbEntityTypes: {
+      propName: "wbEntityType",
 
-    item: "item",
-    property: "property",
-    lexeme: "lexeme",
+      item: "item",
+      property: "property",
+      lexeme: "lexeme",
+    },
   };
 
   // Text constants
@@ -410,6 +414,7 @@ class API {
     errorParsingUrl: "Could not parse URL information",
     noProvidedRdf: "No RDF data provided",
     noProvidedSchema: "No schema provided",
+    noProvidedEntity: "No entity provided",
     invalidXmiSchema: "Invalid XMI schema",
     noProvidedShapeMap: "No shapeMap provided",
     noProvidedQuery: "No query provided",

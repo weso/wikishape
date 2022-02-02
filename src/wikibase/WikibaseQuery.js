@@ -154,8 +154,6 @@ function WikibaseQuery(props) {
         params2Form(reqParams)
       );
 
-      console.info(queryResult);
-
       // If successful, set result and permalink
       setResult(queryResult);
 

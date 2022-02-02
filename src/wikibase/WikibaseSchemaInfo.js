@@ -1,12 +1,13 @@
 import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import { ReloadIcon } from "react-open-iconic-svg";
+import { ExternalLinkIcon, ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import { mkPermalinkLong, params2Form } from "../Permalink";
@@ -165,7 +166,7 @@ function WikibaseSchemaInfo(props) {
 
   return (
     <Container>
-      <h1>Info about Wikibase Schema entity</h1>
+      <h1>Info about Wikidata Schema entity</h1>
       {/* Limited to wikidata until mediaWiki allows seaching for schemas */}
       {/* <h4>
         Target Wikibase:{" "}
@@ -178,6 +179,33 @@ function WikibaseSchemaInfo(props) {
         onChange={setSchemaEntities}
         entity={schemaEntities}
       />
+      {schemaEntities && (
+        <Table>
+          <tbody>
+            {schemaEntities.map((ent) => {
+              const { id, label, descr: description, webUri } = ent;
+              return (
+                <tr key={id}>
+                  <td>{label || "Unknown label"}</td>
+                  <td>
+                    {(
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={webUri}
+                      >
+                        {webUri}
+                        <ExternalLinkIcon />
+                      </a>
+                    ) || "Unknown URI"}
+                  </td>
+                  <td>{description || "No description provided"}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      )}
       <Form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
         <Button
           className={"btn-with-icon " + (loading ? "disabled" : "")}
@@ -196,8 +224,6 @@ function WikibaseSchemaInfo(props) {
       ) : result ? (
         <WikibaseSchemaResults
           result={result}
-          schema={schemaEntities[0]}
-          visual={false}
           permalink={permalink}
         />
       ) : null}

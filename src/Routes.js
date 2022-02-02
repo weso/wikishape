@@ -11,7 +11,6 @@ import WikibaseExtract from "./wikibase/WikibaseExtract";
 import WikibaseItem from "./wikibase/WikibaseItem";
 import WikibaseQuery from "./wikibase/WikibaseQuery";
 import WikibaseSchemaInfo from "./wikibase/WikibaseSchemaInfo";
-import WikibaseSheXer from "./wikibase/WikibaseSheXer";
 import WikibaseValidate from "./wikibase/WikibaseValidate";
 import WikibaseValidateSparql from "./wikibase/WikibaseValidateSparql.js";
 
@@ -35,7 +34,8 @@ function Routes() {
           path={API.routes.client.wikibaseItem}
           render={() =>
             renderComponent(WikibaseItem, {
-              [API.wbEntityTypes.propName]: API.wbEntityTypes.item,
+              [API.propNames.wbEntityTypes.propName]:
+                API.propNames.wbEntityTypes.item,
             })
           }
         />
@@ -43,7 +43,8 @@ function Routes() {
           path={API.routes.client.wikibasePropertyInfo}
           render={() =>
             renderComponent(WikibaseItem, {
-              [API.wbEntityTypes.propName]: API.wbEntityTypes.property,
+              [API.propNames.wbEntityTypes.propName]:
+                API.propNames.wbEntityTypes.property,
             })
           }
         />
@@ -61,11 +62,19 @@ function Routes() {
         />
         <Route
           path={API.routes.client.wikibaseExtract}
-          component={WikibaseExtract}
+          render={() =>
+            renderComponent(WikibaseExtract, {
+              [API.propNames.useShexer]: false,
+            })
+          }
         />
         <Route
           path={API.routes.client.wikibaseSheXer}
-          component={WikibaseSheXer}
+          render={() =>
+            renderComponent(WikibaseExtract, {
+              [API.propNames.useShexer]: true,
+            })
+          }
         />
 
         <Route

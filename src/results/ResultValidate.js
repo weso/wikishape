@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import API from "../API";
+import { Permalink } from "../Permalink";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 import ShowShapeMap from "../shapeMap/ShowShapeMap";
 import PrintJson from "../utils/PrintJson";
@@ -119,7 +120,13 @@ export function mergeResult(result, newResult, shapesPrefixMap) {
   }
 }
 
-function ResultValidate({ result: validateResponse, options, entities }) {
+function ResultValidate({
+  result: validateResponse,
+  options,
+  entities,
+  permalink,
+  disabled,
+}) {
   // Destructure the items nested in the API response
   const { operationData, wikibase, result: validateResult } = validateResponse;
 
@@ -173,6 +180,7 @@ function ResultValidate({ result: validateResponse, options, entities }) {
           <summary>{API.texts.responseSummaryText}</summary>
           <PrintJson json={validateResponse} />
         </details>
+        {permalink && <Permalink url={permalink} disabled={disabled} />}
       </div>
     );
   }

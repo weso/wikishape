@@ -16,6 +16,14 @@ code {
   display: none;
 }
 
+.half-col {
+  max-width: 50% !important;
+}
+
+.half-row {
+  max-height: 50vh !important;
+}
+
 .btn-with-icon {
   margin: 5px auto;
   display: inline-flex !important;
@@ -203,7 +211,11 @@ a.dropdown-item {
   padding: 5px;
 }
 
-.btn-zoom {
+.controls-group {
+  margin: 0 5px;
+}
+
+.btn-controls {
   margin: 5px 0 5px 0px;
   display: inline-flex !important;
   padding: 5px;
@@ -287,8 +299,9 @@ table td {
   margin: 5px;
 }
 
+/* Full-screen visualizations */
 .fullscreen {
-  position: fixed;
+  position: fixed !important;
   top: 0;
   left: 0;
   right: 0;
@@ -500,10 +513,6 @@ table :is(tr, td).table-item.green.expanded-parent {
 table :is(tr, td).table-item.red.expanded-parent {
   font-style: italic;
   background-color: rgba(235, 0, 0, 0.35);
-}
-
-table :is(tr, td).table-item.expanded-child {
-  /* outline: 1px solid black; */
 }
 
 li.size-per-page-dropdown {

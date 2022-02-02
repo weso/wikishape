@@ -69,18 +69,23 @@ function WikishapeNavbar() {
             <NavDropdown.Item
               href={`${API.routes.client.wikibaseItem}?${API.queryParameters.endpoint}=https%3A%2F%2Fquery.wikidata.org%2Fsparql&${API.queryParameters.entities}=%5B%7B%22label%22%3A%22Douglas%20Adams%22%2C%22id%22%3A%22Q42%22%2C%22uri%22%3A%22http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ42%22%2C%22descr%22%3A%22English%20writer%20and%20humorist%22%7D%5D`}
             >
-              Show entity (Q42)
+              Show entity - Q42
             </NavDropdown.Item>
             {/*<NavDropdown.Item href='/#/wikidataSchemaInfo?id=E42&lang=en'>Show entity schema (E42)</NavDropdown.Item>*/}
             <NavDropdown.Item
               href={`${API.routes.client.wikibaseSchemaInfo}?${API.queryParameters.id}=E42&${API.queryParameters.lang}=en`}
             >
-              Inspect schema (E42)
+              Inspect schema - E42
             </NavDropdown.Item>
             <NavDropdown.Item
               href={`${API.routes.client.wikibaseValidateSparql}?${API.queryParameters.endpoint}=https%3A%2F%2Fwww.wikidata.org&${API.queryParameters.query.query}=SELECT%20%3Fitem%20%3FitemLabel%0AWHERE%0A%7B%0A%20%20%3Fitem%20wdt%3AP31%20wd%3AQ16917.%20%23%20Must%20be%20hospital%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cen%22.%20%7D%0A%7D%20LIMIT%205&${API.queryParameters.query.source}=byText&${API.queryParameters.schema.schema}=https%3A%2F%2Fwww.wikidata.org%2Fwiki%2FSpecial%3AEntitySchemaText%2FE187&${API.queryParameters.schema.engine}=ShEx&${API.queryParameters.schema.format}=ShExC&${API.queryParameters.schema.label}=Hospital&${API.queryParameters.schema.source}=byUrl&${API.queryParameters.tab}=bySchema`}
             >
-              Validate entities (SPARQL)
+              Validate entities (SPARQL) - Hospitals
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              href={`${API.routes.client.wikibaseExtract}?${API.queryParameters.payload}=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ11681590`}
+            >
+              Extract schema from entities - EII
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Settings" id="basic-nav-dropdown">

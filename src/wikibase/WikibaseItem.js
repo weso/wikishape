@@ -141,7 +141,10 @@ function WikibaseItem(props) {
 
   return (
     <Container>
-      <h1>Outgoing arcs from Wikibase {props.wbEntityType}</h1>
+      <h1>
+        Outgoing arcs from Wikibase{" "}
+        {props[API.propNames.wbEntityTypes.propName]}
+      </h1>
       <h4>
         Target Wikibase:{" "}
         <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
@@ -149,7 +152,8 @@ function WikibaseItem(props) {
         </a>
       </h4>
 
-      {props.wbEntityType == API.wbEntityTypes.item ? (
+      {props[API.propNames.wbEntityTypes.propName] ==
+      API.propNames.wbEntityTypes.item ? (
         <InputEntitiesByText
           onChange={handleChange}
           multiple={false}
@@ -191,11 +195,11 @@ function WikibaseItem(props) {
 
 WikibaseItem.propTypes = {
   // Whether to search for items, properties, etc. in the form
-  wbEntityType: PropTypes.string.isRequired,
+  [API.propNames.wbEntityTypes.propName]: PropTypes.string.isRequired,
 };
 
 WikibaseItem.defaultProps = {
-  wbEntityType: API.wbEntityTypes.item,
+  [API.propNames.wbEntityTypes.propName]: API.propNames.wbEntityTypes.item,
 };
 
 export default WikibaseItem;

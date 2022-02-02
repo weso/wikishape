@@ -568,3 +568,8 @@ export const getFileContents = async (file) =>
     reader.onload = () => res(reader.result);
     reader.readAsText(file);
   });
+
+// Zoom limits for non-cyto visualizations, whose zoom is controlled with CSS
+export const visualizationMinZoom = 0.2;
+export const visualizationMaxZoom = 1.9;
+export const visualizationStepZoom = 0.1;
