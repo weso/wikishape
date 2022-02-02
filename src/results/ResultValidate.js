@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
+import API from "../API";
+import { Permalink } from "../Permalink";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 import ShowShapeMap from "../shapeMap/ShowShapeMap";
-import { showQualify } from "../utils/Utils";
+import PrintJson from "../utils/PrintJson";
+import { equalsIgnoreCase, showQualify } from "../utils/Utils";
+
+export const conformant = "conformant"; // Status of conformant nodes
+export const nonConformant = "nonconformant"; // Status of non-conformant nodes
+export const unknown = "?"; // Status of non-conformant nodes
 
 function showStatus(status) {
   switch (status) {
-    case "conformant":
+    case conformant:
       return "";
-    case "nonconformant":
+    case nonConformant:
       return "!";
-    case "?":
+    case unknown:
       return "?";
     default:
       return status;
@@ -82,27 +89,14 @@ export function mergeShapeMap(shapeMap1, shapeMap2, shapesPrefixMap) {
 
 export function mergeResult(result, newResult, shapesPrefixMap) {
   if (!result) {
-    console.log(
-      `No previous result?: returning newResult: ${showResult(
-        newResult,
-        "New"
-      )}`
-    );
     return newResult;
   }
   if (newResult) {
-    console.log(
-      `Merging. ${showResult(result, "Previous")}\nNew: \n${showResult(
-        newResult,
-        "New"
-      )}`
-    );
     const mergedShapeMap = mergeShapeMap(
       result.shapeMap,
       newResult.shapeMap,
       shapesPrefixMap
     );
-    console.log(`newResult error ${newResult}`);
     let newErrors;
     if (newResult.error) {
       newErrors = [newResult.error];
@@ -120,61 +114,82 @@ export function mergeResult(result, newResult, shapesPrefixMap) {
       nodesPrefixMap: wikidataPrefixes,
       shapesPrefixMap: newResult.shapesPrefixMap,
     };
-    console.log(`${showResult(mergedResult, "Merged")}`);
     return mergedResult;
   } else {
-    console.log(`Previous result=null! ${showResult(result, "New")}`);
     return result;
   }
 }
 
-function ResultValidate({ result }) {
-  let msg;
-  if (result === "") {
-    msg = null;
-  } else if (result.error) {
-    msg = (
-      <div>
-        <Alert variant="danger">Error: {result.error}</Alert>
-        <details>
-          <pre>{JSON.stringify(result)}</pre>
-        </details>
-      </div>
-    );
-  } else {
-    const {
-      message,
+function ResultValidate({
+  result: validateResponse,
+  options,
+  entities,
+  permalink,
+  disabled,
+}) {
+  // Destructure the items nested in the API response
+  const { operationData, wikibase, result: validateResult } = validateResponse;
+
+  const { entity: validatedEntity, result: apiResult } = validateResult;
+
+  const {
+    data,
+    schema,
+    trigger,
+    result: {
+      valid,
       errors,
-      shapeMap,
+      shapeMap: resultsMap,
       nodesPrefixMap,
       shapesPrefixMap,
-    } = result;
-    msg = (
-      <div>
-        {message && <Alert variant="success">{message} </Alert>}
-        {errors && <div> {showErrors(errors)} </div>}
-        {shapeMap && (
+    },
+  } = apiResult;
+
+  // Store the resulting nodes in state, plus the invalid ones
+  const [nodes] = useState(resultsMap);
+  const [invalidNodes, setInvalidNodes] = useState([]);
+
+  // Scroll results into view
+  useEffect(() => {
+    const resultElement = document.getElementById("results-container");
+    resultElement &&
+      resultElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  // Update invalid nodes on node changes
+  useEffect(() => {
+    const nonConformantNodes = nodes.filter((node) =>
+      equalsIgnoreCase(node.status, nonConformant)
+    );
+    setInvalidNodes(nonConformantNodes);
+  }, [nodes]);
+
+  if (validateResponse) {
+    return (
+      <div id="results-container">
+        {nodes?.length && (
           <ShowShapeMap
-            shapeMap={shapeMap}
+            shapeMap={resultsMap}
             nodesPrefixMap={nodesPrefixMap}
             shapesPrefixMap={shapesPrefixMap}
+            options={options}
           />
         )}
+
         <details>
-          <pre>{JSON.stringify(result)}</pre>
+          <summary>{API.texts.responseSummaryText}</summary>
+          <PrintJson json={validateResponse} />
         </details>
+        {permalink && <Permalink url={permalink} disabled={disabled} />}
       </div>
     );
   }
-
-  return <div style={{ width: "100%" }}>{msg}</div>;
 }
 
 function showErrors(es) {
   if (Array.isArray(es)) {
     es.map((e, idx) => {
       let msgErr;
-      console.error(`Errors: ${es} e: ${e}`);
       if (e.type) {
         msgErr = (
           <Alert id={idx} variant="danger">

@@ -1,4 +1,5 @@
 import axios from "axios";
+import PropTypes from "prop-types";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
@@ -9,34 +10,38 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
+import InputPropertiesByText from "../components/InputPropertiesByText";
 import { mkPermalinkLong } from "../Permalink";
 import ResultOutgoing from "../results/ResultOutgoing";
+import { mkError } from "../utils/ResponseError";
 
-function WikidataOutgoing(props) {
+function WikibaseItem(props) {
   const [entities, setEntities] = useState([]);
   const [lastEntities, setLastEntities] = useState([]);
   const [node, setNode] = useState("");
-  const [endpoint, setEndpoint] = useState(API.currentEndpoint);
+  const [endpoint, setEndpoint] = useState(API.currentEndpoint());
   const [permalink, setPermalink] = useState("");
   const [result, setResult] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
 
-  const ApiEndpoint = API.dataOutgoing;
+  const urlServer = API.routes.server.dataOutgoing;
 
   useEffect(() => {
     if (props.location.search) {
       const queryParams = qs.parse(props.location.search);
-      if (queryParams.endpoint) {
-        setEndpoint(queryParams.endpoint);
+      if (queryParams[API.queryParameters.endpoint]) {
+        setEndpoint(queryParams[API.queryParameters.endpoint]);
       }
-      if (queryParams.entities) {
+      if (queryParams[API.queryParameters.entities]) {
         let entitiesFromUrl = [];
         try {
-          entitiesFromUrl = JSON.parse(queryParams.entities);
-        } catch (e) {
-          setError("Could not parse parameters from URL");
+          entitiesFromUrl = JSON.parse(
+            queryParams[API.queryParameters.entities]
+          );
+        } catch (err) {
+          setError(API.texts.errorParsingUrl);
         }
         setEntities(entitiesFromUrl);
         setLastEntities(entitiesFromUrl);
@@ -69,42 +74,30 @@ function WikidataOutgoing(props) {
     }
   }
 
-  function getOutgoing(cb) {
+  async function getOutgoing(cb) {
     setLoading(true);
     const params = {
-      endpoint: endpoint,
-      node: node,
+      [API.queryParameters.endpoint]: endpoint,
+      [API.queryParameters.node]: node,
     };
+
     setProgressPercent(30);
-    axios
-      .get(ApiEndpoint, {
-        params: params,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        setProgressPercent(70);
-        return response.data;
-      })
-      .then(async (data) => {
-        setResult(data);
-        setProgressPercent(80);
-        setPermalink(
-          mkPermalinkLong(API.wikidataOutgoingRoute, {
-            ...params,
-            entities: JSON.stringify(entities),
-          })
-        );
-        setProgressPercent(90);
-        if (cb) cb();
-        setProgressPercent(100);
-      })
-      .catch((error) => {
-        setError(`Error processing ${ApiEndpoint}: ${error.message}`);
-      })
-      .finally(() => setLoading(false));
+
+    try {
+      const { data: entityOutgoing } = await axios.get(urlServer, { params });
+      setProgressPercent(80);
+      setResult(entityOutgoing);
+      setPermalink(
+        mkPermalinkLong(API.routes.client.wikibaseItem, {
+          ...params,
+          entities: JSON.stringify(entities),
+        })
+      );
+    } catch (err) {
+      setError(mkError(err, urlServer));
+    } finally {
+      setLoading(false);
+    }
   }
 
   function setUpHistory() {
@@ -118,9 +111,9 @@ function WikidataOutgoing(props) {
       history.pushState(
         null,
         document.title,
-        mkPermalinkLong(API.wikidataOutgoingRoute, {
-          entities: JSON.stringify(lastEntities),
-          endpoint: endpoint,
+        mkPermalinkLong(API.routes.client.wikibaseItem, {
+          [API.queryParameters.entities]: JSON.stringify(lastEntities),
+          [API.queryParameters.endpoint]: endpoint,
         })
       );
     }
@@ -129,7 +122,7 @@ function WikidataOutgoing(props) {
     history.replaceState(
       null,
       document.title,
-      mkPermalinkLong(API.wikidataOutgoingRoute, {
+      mkPermalinkLong(API.routes.client.wikibaseItem, {
         entities: JSON.stringify(entities),
         endpoint: endpoint,
       })
@@ -148,19 +141,33 @@ function WikidataOutgoing(props) {
 
   return (
     <Container>
-      <h1>Outgoing arcs from Wikibase entity</h1>
+      <h1>
+        Outgoing arcs from Wikibase{" "}
+        {props[API.propNames.wbEntityTypes.propName]}
+      </h1>
       <h4>
         Target Wikibase:{" "}
         <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
           {API.currentUrl()}
         </a>
       </h4>
-      <InputEntitiesByText
-        onChange={handleChange}
-        multiple={false}
-        entities={entities}
-      />
-      <Form onSubmit={handleSubmit} style={{marginBottom: "10px"}}>
+
+      {props[API.propNames.wbEntityTypes.propName] ==
+      API.propNames.wbEntityTypes.item ? (
+        <InputEntitiesByText
+          onChange={handleChange}
+          multiple={false}
+          entities={entities}
+        />
+      ) : (
+        <InputPropertiesByText
+          onChange={handleChange}
+          multiple={false}
+          entities={entities}
+        />
+      )}
+
+      <Form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
         <Button
           className={"btn-with-icon " + (loading ? "disabled" : "")}
           variant="primary"
@@ -186,4 +193,13 @@ function WikidataOutgoing(props) {
   );
 }
 
-export default WikidataOutgoing;
+WikibaseItem.propTypes = {
+  // Whether to search for items, properties, etc. in the form
+  [API.propNames.wbEntityTypes.propName]: PropTypes.string.isRequired,
+};
+
+WikibaseItem.defaultProps = {
+  [API.propNames.wbEntityTypes.propName]: API.propNames.wbEntityTypes.item,
+};
+
+export default WikibaseItem;

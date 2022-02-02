@@ -7,7 +7,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import API from "../API";
 import Code from "../components/Code";
 
-function InputWikidataSchema(props) {
+function InputWikibaseSchema(props) {
   const initialStatus = {
     url: "",
     number: "",
@@ -21,19 +21,16 @@ function InputWikidataSchema(props) {
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: "setLoading" });
-      try {
-        const result = await axios(API.wikidataSchemaContent, {
+
+      const result = axios
+        .get(API.wikibaseSchemaContent, {
           params: { wdSchema: status.number },
-        });
-        const json = result.data;
-        if (json.result) {
-          dispatch({ type: "setContent", value: json.result });
-        } else {
-          dispatch({ type: "setError", value: json.error });
-        }
-      } catch (error) {
-        dispatch({ type: "setError", value: error.message });
-      }
+        })
+        .then((response) => response.data)
+        .then(({ result }) => {
+          dispatch({ type: "setContent", value: result });
+        })
+        .catch((err) => dispatch({ type: "setError", value: err }));
     };
     fetchData();
   }, [status.number]);
@@ -99,7 +96,7 @@ function InputWikidataSchema(props) {
   );
 }
 
-InputWikidataSchema.propTypes = {
+InputWikibaseSchema.propTypes = {
   name: PropTypes.string.isRequired,
   entity: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
@@ -107,4 +104,4 @@ InputWikidataSchema.propTypes = {
   raw: PropTypes.string, // raw stem of URL
 };
 
-export default InputWikidataSchema;
+export default InputWikibaseSchema;

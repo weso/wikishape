@@ -10,7 +10,7 @@ import Row from "react-bootstrap/Row";
 import API from "../API";
 import SelectLanguage from "./SelectLanguage";
 
-const SEARCH_URI = API.wikidataSearchEntity;
+const SEARCH_URI = API.routes.server.wikibaseSearchEntity;
 const PER_PAGE = 50;
 const defaultLanguage = [{ label: "en", name: "English" }];
 
@@ -24,12 +24,15 @@ function InputEntitiesByText(props) {
   function makeAndHandleRequest(label, language, page = 0) {
     const lang = language[0] ? language[0].label : "en";
     return fetch(
-      `${SEARCH_URI}?endpoint=${endpoint}&label=${label}&limit=${PER_PAGE}&language=${lang}&continue=${page *
-        PER_PAGE}`
+      `${SEARCH_URI}?${API.queryParameters.endpoint}=${endpoint}&${
+        API.queryParameters.payload
+      }=${label}&${API.queryParameters.limit}=${PER_PAGE}&${
+        API.queryParameters.language
+      }=${lang}&${API.queryParameters.continue}=${page * PER_PAGE}`
     )
       .then((resp) => resp.json())
-      .then((json) => {
-        return json;
+      .then(({ result: entities }) => {
+        return entities;
       })
       .catch(() => []);
   }

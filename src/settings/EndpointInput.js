@@ -9,8 +9,8 @@ import API from "../API";
 
 function EndpointInput(props) {
   const endpoints = [
-    { name: "wikidata", url: API.wikidataUrl },
-    { name: "dbpedia", url: API.dbpediaUrl },
+    { name: "wikidata", url: API.wikidataSparqlUrl },
+    { name: "dbpedia", url: API.dbpediaSparqlUrl },
   ];
 
   const dropDownItems = endpoints.map((endpoint, index) => (

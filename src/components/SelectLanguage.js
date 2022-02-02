@@ -14,14 +14,10 @@ function SelectLanguage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const LANGS_URI = API.wikidataLanguages;
-      const result = await axios.get(LANGS_URI, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      });
-      setOptions(result.data);
+      const LANGS_URI = `${API.routes.server.wikibaseLanguages}?${API.queryParameters.endpoint}=${API.currentUrl()}`;
+      const result = await axios.get(LANGS_URI)
+      const {result: languages} = result.data
+      setOptions(languages);
     };
     fetchData();
   }, [props.language]);
