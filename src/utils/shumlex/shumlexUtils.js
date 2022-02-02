@@ -18,10 +18,7 @@ export function mkInlineSvg(rawSchema) {
   shumlex.crearDiagramaUML(dummyId, rawXmi);
   const svg64 = shumlex.base64SVG(dummyId);
   // ...and decode the binary to get the inline SVG element to be represented
-  const inlineSvg = Buffer.from(
-    svg64.replace("data:image/svg+xml;base64,", ""),
-    "base64"
-  ).toString();
+  const inlineSvg = atob(svg64.replace("data:image/svg+xml;base64,", ""));
 
   // Remove dummy element and return
   dummy.remove();
@@ -33,7 +30,7 @@ export function mkInlineSvg(rawSchema) {
 // that create errors when downloading SVGs
 function sanitizeXmi(xmi) {
   const stringsBlackList = ["&lt;", "&gt;"];
-  const regexBlackList = [/g\s+id="[a-zA-Z_:0-9<>]+"/gim];
+  const regexBlackList = [/id="[\/a-zA-Z_\-:0-9<>]+"/gim];
 
   xmi = stringsBlackList.reduce((prev, curr) => prev.replaceAll(curr, ""), xmi);
   xmi = regexBlackList.reduce(
