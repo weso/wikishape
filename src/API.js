@@ -1,5 +1,5 @@
+import React from "react";
 import environmentConfiguration from "./EnvironmentConfig";
-
 class API {
   static rootApi = environmentConfiguration.rdfShapeHost + "/api/";
   static routes = {
@@ -69,11 +69,14 @@ class API {
       projectSite: "https://www.weso.es/rdfshape-api/",
       rdfShapeClient: "https://rdfshape.weso.es/",
       wikidataUrl: "https://query.wikidata.org/sparql",
+      wikidataBase: "https://www.wikidata.org/",
       dbpediaUrl: "https://dbpedia.org/sparql",
+      dbpediaBase: "https://dbpedia.org/",
       shapeFormHelpUrl:
         "https://github.com/weso/shapeForms#requirementslimitations",
 
       wikibase: "https://wikiba.se/",
+      shexerRepo: "https://github.com/DaniFdezAlvarez/shexer",
     },
   };
 
@@ -328,6 +331,66 @@ class API {
       validateWbEntitiesSparql: "Validate Wikibase entities (from SPARQL)",
       schemaExtractDefault: "Extract schema from Wikidata entities",
       schemaExtractShexer: "Extract schema from Wikidata entities (Shexer)",
+      changeWikibase: "Set target Wikibase instance",
+    },
+
+    pageExplanations: {
+      entityInfo:
+        "Select a set of entities to see a list of all the outgoing relationships to other entities/properties",
+      propertyInfo:
+        "Select a set of properties to see a list of all the outgoing relationships to other entities/properties",
+      schemaInfo:
+        "Type in and select any Wikidata schema to see its contents and different visualizations of it, " +
+        "including: ShEx text, SVG and Cytoscape visuals and a UML-equivalent of the schema",
+      querySparql:
+        "Input a query (by text, by pointing to a URL with the contents or by file) and execute it against the current SPARQL endpoint",
+      validateWbEntities:
+        "Select a set of entities to be validated and a schema to be validated against. The validation schema can be one of Wikidata's or a custom one (Wikidata schemas will require a start shape)",
+      validateWbEntitiesSparql:
+        "Query the current endpoint and validate the resulting entities against a given schema. The validation schema can be one of Wikidata's or a custom one (Wikidata schemas will require a start shape)",
+
+      schemaExtractDefault:
+        "Select a set of entities and try to extract a validation schema (ShEx) that suits the entities' properties",
+
+      schemaExtractShexer: (
+        <span>
+          Select a set of entities and try to extract a validation schema (ShEx)
+          that suits the entities' properties (uses{" "}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={this.routes.utils.shexerRepo}
+          >
+            Shexer
+          </a>
+          )
+        </span>
+      ),
+
+      changeWikibase: (
+        <span>
+          Set the target Wikibase instance used in the web operations to one of
+          your liking. Examples of common Wikibase instances are provided (
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={this.routes.utils.wikidataBase}
+          >
+            Wikidata
+          </a>{" "}
+          and{" "}
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={this.routes.utils.dbpediaBase}
+          >
+            DBpedia
+          </a>
+          )
+          <br />
+          Note that some operations are still restricted to Wikidata
+        </span>
+      ),
     },
 
     dataTabs: {

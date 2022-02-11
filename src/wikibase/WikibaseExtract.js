@@ -12,6 +12,7 @@ import { ReloadIcon } from "react-open-iconic-svg";
 import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import { mkError } from "../utils/ResponseError";
 import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
@@ -197,13 +198,20 @@ function WikibaseExtract(props) {
 
   return (
     <Container>
-      <h1>
-        {useShexer
-          ? API.texts.pageHeaders.schemaExtractShexer
-          : API.texts.pageHeaders.schemaExtractDefault}
-      </h1>
+      <PageHeader
+        title={
+          useShexer
+            ? API.texts.pageHeaders.schemaExtractShexer
+            : API.texts.pageHeaders.schemaExtractDefault
+        }
+        details={
+          useShexer
+            ? API.texts.pageExplanations.schemaExtractShexer
+            : API.texts.pageExplanations.schemaExtractDefault
+        }
+      />
       <Row>
-        <Form onSubmit={handleSubmit}>
+        <Form className="width-100" onSubmit={handleSubmit}>
           <InputEntitiesByText
             onChange={handleChangeEntities}
             multiple={false}

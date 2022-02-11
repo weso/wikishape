@@ -16,14 +16,15 @@ import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import InputShapeLabel from "../components/InputShapeLabel";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
 import ResultValidate from "../results/ResultValidate";
 import {
-    InitialShex,
-    mkShexTabs,
-    paramsFromStateShex,
-    updateStateShex
+  InitialShex,
+  mkShexTabs,
+  paramsFromStateShex,
+  updateStateShex
 } from "../shex/Shex";
 import { mkError } from "../utils/ResponseError";
 import { sanitizeQualify, showQualify } from "../utils/Utils";
@@ -77,7 +78,8 @@ function WikibaseValidate(props) {
         const finalSchema =
           updateStateShex(urlParams, userSchema) || userSchema;
 
-        const pEndpoint = urlParams[API.queryParameters.wikibase.endpoint || endpoint];
+        const pEndpoint =
+          urlParams[API.queryParameters.wikibase.endpoint || endpoint];
         setEndpoint(pEndpoint);
 
         const pShapeLabel =
@@ -226,8 +228,11 @@ function WikibaseValidate(props) {
         : paramsFromStateShex(uSchema);
 
     return {
-      [API.queryParameters.wikibase.endpoint]: pEndpoint || API.wikidataContact.url,
-      [API.queryParameters.wikibase.payload]: pEntities.map((ent) => ent.uri).join("|"), // List of entities joined by "|"
+      [API.queryParameters.wikibase.endpoint]:
+        pEndpoint || API.wikidataContact.url,
+      [API.queryParameters.wikibase.payload]: pEntities
+        .map((ent) => ent.uri)
+        .join("|"), // List of entities joined by "|"
       [API.queryParameters.tab]: pSchemaTab,
       [API.queryParameters.schema.label]: pShapeLabel,
       ...paramsSchema,
@@ -295,7 +300,10 @@ function WikibaseValidate(props) {
 
   return (
     <Container>
-      <h1>{API.texts.pageHeaders.validateWbEntities}</h1>
+      <PageHeader
+        title={API.texts.pageHeaders.validateWbEntities}
+        details={API.texts.pageExplanations.validateWbEntities}
+      />
       <h4>
         Target Wikibase:{" "}
         <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
@@ -303,7 +311,7 @@ function WikibaseValidate(props) {
         </a>
       </h4>
       <Row>
-        <Form onSubmit={handleSubmit}>
+        <Form className="width-100" onSubmit={handleSubmit}>
           <InputEntitiesByText
             onChange={handleChangeEntities}
             multiple={true}
@@ -335,6 +343,7 @@ function WikibaseValidate(props) {
             activeKey={schemaTab}
             id="SchemaTabs"
             onSelect={handleTabChange}
+            mountOnEnter={true}
           >
             <Tab eventKey={API.tabs.wdSchema} title="Wikidata schema">
               <InputSchemaEntityByText

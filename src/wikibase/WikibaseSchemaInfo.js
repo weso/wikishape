@@ -10,6 +10,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { ExternalLinkIcon, ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
 import { mkError } from "../utils/ResponseError";
@@ -175,7 +176,10 @@ function WikibaseSchemaInfo(props) {
 
   return (
     <Container>
-      <h1>{API.texts.pageHeaders.schemaInfo}</h1>
+      <PageHeader
+        title={API.texts.pageHeaders.schemaInfo}
+        details={API.texts.pageExplanations.schemaInfo}
+      />
       {/* Limited to wikidata until mediaWiki allows seaching for schemas */}
       {/* <h4>
         Target Wikibase:{" "}

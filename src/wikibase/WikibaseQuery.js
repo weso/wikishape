@@ -9,14 +9,15 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Spinner from "react-bootstrap/Spinner";
 import API from "../API";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import {
-    getQueryRaw,
-    getQueryText,
-    InitialQuery,
-    mkQueryTabs,
-    paramsFromStateQuery,
-    updateStateQuery
+  getQueryRaw,
+  getQueryText,
+  InitialQuery,
+  mkQueryTabs,
+  paramsFromStateQuery,
+  updateStateQuery
 } from "../query/Query";
 import ResultSparqlQuery from "../results/ResultSparqlQuery";
 import { mkError } from "../utils/ResponseError";
@@ -182,7 +183,10 @@ function WikibaseQuery(props) {
 
   return (
     <Container fluid={true}>
-      <h1>{API.texts.pageHeaders.querySparql}</h1>
+      <PageHeader
+        title={API.texts.pageHeaders.querySparql}
+        details={API.texts.pageExplanations.querySparql}
+      />
       <h4>
         Target endpoint:{" "}
         <a target="_blank" href={endpoint}>

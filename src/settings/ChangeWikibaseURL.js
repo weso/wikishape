@@ -10,6 +10,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import API from "../API";
+import PageHeader from "../components/PageHeader";
 import { validateUrl } from "../utils/Utils";
 
 function ChangeWikibaseURL(props) {
@@ -38,11 +39,11 @@ function ChangeWikibaseURL(props) {
   };
 
   const [messageUrlStyle, setMessageUrlStyle] = useState({
-    display: "none",
+    visibility: "hidden",
   });
 
   const [messageEndpointStyle, setMessageEndpointStyle] = useState({
-    display: "none",
+    visibility: "hidden",
   });
 
   const wikibaseURLs = [
@@ -162,6 +163,10 @@ function ChangeWikibaseURL(props) {
 
   return (
     <Container>
+      <PageHeader
+        title={API.texts.pageHeaders.changeWikibase}
+        details={API.texts.pageExplanations.changeWikibase}
+      />
       <Form.Group>
         <Form.Label>Custom Wikibase URL</Form.Label>
         <Form.Control
@@ -190,19 +195,27 @@ function ChangeWikibaseURL(props) {
             value={endpoint}
             onChange={handleOnChangeEndpoint}
           />
-          <span style={messageEndpointStyle}>{messageEndpoint}</span>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span style={messageEndpointStyle}>{messageEndpoint}</span>
 
-          <Dropdown onSelect={handleOnSelect}>
-            <div>
-              <DropdownButton
-                alignRight
-                title="Common Wikibase Instances"
-                id="select-endpoint"
-              >
-                {dropDownItems}
-              </DropdownButton>
-            </div>
-          </Dropdown>
+            <Dropdown onSelect={handleOnSelect}>
+              <div>
+                <DropdownButton
+                  alignRight
+                  title="Common Wikibase Instances"
+                  id="select-endpoint"
+                >
+                  {dropDownItems}
+                </DropdownButton>
+              </div>
+            </Dropdown>
+          </div>
         </div>
       </Form.Group>
     </Container>

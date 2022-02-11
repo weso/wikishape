@@ -11,6 +11,7 @@ import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import InputPropertiesByText from "../components/InputPropertiesByText";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
 import ResultOutgoing from "../results/ResultOutgoing";
 import { mkError } from "../utils/ResponseError";
@@ -142,11 +143,18 @@ function WikibaseItem(props) {
 
   return (
     <Container>
-      <h1>
-        {itemType === API.propNames.wbEntityTypes.item
-          ? API.texts.pageHeaders.entityInfo
-          : API.texts.pageHeaders.propertyInfo}
-      </h1>
+      <PageHeader
+        title={
+          itemType === API.propNames.wbEntityTypes.item
+            ? API.texts.pageHeaders.entityInfo
+            : API.texts.pageHeaders.propertyInfo
+        }
+        details={
+          itemType === API.propNames.wbEntityTypes.item
+            ? API.texts.pageExplanations.entityInfo
+            : API.texts.pageExplanations.propertyInfo
+        }
+      />
       <h4>
         Target Wikibase:{" "}
         <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
