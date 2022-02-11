@@ -14,7 +14,7 @@ function SelectLanguage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const LANGS_URI = `${API.routes.server.wikibaseLanguages}?${API.queryParameters.endpoint}=${API.currentUrl()}`;
+      const LANGS_URI = `${API.routes.server.wikibaseLanguages}?${API.queryParameters.wikibase.endpoint}=${API.currentUrl()}`;
       const result = await axios.get(LANGS_URI)
       const {result: languages} = result.data
       setOptions(languages);

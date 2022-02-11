@@ -9,15 +9,11 @@ import API from "../API";
 import { Permalink } from "../Permalink";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 import PrintJson from "../utils/PrintJson";
-import { showQualified, showQualify } from "../utils/Utils";
+import { scrollToResults, showQualified, showQualify } from "../utils/Utils";
 
 function ResultOutgoing({ entities, result, permalink, disabled }) {
   // Scroll results into view
-  useEffect(() => {
-    const resultElement = document.getElementById("results-container");
-    resultElement &&
-      resultElement.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  useEffect(scrollToResults, []);
 
   let msg;
   if (!result || result === "") {
@@ -84,7 +80,7 @@ function ResultOutgoing({ entities, result, permalink, disabled }) {
     ];
 
     msg = (
-      <div id="results-container">
+      <div id={API.resultsId}>
         <Fragment>
           <Table>
             <tbody>
@@ -109,7 +105,7 @@ function ResultOutgoing({ entities, result, permalink, disabled }) {
           </div>
 
           <BootstrapTable
-            keyField="id"
+            keyField={"id"}
             data={outgoing}
             columns={columns}
             bootstrap4

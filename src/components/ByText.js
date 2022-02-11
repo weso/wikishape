@@ -8,15 +8,18 @@ import { format2mode } from "../utils/Utils";
 import Code from "./Code";
 
 function ByText(props) {
-  function handleChange(value) {
-    props.handleByTextChange && props.handleByTextChange(value);
+  // Pre-process the text sent down to the text container
+  const textContent = props.textAreaValue?.trim();
+
+  function handleChange(value, y, change) {
+    props.handleByTextChange && props.handleByTextChange(value, y, change);
   }
 
   const textFormat = props.textFormat?.toLowerCase();
 
   return (
     <Form.Group>
-      <Form.Label>{props.name}</Form.Label>
+      {props.name && <Form.Label>{props.name}</Form.Label>}
       {/* Choose which input component to use regarding the format of the data.
       Use a generic <Code> element with text by default */}
       {textFormat == API.formats.turtle.toLowerCase() ? (
@@ -25,7 +28,7 @@ function ByText(props) {
           engine={props.textEngine}
           fromParams={props.fromParams}
           resetFromParams={props.resetFromParams}
-          value={props.textAreaValue}
+          value={textContent}
           options={{ placeholder: props.placeholder, ...props.options }}
         />
       ) : textFormat == API.formats.shexc.toLowerCase() ? (
@@ -34,12 +37,12 @@ function ByText(props) {
           setCodeMirror={props.setCodeMirror}
           fromParams={props.fromParams}
           resetFromParams={props.resetFromParams}
-          value={props.textAreaValue}
+          value={textContent}
           options={{ placeholder: props.placeholder, ...props.options }}
         />
       ) : (
         <Code
-          value={props.textAreaValue}
+          value={textContent}
           mode={format2mode(props.textFormat)}
           onChange={handleChange}
           fromParams={props.fromParams}

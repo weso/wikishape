@@ -10,7 +10,7 @@ function ShexForm(props) {
 
   useEffect(() => {
     const options = {
-      readOnly: "nocursor",
+      readOnly: true,
       autoCloseTags: true,
       start: { line: 0 },
       lineNumbers: true,

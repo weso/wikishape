@@ -14,6 +14,7 @@ import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import InputShapeLabel from "../components/InputShapeLabel";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import {
   getQueryRaw,
@@ -71,7 +72,7 @@ function WikibaseValidateSparql(props) {
       if (
         urlParams[API.queryParameters.query.query] &&
         urlParams[API.queryParameters.schema.schema] &&
-        urlParams[API.queryParameters.endpoint]
+        urlParams[API.queryParameters.wikibase.endpoint]
       ) {
         const tab = urlParams[API.queryParameters.tab] || schemaTab;
 
@@ -81,7 +82,8 @@ function WikibaseValidateSparql(props) {
         const finalSchema =
           updateStateShex(urlParams, userSchema) || userSchema;
 
-        const pEndpoint = urlParams[API.queryParameters.endpoint || endpoint];
+        const pEndpoint =
+          urlParams[API.queryParameters.wikibase.endpoint || endpoint];
         setEndpoint(pEndpoint);
 
         const pShapeLabel =
@@ -238,7 +240,8 @@ function WikibaseValidateSparql(props) {
         : paramsFromStateShex(uSchema);
 
     return {
-      [API.queryParameters.endpoint]: pEndpoint || API.wikidataContact.url,
+      [API.queryParameters.wikibase.endpoint]:
+        pEndpoint || API.wikidataContact.url,
       [API.queryParameters.tab]: pSchemaTab,
       [API.queryParameters.schema.label]: pShapeLabel,
       ...paramsFromStateQuery(pQuery),
@@ -256,8 +259,9 @@ function WikibaseValidateSparql(props) {
       // Query the server to perform the SPARQL query and get the results back.
       // Send only the necessary parameters.
       const queryServerParams = params2Form({
-        [API.queryParameters.endpoint]: params[API.queryParameters.endpoint],
-        [API.queryParameters.payload]: await getQueryRaw(query),
+        [API.queryParameters.wikibase.endpoint]:
+          params[API.queryParameters.wikibase.endpoint],
+        [API.queryParameters.wikibase.payload]: await getQueryRaw(query),
       });
       const {
         data: {
@@ -280,7 +284,7 @@ function WikibaseValidateSparql(props) {
       // Set the payload to the data retrieved from the query.
       const validateServerParams = params2Form({
         ...params,
-        [API.queryParameters.payload]: entities.join("|"),
+        [API.queryParameters.wikibase.payload]: entities.join("|"),
       });
       const { data: validationResponse } = await axios.post(
         urlServerValidate,
@@ -339,21 +343,18 @@ function WikibaseValidateSparql(props) {
 
   return (
     <Container fluid={true}>
-      <Row>
-        <h1>Validate Wikibase entities from SPARQL query</h1>
-      </Row>
+      <PageHeader
+        title={API.texts.pageHeaders.validateWbEntitiesSparql}
+        details={API.texts.pageExplanations.validateWbEntitiesSparql}
+      />
+      <h4>
+        Target Wikibase:{" "}
+        <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
+          {API.currentUrl()}
+        </a>
+      </h4>
       <Row>
         <Col className={"half-col border-right"}>
-          <h4>
-            Target Wikibase:{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={API.currentUrl()}
-            >
-              {API.currentUrl()}
-            </a>
-          </h4>
           <Form onSubmit={handleSubmit}>
             {mkQueryTabs(query, setQuery)}
             <hr />
@@ -361,6 +362,7 @@ function WikibaseValidateSparql(props) {
               activeKey={schemaTab}
               id="SchemaTabs"
               onSelect={handleTabChange}
+              mountOnEnter={true}
             >
               <Tab eventKey={API.tabs.wdSchema} title="Wikidata schema">
                 <InputSchemaEntityByText
@@ -389,7 +391,7 @@ function WikibaseValidateSparql(props) {
               type="submit"
               disabled={loadingResult || loadingSchema ? true : false}
             >
-              Validate entities
+              {API.texts.actionButtons.validateEntities}
               <ReloadIcon className="white-icon" />
             </Button>
           </Form>

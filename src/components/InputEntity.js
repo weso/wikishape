@@ -22,8 +22,8 @@ function InputEntity(props) {
 
   function findEntityLabel(entity, language) {
     const params = {
-      [API.queryParameters.payload]: entity,
-      [API.queryParameters.language]: language,
+      [API.queryParameters.wikibase.payload]: entity,
+      [API.queryParameters.wikibase.language]: language,
     };
 
     axios

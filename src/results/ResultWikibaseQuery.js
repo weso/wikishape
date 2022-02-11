@@ -5,7 +5,7 @@ import API from "../API";
 import { Permalink } from "../Permalink";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 import PrintJson from "../utils/PrintJson";
-import { cnvValueFromSPARQL, showQualified, showQualify } from "../utils/Utils";
+import { cnvValueFromSPARQL, scrollToResults, showQualified, showQualify } from "../utils/Utils";
 
 function ResultWikibaseQuery({ result: serverResponse, permalink, disabled }) {
   // Destructure API response
@@ -18,10 +18,7 @@ function ResultWikibaseQuery({ result: serverResponse, permalink, disabled }) {
   const [table] = useState(parseData());
 
   // Scroll results into view
-  useEffect(() => {
-    const resultElement = document.getElementById("results-summary");
-    resultElement.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  useEffect(scrollToResults, []);
 
   // From the wikibase response, return a object with the rows and columns
   // of the result's table

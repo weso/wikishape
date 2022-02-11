@@ -10,9 +10,11 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { ExternalLinkIcon, ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
 import { mkError } from "../utils/ResponseError";
+import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";
 
 function WikibaseSchemaInfo(props) {
@@ -36,8 +38,8 @@ function WikibaseSchemaInfo(props) {
   useEffect(() => {
     if (props.location?.search) {
       const urlParams = qs.parse(props.location.search);
-      if (urlParams[API.queryParameters.endpoint]) {
-        setEndpoint(urlParams[API.queryParameters.endpoint]);
+      if (urlParams[API.queryParameters.wikibase.endpoint]) {
+        setEndpoint(urlParams[API.queryParameters.wikibase.endpoint]);
       }
       // If parameter ID is present: go, else error
       if (urlParams[API.queryParameters.id]) {
@@ -65,21 +67,31 @@ function WikibaseSchemaInfo(props) {
     setLoading(true);
     setProgressPercent(10);
 
-    const reqParams = params2Form(await mkServerParams());
-
+    const baseParams = await mkServerParams();
     try {
-      const { data: schemaInfo } = await axios.post(urlServerInfo, reqParams);
+      // 1. Schema info
+      const infoParams = params2Form(baseParams);
+      const { data: resultInfo } = await axios.post(urlServerInfo, infoParams);
       setProgressPercent(40);
-      const { data: schemaVisual } = await axios.post(
+      // 2. Schema SVG
+      const toSvgParams = params2Form({
+        ...baseParams,
+        [API.queryParameters.schema.targetFormat]: API.formats.svg,
+      });
+      const { data: resultSvg } = await axios.post(
         urlServerVisual,
-        reqParams
+        toSvgParams
       );
+
       setProgressPercent(60);
 
+      // 3. Schema UML
+      const umlFromSchema = await shexToXmi(baseParams);
+
       const newResult = {
-        ...schemaInfo,
-        ...schemaVisual,
-        result: { ...schemaInfo.result, ...schemaVisual.result },
+        resultInfo,
+        resultSvg,
+        resultUml: umlFromSchema,
       };
 
       // Merge results from both info and convert and set the state
@@ -89,7 +101,7 @@ function WikibaseSchemaInfo(props) {
       setPermalink(
         mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
           [API.queryParameters.schema.schema]: schemaEntities[0].id,
-          [API.queryParameters.lang]: schemaEntities[0].lang,
+          [API.queryParameters.wikibase.lang]: schemaEntities[0].lang,
         })
       );
     } catch (error) {
@@ -112,8 +124,6 @@ function WikibaseSchemaInfo(props) {
       [API.queryParameters.schema.source]: API.sources.byText,
       [API.queryParameters.schema.format]: API.formats.shexc,
       [API.queryParameters.schema.engine]: API.engines.shex,
-      // The server internally converts to a PlantUML SVG string and the client interprets it
-      [API.queryParameters.schema.targetFormat]: API.formats.svg,
     };
   }
 
@@ -122,7 +132,7 @@ function WikibaseSchemaInfo(props) {
     if (pSchemaEntity) {
       return {
         [API.queryParameters.id]: pSchemaEntity.id,
-        [API.queryParameters.lang]: pSchemaEntity.lang,
+        [API.queryParameters.wikibase.lang]: pSchemaEntity.lang,
       };
     }
   }
@@ -140,7 +150,7 @@ function WikibaseSchemaInfo(props) {
         document.title,
         mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
           [API.queryParameters.id]: lastParams.id,
-          [API.queryParameters.lang]: lastParams.lang,
+          [API.queryParameters.wikibase.lang]: lastParams.lang,
         })
       );
     }
@@ -151,7 +161,7 @@ function WikibaseSchemaInfo(props) {
       document.title,
       mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
         [API.queryParameters.id]: params.id,
-        [API.queryParameters.lang]: params.lang,
+        [API.queryParameters.wikibase.lang]: params.lang,
       })
     );
 
@@ -166,7 +176,10 @@ function WikibaseSchemaInfo(props) {
 
   return (
     <Container>
-      <h1>Info about Wikidata Schema entity</h1>
+      <PageHeader
+        title={API.texts.pageHeaders.schemaInfo}
+        details={API.texts.pageExplanations.schemaInfo}
+      />
       {/* Limited to wikidata until mediaWiki allows seaching for schemas */}
       {/* <h4>
         Target Wikibase:{" "}
@@ -213,7 +226,7 @@ function WikibaseSchemaInfo(props) {
           type="submit"
           disabled={loading}
         >
-          Get schema info
+          {API.texts.actionButtons.schemaInfo}
           <ReloadIcon className="white-icon" />
         </Button>
       </Form>
@@ -222,10 +235,7 @@ function WikibaseSchemaInfo(props) {
       ) : error ? (
         <Alert variant="danger">{error}</Alert>
       ) : result ? (
-        <WikibaseSchemaResults
-          result={result}
-          permalink={permalink}
-        />
+        <WikibaseSchemaResults result={result} permalink={permalink} />
       ) : null}
     </Container>
   );
@@ -240,8 +250,9 @@ export function paramsFromQueryParams(params) {
   params[API.queryParameters.schema.schema] &&
     (newParams[API.queryParameters.schema.schema] =
       params[API.queryParameters.schema.schema]);
-  params[API.queryParameters.lang] &&
-    (newParams[API.queryParameters.lang] = params[API.queryParameters.lang]);
+  params[API.queryParameters.wikibase.lang] &&
+    (newParams[API.queryParameters.wikibase.lang] =
+      params[API.queryParameters.wikibase.lang]);
   return newParams;
 }
 
@@ -249,7 +260,7 @@ export function getSchemaEntity(params, setError) {
   const schemaId = params[API.queryParameters.id];
 
   // For parameter lang: default to "en" if needed
-  const lang = params[API.queryParameters.lang] || "en";
+  const lang = params[API.queryParameters.wikibase.lang] || "en";
   const e = SchemaEntities.find((e) => e.id === schemaId);
   if (e) {
     return mkSchemaEntity(e, lang);

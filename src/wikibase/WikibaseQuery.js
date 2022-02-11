@@ -9,17 +9,19 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Spinner from "react-bootstrap/Spinner";
 import API from "../API";
+import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import {
   getQueryRaw,
+  getQueryText,
   InitialQuery,
   mkQueryTabs,
   paramsFromStateQuery,
   updateStateQuery
 } from "../query/Query";
-import ResultWikibaseQuery from "../results/ResultWikibaseQuery";
+import ResultSparqlQuery from "../results/ResultSparqlQuery";
 import { mkError } from "../utils/ResponseError";
-import { validateURL } from "../utils/Utils";
+import { validateUrl } from "../utils/Utils";
 
 function WikibaseQuery(props) {
   const serverUrl = API.routes.server.wikibaseQuery;
@@ -46,15 +48,15 @@ function WikibaseQuery(props) {
       // Get the query and the endpoint
       if (
         reqParams[API.queryParameters.query.query] &&
-        reqParams[API.queryParameters.endpoint]
+        reqParams[API.queryParameters.wikibase.endpoint]
       ) {
         // Set state => UI
-        setEndpoint(reqParams[API.queryParameters.endpoint]);
+        setEndpoint(reqParams[API.queryParameters.wikibase.endpoint]);
         const finalQuery = updateStateQuery(reqParams, query) || query;
         setQuery(finalQuery);
 
         const newParams = mkParams(
-          reqParams[API.queryParameters.endpoint],
+          reqParams[API.queryParameters.wikibase.endpoint],
           finalQuery
         );
 
@@ -73,15 +75,6 @@ function WikibaseQuery(props) {
       } else setError(API.texts.noProvidedQuery);
     }
   }, [params]);
-
-  const divStyle = {
-    display: "flex",
-    margin: "10px auto",
-  };
-  const spinnerStyle = {
-    marginLeft: "10px",
-    visibility: loading ? "visible" : "hidden",
-  };
 
   function handleChange(queryText) {
     const query = queryText.trim();
@@ -107,7 +100,7 @@ function WikibaseQuery(props) {
 
   function mkParams(pEndpoint = endpoint, pQuery = query) {
     return {
-      [API.queryParameters.endpoint]: pEndpoint,
+      [API.queryParameters.wikibase.endpoint]: pEndpoint,
       ...paramsFromStateQuery(pQuery),
     };
   }
@@ -146,8 +139,8 @@ function WikibaseQuery(props) {
       if (!queryRaw) throw "Could not fetch the query data";
 
       const reqParams = {
-        [API.queryParameters.endpoint]: endpoint,
-        [API.queryParameters.payload]: queryRaw,
+        [API.queryParameters.wikibase.endpoint]: endpoint,
+        [API.queryParameters.wikibase.payload]: queryRaw,
       };
       const { data: queryResult } = await axios.post(
         serverUrl,
@@ -163,22 +156,6 @@ function WikibaseQuery(props) {
     } finally {
       setLoading(false);
     }
-
-    // axios.post(serverUrl, params2Form(reqParams)).then(async (response) => {
-    //   const { result: apiResponse } = response.data;
-    //   const { head, results } = apiResponse;
-    //   // Even if the request fails, the RdfShape server returns a 200 status with no data so the client
-    //   // has to check if there is any result. Refactor the server to return a more accurate code.
-    //   if (results) {
-    //     if (results.bindings.length > 0) {
-    //       setError(null);
-    //       handleResults(apiResponse);
-    //     } else {
-    //       setError(API.texts.noResultsFound);
-    //       setResult(null);
-    //     }
-    //   }
-    // });
   }
 
   // Place the current URL to the resulting items
@@ -187,7 +164,7 @@ function WikibaseQuery(props) {
     for (let i = 0; i < data.length; i++) {
       Object.keys(data[i]).forEach((key) => {
         let value = data[i][key].value;
-        if (value && validateURL(value)) {
+        if (value && validateUrl(value)) {
           let path = value.split(/\/\//)[1].split(/\/(.+)/)[1];
           data[i][key].value = `${
             value.split(/\/\//)[0]
@@ -206,7 +183,10 @@ function WikibaseQuery(props) {
 
   return (
     <Container fluid={true}>
-      <h1>Query SPARQL endpoint</h1>
+      <PageHeader
+        title={API.texts.pageHeaders.querySparql}
+        details={API.texts.pageExplanations.querySparql}
+      />
       <h4>
         Target endpoint:{" "}
         <a target="_blank" href={endpoint}>
@@ -217,20 +197,22 @@ function WikibaseQuery(props) {
         <Col>
           <Form onSubmit={handleSubmit} onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
             {mkQueryTabs(query, setQuery)}
-            <div style={divStyle}>
+            <div className="btn-spinner-container">
               <Button
                 variant="primary"
                 className={loading ? "disabled" : ""}
                 type="submit"
                 disabled={loading}
               >
-                Resolve (Ctrl+Enter)
+                {API.texts.actionButtons.query}
               </Button>
-              <Spinner
-                style={spinnerStyle}
-                animation="border"
-                variant="primary"
-              />
+              {loading && (
+                <Spinner
+                  className="loading-spinner"
+                  animation="border"
+                  variant="primary"
+                />
+              )}
             </div>
           </Form>
 
@@ -239,7 +221,18 @@ function WikibaseQuery(props) {
               {error ? (
                 <Alert variant="danger">{error}</Alert>
               ) : result ? (
-                <ResultWikibaseQuery result={result} permalink={permalink} />
+                <ResultSparqlQuery
+                  result={result}
+                  permalink={permalink}
+                  disabled={
+                    getQueryText(query).length + endpoint.length >
+                    API.limits.byTextCharacterLimit
+                      ? API.sources.byText
+                      : query.activeSource === API.sources.byFile
+                      ? API.sources.byFile
+                      : false
+                  }
+                />
               ) : null}
             </div>
           ) : null}
