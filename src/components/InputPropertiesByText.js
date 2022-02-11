@@ -23,11 +23,11 @@ function InputPropertiesByText(props) {
   function makeAndHandleRequest(label, language, page = 0) {
     const lang = language[0] ? language[0].label : "en";
     return fetch(
-      `${SEARCH_URI}?${API.queryParameters.endpoint}=${API.currentUrl()}&${
-        API.queryParameters.payload
-      }=${label}&${API.queryParameters.limit}=${PER_PAGE}&${
-        API.queryParameters.language
-      }=${lang}&${API.queryParameters.continue}=${page * PER_PAGE}`
+      `${SEARCH_URI}?${API.queryParameters.wikibase.endpoint}=${API.currentUrl()}&${
+        API.queryParameters.wikibase.payload
+      }=${label}&${API.queryParameters.wikibase.limit}=${PER_PAGE}&${
+        API.queryParameters.wikibase.language
+      }=${lang}&${API.queryParameters.wikibase.continue}=${page * PER_PAGE}`
     )
       .then((resp) => resp.json())
       .then(({ result: properties }) => {

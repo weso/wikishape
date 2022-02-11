@@ -61,15 +61,25 @@ class API {
       about: "/about",
       permalink: "/link/:urlCode",
 
-      byTextTab: "byText",
-      byUrlTab: "byUrl",
-      byFileTab: "byFile",
-      defaultTab: "byTextTab",
-      defaultDataFormat: "TURTLE",
-      defaultShExFormat: "ShExC",
-      defaultSHACLFormat: "TURTLE",
-      defaultShapeMapFormat: "Compact",
+      visualizeRawRoute: "/visualize",
     },
+    // Other useful routes
+    utils: {
+      apiDocs: "https://app.swaggerhub.com/apis/weso/RDFShape",
+      projectSite: "https://www.weso.es/rdfshape-api/",
+      rdfShapeClient: "https://rdfshape.weso.es/",
+      wikidataUrl: "https://query.wikidata.org/sparql",
+      dbpediaUrl: "https://dbpedia.org/sparql",
+      shapeFormHelpUrl:
+        "https://github.com/weso/shapeForms#requirementslimitations",
+
+      wikibase: "https://wikiba.se/",
+    },
+  };
+
+  // By text limitations
+  static limits = {
+    byTextCharacterLimit: 2200,
   };
 
   // URLs and Endpoints
@@ -154,14 +164,33 @@ class API {
     permalink: {
       code: "urlCode",
     },
-    payload: "payload",
-    endpoint: "endpoint",
-    language: "language",
-    languages: "languages",
-    limit: "limit",
-    continue: "continue",
-    node: "node",
-    entities: "entities",
+    visualization: {
+      type: "vType",
+      target: "vTarget",
+
+      types: {
+        data: "data",
+        shex: "shex",
+        shacl: "shacl",
+        uml: "uml",
+      },
+      targets: {
+        svg: "svg",
+        cyto: "cyto",
+      },
+    },
+    wikibase: {
+      payload: "payload",
+      endpoint: "endpoint",
+      language: "language",
+
+      languages: "languages",
+      limit: "limit",
+      continue: "continue",
+      node: "node",
+      entities: "entities",
+    },
+
     lang: "lang",
     tab: "tab",
     id: "id",
@@ -183,7 +212,11 @@ class API {
     shex: "ShEx",
     text: "text",
     prefixMap: "prefixMap",
+
     visualization: "visualization",
+    visualizations: "visualizations",
+    visualizationDot: "dot",
+    visualizationCyto: "cyto",
 
     shaclValidationReportText: "shaclReportText",
     shaclValidationReportNodes: "shaclReportNodes",
@@ -274,65 +307,27 @@ class API {
   // Text constants
   static texts = {
     navbarHeaders: {
-      rdf: "RDF",
-      endpoint: "Endpoint",
-      shex: "ShEx",
-      shacl: "SHACL",
-      shapeMap: "ShapeMap",
-      analysis: "Analysis",
-      information: "Information",
-      conversion: "Conversion",
-      visualization: "Visualization",
-      validationUser: "Validation (user data)",
-      validationEndpoint: "Validation (endpoint data)",
-      mergeAndConvert: "Merge & Convert",
-      mergeAndVisualize: "Merge & Visualize",
-      sparqlQuery: "Query (SPARQL)",
-      shexExtract: "ShEx extraction",
-      shexToShacl: "ShEx → SHACL",
-      shaclToShex: "SHACL → ShEx",
-      shexToForm: "ShEx → Form",
-      shexToUml: "ShEx ⟷ UML",
       examples: "Examples",
       help: "Help",
       wikishape: "Wikishape",
       wiki: "Wiki",
       apiDocs: "API Docs",
       about: "About",
+      settings: "Settings",
+      examples: "Examples",
+      changeWikibase: "Set target Wikibase",
+      projectSite: "Project site",
     },
 
     pageHeaders: {
-      dataInfo: "Data analysis",
-      dataConversion: "Data conversion",
-      dataVisualization: "Data visualization",
-      dataMergeConvert: "Data merge & convert",
-      dataMergeVisualize: "Data merge & visualize",
-      dataQuery: "Data query",
-      wikibaseQuery: "Query Wikibase",
-      wikidataValidate: "Validate Wikidata entities",
-      dataShexExtraction: "Extract ShEx from Data",
-      wikidataSchemaExtraction: "Extract schema from Wikidata entities",
-      endpointSchemaExtraction: "Extract schema from Endpoint node",
-
-      endpointInfo: "Endpoint information",
-      endpointQuery: "Endpoint query",
-
-      shexInfo: "ShEx analysis",
-      shexConversion: "ShEx conversion",
-      shexValidation: "ShEx validate user data",
-      shexValidationEndpoint: "ShEx validate endpoint data",
-      shexVisualization: "ShEx visualization",
-      shexToShacl: "ShEx conversion to Shacl",
-      shexToForm: "Create form from ShEx",
-      shexToUml: "ShEx conversion to UML",
-      umlToShex: "UML conversion to ShEx",
-
-      shaclInfo: "SHACL analysis",
-      shaclValidation: "SHACL validate user data",
-      shaclConversion: "SHACL conversion",
-      shaclToShex: "SHACL conversion to ShEx",
-
-      shapeMapInfo: "ShapeMap analysis",
+      entityInfo: "Outgoing arcs from entity",
+      propertyInfo: "Outgoing arcs from property",
+      schemaInfo: "Analyze Wikidata schema",
+      querySparql: "Query SPARQL endpoint",
+      validateWbEntities: "Validate Wikibase entities",
+      validateWbEntitiesSparql: "Validate Wikibase entities (from SPARQL)",
+      schemaExtractDefault: "Extract schema from Wikidata entities",
+      schemaExtractShexer: "Extract schema from Wikidata entities (Shexer)",
     },
 
     dataTabs: {
@@ -367,15 +362,20 @@ class API {
     },
 
     actionButtons: {
-      analyze: "Analyze",
-      convert: "Convert",
-      visualize: "Visualize",
-      validate: "Validate",
-      merge: "Merge",
+      getOutgoing: "Get outgoing arcs",
+      schemaInfo: "Get schema info",
+      validateEntities: "Validate entities",
+      extractSchema: "Extract schema",
       query: "Query",
-      extract: "Extract",
-      fetch: "Fetch",
-      createForm: "Create form",
+    },
+
+    visualizationSettings: {
+      download: "Download",
+      embedLink: "Embed link",
+      fullscreen: "Toggle fullscreen",
+      fullscreenIn: "Enter fullscreen",
+      fullscreenOut: "Exit fullscreen",
+      center: "Center visualization",
     },
 
     validationResults: {
@@ -387,6 +387,38 @@ class API {
       noneValid: "Invalid data: check the details of each node to learn more",
       noData:
         "Validation was completed but no results were obtained, check if the input data is coherent",
+    },
+
+    targetUrlChanges: {
+      okUrl: "Valid wikibase URL, URL updated",
+      badUrl: "Invalid wikibase URL",
+
+      okEndpoint: "Valid endpoint URL, endpoint updated",
+      badEndpoint: "Invalid endpoint URL",
+    },
+
+    resultTabs: {
+      schema: "Schema",
+      extracted: "Extracted",
+      overview: "Overview",
+      result: "Result",
+      prefixMap: "Prefix Map",
+      visualization: "Visualization",
+      render: "Render",
+      visualizations: "Visualizations",
+      visualizationDot: "DOT",
+      visualizationCyto: "Cytoscape",
+      uml: "UML",
+      xmi: "XMI",
+    },
+
+    selectors: {
+      format: "Format",
+      targetFormat: "Target format",
+
+      engine: "Engine",
+      targetEngine: "Target engine",
+      shaclEngine: "SHACL engine",
     },
 
     misc: {
@@ -449,13 +481,15 @@ class API {
       "Can't generate links for long manual inputs, try inserting data by URL",
     noPermalinkFile:
       "Can't generate links for file-based inputs, try inserting data by URL",
-    embeddedLink: "Embedded link",
     permalinkCopied: "Link copied to clipboard!",
     shapeStartRequired: '"Shape Start" is required on input',
 
     enableFullscreen: "Show at fullscreen",
     leaveFullscreen: "✖ Leave fullscreen",
   };
+
+  // ID of the results container for any operation
+  static resultsId = "results-container";
 }
 
 export default API;

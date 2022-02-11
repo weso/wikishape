@@ -3,7 +3,7 @@ import API from "../API";
 import ByText from "../components/ByText";
 import { Permalink } from "../Permalink";
 import PrintJson from "../utils/PrintJson";
-import { yasheNoButtonsOptions } from "../utils/Utils";
+import { scrollToResults, yasheNoButtonsOptions } from "../utils/Utils";
 
 function ResultSchemaExtract({
   result: serverResponse,
@@ -19,15 +19,11 @@ function ResultSchemaExtract({
   } = serverResponse;
 
   // Scroll results into view
-  useEffect(() => {
-    const resultElement = document.getElementById("results-container");
-    resultElement &&
-      resultElement.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  useEffect(scrollToResults, []);
 
   if (serverResponse) {
     return (
-      <div id="results-container">
+      <div id={API.resultsId}>
         {serverResponse.result && (
           <ByText
             textAreaValue={rawSchemaExtracted.trim()}

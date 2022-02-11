@@ -20,10 +20,10 @@ import { mkPermalinkLong, params2Form } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
 import ResultValidate from "../results/ResultValidate";
 import {
-  InitialShex,
-  mkShexTabs,
-  paramsFromStateShex,
-  updateStateShex
+    InitialShex,
+    mkShexTabs,
+    paramsFromStateShex,
+    updateStateShex
 } from "../shex/Shex";
 import { mkError } from "../utils/ResponseError";
 import { sanitizeQualify, showQualify } from "../utils/Utils";
@@ -62,12 +62,12 @@ function WikibaseValidate(props) {
     if (props.location?.search) {
       const urlParams = qs.parse(props.location.search);
       if (
-        urlParams[API.queryParameters.payload] &&
+        urlParams[API.queryParameters.wikibase.payload] &&
         urlParams[API.queryParameters.schema.schema] &&
-        urlParams[API.queryParameters.endpoint]
+        urlParams[API.queryParameters.wikibase.endpoint]
       ) {
         const tab = urlParams[API.queryParameters.tab] || schemaTab;
-        const pEntities = urlParams[API.queryParameters.payload]
+        const pEntities = urlParams[API.queryParameters.wikibase.payload]
           .split("|")
           .map((ent) => ({
             uri: ent,
@@ -77,7 +77,7 @@ function WikibaseValidate(props) {
         const finalSchema =
           updateStateShex(urlParams, userSchema) || userSchema;
 
-        const pEndpoint = urlParams[API.queryParameters.endpoint || endpoint];
+        const pEndpoint = urlParams[API.queryParameters.wikibase.endpoint || endpoint];
         setEndpoint(pEndpoint);
 
         const pShapeLabel =
@@ -120,7 +120,7 @@ function WikibaseValidate(props) {
   // On params changed, submit request
   useEffect(() => {
     if (params && !loading) {
-      if (!params[API.queryParameters.payload])
+      if (!params[API.queryParameters.wikibase.payload])
         setError(API.texts.noProvidedEntity);
       else if (
         !(
@@ -226,8 +226,8 @@ function WikibaseValidate(props) {
         : paramsFromStateShex(uSchema);
 
     return {
-      [API.queryParameters.endpoint]: pEndpoint || API.wikidataContact.url,
-      [API.queryParameters.payload]: pEntities.map((ent) => ent.uri).join("|"), // List of entities joined by "|"
+      [API.queryParameters.wikibase.endpoint]: pEndpoint || API.wikidataContact.url,
+      [API.queryParameters.wikibase.payload]: pEntities.map((ent) => ent.uri).join("|"), // List of entities joined by "|"
       [API.queryParameters.tab]: pSchemaTab,
       [API.queryParameters.schema.label]: pShapeLabel,
       ...paramsSchema,
@@ -295,7 +295,7 @@ function WikibaseValidate(props) {
 
   return (
     <Container>
-      <h1>Validate Wikibase entity</h1>
+      <h1>{API.texts.pageHeaders.validateWbEntities}</h1>
       <h4>
         Target Wikibase:{" "}
         <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
@@ -359,7 +359,7 @@ function WikibaseValidate(props) {
             type="submit"
             disabled={loading}
           >
-            Validate entities
+            {API.texts.actionButtons.validateEntities}
             <ReloadIcon className="white-icon" />
           </Button>
         </Form>

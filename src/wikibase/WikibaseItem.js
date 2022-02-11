@@ -26,19 +26,20 @@ function WikibaseItem(props) {
   const [loading, setLoading] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
 
+  const itemType = props[API.propNames.wbEntityTypes.propName];
   const urlServer = API.routes.server.dataOutgoing;
 
   useEffect(() => {
     if (props.location.search) {
       const queryParams = qs.parse(props.location.search);
-      if (queryParams[API.queryParameters.endpoint]) {
-        setEndpoint(queryParams[API.queryParameters.endpoint]);
+      if (queryParams[API.queryParameters.wikibase.endpoint]) {
+        setEndpoint(queryParams[API.queryParameters.wikibase.endpoint]);
       }
-      if (queryParams[API.queryParameters.entities]) {
+      if (queryParams[API.queryParameters.wikibase.entities]) {
         let entitiesFromUrl = [];
         try {
           entitiesFromUrl = JSON.parse(
-            queryParams[API.queryParameters.entities]
+            queryParams[API.queryParameters.wikibase.entities]
           );
         } catch (err) {
           setError(API.texts.errorParsingUrl);
@@ -77,8 +78,8 @@ function WikibaseItem(props) {
   async function getOutgoing(cb) {
     setLoading(true);
     const params = {
-      [API.queryParameters.endpoint]: endpoint,
-      [API.queryParameters.node]: node,
+      [API.queryParameters.wikibase.endpoint]: endpoint,
+      [API.queryParameters.wikibase.node]: node,
     };
 
     setProgressPercent(30);
@@ -112,8 +113,8 @@ function WikibaseItem(props) {
         null,
         document.title,
         mkPermalinkLong(API.routes.client.wikibaseItem, {
-          [API.queryParameters.entities]: JSON.stringify(lastEntities),
-          [API.queryParameters.endpoint]: endpoint,
+          [API.queryParameters.wikibase.entities]: JSON.stringify(lastEntities),
+          [API.queryParameters.wikibase.endpoint]: endpoint,
         })
       );
     }
@@ -142,8 +143,9 @@ function WikibaseItem(props) {
   return (
     <Container>
       <h1>
-        Outgoing arcs from Wikibase{" "}
-        {props[API.propNames.wbEntityTypes.propName]}
+        {itemType === API.propNames.wbEntityTypes.item
+          ? API.texts.pageHeaders.entityInfo
+          : API.texts.pageHeaders.propertyInfo}
       </h1>
       <h4>
         Target Wikibase:{" "}
@@ -152,8 +154,7 @@ function WikibaseItem(props) {
         </a>
       </h4>
 
-      {props[API.propNames.wbEntityTypes.propName] ==
-      API.propNames.wbEntityTypes.item ? (
+      {itemType === API.propNames.wbEntityTypes.item ? (
         <InputEntitiesByText
           onChange={handleChange}
           multiple={false}
@@ -174,7 +175,7 @@ function WikibaseItem(props) {
           type="submit"
           disabled={loading}
         >
-          Get outgoing arcs
+          {API.texts.actionButtons.getOutgoing}
           <ReloadIcon className="white-icon" />
         </Button>
       </Form>

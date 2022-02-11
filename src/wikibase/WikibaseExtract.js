@@ -14,6 +14,7 @@ import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import { mkError } from "../utils/ResponseError";
+import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";
 
 function WikibaseExtract(props) {
@@ -37,9 +38,12 @@ function WikibaseExtract(props) {
   // Target API endpoint.
   // Choose to use SheXer or not to perform the extraction in the server
   const { useShexer } = props;
-  const urlServer = useShexer
+  const urlExtract = useShexer
     ? API.routes.server.wikibaseExtractShexer
     : API.routes.server.wikibaseExtract;
+
+  const urlInfo = API.routes.server.schemaInfo;
+  const urlVisualize = API.routes.server.schemaConvert;
 
   const urlClient = useShexer
     ? API.routes.client.wikibaseSheXer
@@ -49,8 +53,8 @@ function WikibaseExtract(props) {
   useEffect(() => {
     if (props.location?.search) {
       const urlParams = qs.parse(props.location.search);
-      if (urlParams[API.queryParameters.payload]) {
-        const pEntities = urlParams[API.queryParameters.payload]
+      if (urlParams[API.queryParameters.wikibase.payload]) {
+        const pEntities = urlParams[API.queryParameters.wikibase.payload]
           .split("|")
           .map((ent) => ({
             uri: ent,
@@ -69,7 +73,7 @@ function WikibaseExtract(props) {
   // On params changed, submit request
   useEffect(() => {
     if (params && !loading) {
-      if (!params[API.queryParameters.payload])
+      if (!params[API.queryParameters.wikibase.payload])
         setError(API.texts.noProvidedEntity);
       else {
         resetState();
@@ -91,8 +95,10 @@ function WikibaseExtract(props) {
   // Create params to be sent to the server
   function mkParams(pEntities = entities, pEndpoint = endpoint) {
     return {
-      [API.queryParameters.payload]: pEntities.map((ent) => ent.uri).join("|"), // List of entities joined by "|"
-      // [API.queryParameters.endpoint]: pEndpoint,
+      [API.queryParameters.wikibase.payload]: pEntities
+        .map((ent) => ent.uri)
+        .join("|"), // List of entities joined by "|"
+      // [API.queryParameters.wikibase.endpoint]: pEndpoint,
     };
   }
 
@@ -100,50 +106,59 @@ function WikibaseExtract(props) {
   // make the schema parameters to be sent to the server for futher processing
   // the schema
   function mkSchemaServerParams(extractResponse) {
-    return params2Form({
+    return {
       [API.queryParameters.schema.schema]: extractResponse?.result?.result,
       [API.queryParameters.schema.source]: API.sources.byText,
       [API.queryParameters.schema.format]: API.formats.shexc,
       [API.queryParameters.schema.engine]: API.engines.shex,
-      // The server internally converts to a PlantUML SVG string and the client interprets it
-      [API.queryParameters.schema.targetFormat]: API.formats.svg,
-    });
+    };
   }
 
   async function postExtract() {
     setLoading(true);
     setProgressPercent(15);
-    // Make server params
-    const reqParams = params2Form(params);
 
     try {
-      // Request the schema extraction
-      const { data: extractResponse } = await axios.post(urlServer, reqParams);
+      // 1. Exrtact schema
+      const extractParams = params2Form(params);
+      const { data: extractResponse } = await axios.post(
+        urlExtract,
+        extractParams
+      );
       setProgressPercent(40);
 
-      // Try to get the schema information and visualization from there
-      const schemaServerParams = mkSchemaServerParams(extractResponse);
-      const { data: infoResponse } = await axios.post(
-        API.routes.server.schemaInfo,
-        schemaServerParams
+      // 2. Schema info
+      const infoParams = mkSchemaServerParams(extractResponse);
+      const { data: resultInfo } = await axios.post(
+        urlInfo,
+        params2Form(infoParams)
       );
       setProgressPercent(60);
-      const { data: visualizeResponse } = await axios.post(
-        API.routes.server.schemaConvert,
-        schemaServerParams
+
+      // 3. Schema SVG
+      const convertParams = {
+        ...infoParams,
+        [API.queryParameters.schema.targetFormat]: API.formats.svg,
+      };
+      const { data: resultSvg } = await axios.post(
+        urlVisualize,
+        params2Form(convertParams)
       );
       setProgressPercent(80);
 
+      // 4. Schema UML
+      const umlFromSchema = await shexToXmi(infoParams);
+
       // Merge all operation results for full information
       setResult({
-        ...infoResponse,
-        ...visualizeResponse,
-        result: { ...infoResponse.result, ...visualizeResponse.result },
+        resultInfo,
+        resultSvg,
+        resultUml: umlFromSchema,
       });
       // Create and set the permalink value on success
       setPermalink(mkPermalinkLong(urlClient, params));
     } catch (err) {
-      setError(mkError(err, urlServer));
+      setError(mkError(err, urlExtract));
     } finally {
       setLoading(false);
     }
@@ -182,7 +197,11 @@ function WikibaseExtract(props) {
 
   return (
     <Container>
-      <h1>Extract schema from Wikidata entity</h1>
+      <h1>
+        {useShexer
+          ? API.texts.pageHeaders.schemaExtractShexer
+          : API.texts.pageHeaders.schemaExtractDefault}
+      </h1>
       <Row>
         <Form onSubmit={handleSubmit}>
           <InputEntitiesByText
@@ -217,7 +236,7 @@ function WikibaseExtract(props) {
             type="submit"
             disabled={loading}
           >
-            Extract schema
+            {API.texts.actionButtons.extractSchema}
             <ReloadIcon className="white-icon" />
           </Button>
         </Form>
@@ -235,7 +254,11 @@ function WikibaseExtract(props) {
           ) : error ? (
             <Alert variant="danger">{error}</Alert>
           ) : result ? (
-            <WikibaseSchemaResults result={result} permalink={permalink} />
+            <WikibaseSchemaResults
+              result={result}
+              permalink={permalink}
+              doUml={false}
+            />
           ) : null}
         </Row>
       ) : null}

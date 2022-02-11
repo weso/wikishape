@@ -5,7 +5,7 @@ import { Permalink } from "../Permalink";
 import { wikidataPrefixes } from "../resources/wikidataPrefixes";
 import ShowShapeMap from "../shapeMap/ShowShapeMap";
 import PrintJson from "../utils/PrintJson";
-import { equalsIgnoreCase, showQualify } from "../utils/Utils";
+import { equalsIgnoreCase, scrollToResults, showQualify } from "../utils/Utils";
 
 export const conformant = "conformant"; // Status of conformant nodes
 export const nonConformant = "nonconformant"; // Status of non-conformant nodes
@@ -150,11 +150,7 @@ function ResultValidate({
   const [invalidNodes, setInvalidNodes] = useState([]);
 
   // Scroll results into view
-  useEffect(() => {
-    const resultElement = document.getElementById("results-container");
-    resultElement &&
-      resultElement.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  useEffect(scrollToResults, []);
 
   // Update invalid nodes on node changes
   useEffect(() => {
@@ -166,7 +162,7 @@ function ResultValidate({
 
   if (validateResponse) {
     return (
-      <div id="results-container">
+      <div id={API.resultsId}>
         {nodes?.length && (
           <ShowShapeMap
             shapeMap={resultsMap}

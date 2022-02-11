@@ -10,7 +10,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import API from "../API";
-import { validateURL } from "../utils/Utils";
+import { validateUrl } from "../utils/Utils";
 
 function ChangeWikibaseURL(props) {
   const [url, setUrl] = useState(
@@ -20,14 +20,12 @@ function ChangeWikibaseURL(props) {
     localStorage.getItem("endpoint") || API.wikidataContact.endpoint
   );
 
-  const okMessageUrl = "Valid wikibase URL. URL updated.";
-  const errorMessageUrl = "Invalid wikibase URL.";
-
-  const okMessageEndpoint = "Valid endpoint URL. Endpoint updated.";
-  const errorMessageEndpoint = "Invalid endpoint URL.";
-
-  const [messageUrl, setMessageUrl] = useState(okMessageUrl);
-  const [messageEndpoint, setMessageEndpoint] = useState(okMessageEndpoint);
+  const [messageUrl, setMessageUrl] = useState(
+    API.texts.targetUrlChanges.okUrl
+  );
+  const [messageEndpoint, setMessageEndpoint] = useState(
+    API.texts.targetUrlChanges.okEndpoint
+  );
 
   const okMessageStyle = {
     display: "block",
@@ -55,31 +53,31 @@ function ChangeWikibaseURL(props) {
 
   function processUrl(receivedUrl) {
     // Validate base url
-    if (validateURL(receivedUrl) === true) {
+    if (validateUrl(receivedUrl) === true) {
       setMessageUrlStyle(okMessageStyle);
-      setMessageUrl(okMessageUrl);
+      setMessageUrl(API.texts.targetUrlChanges.okUrl);
       // Set new custom endpoint
       setUrl(receivedUrl);
       localStorage.setItem("url", receivedUrl);
     } else {
       // Show error and keep old url
       setMessageUrlStyle(errorMessageStyle);
-      setMessageUrl(errorMessageUrl);
+      setMessageUrl(API.texts.targetUrlChanges.badUrl);
     }
   }
 
   function processEndpoint(receivedEndpoint) {
     // Validate endpoint
-    if (validateURL(receivedEndpoint) === true) {
+    if (validateUrl(receivedEndpoint) === true) {
       setMessageEndpointStyle(okMessageStyle);
-      setMessageEndpoint(okMessageEndpoint);
+      setMessageEndpoint(API.texts.targetUrlChanges.okEndpoint);
       // Set new custom endpoint
       setEndpoint(receivedEndpoint);
       localStorage.setItem("endpoint", receivedEndpoint);
     } else {
       // Show error and keep old endpoint
       setMessageEndpointStyle(errorMessageStyle);
-      setMessageEndpoint(errorMessageEndpoint);
+      setMessageEndpoint(API.texts.targetUrlChanges.badEndpoint);
     }
   }
 
@@ -93,7 +91,7 @@ function ChangeWikibaseURL(props) {
     wikibaseURLs.forEach((baseUrl) => {
       if (baseUrl.data.url.localeCompare(receivedUrl) === 0) {
         setMessageUrlStyle(okMessageStyle);
-        setMessageUrl(okMessageUrl);
+        setMessageUrl(API.texts.targetUrlChanges.okUrl);
 
         // Set new custom endpoint
         setUrl(baseUrl.data.url);
@@ -110,7 +108,7 @@ function ChangeWikibaseURL(props) {
     wikibaseURLs.forEach((baseUrl) => {
       if (baseUrl.data.endpoint.localeCompare(receivedEndpoint) === 0) {
         setMessageEndpointStyle(okMessageStyle);
-        setMessageEndpoint(okMessageEndpoint);
+        setMessageEndpoint(API.texts.targetUrlChanges.okEndpoint);
         // Set new custom endpoint
         setEndpoint(baseUrl.data.endpoint);
         localStorage.setItem("endpoint", baseUrl.data.endpoint);
