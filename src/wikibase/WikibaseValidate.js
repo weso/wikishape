@@ -176,7 +176,8 @@ function WikibaseValidate(props) {
         .then(({ result: { prefixMap, shapes } }) => {
           const shapeList = shapes
             .map((sl) => showQualify(sl, prefixMap).str)
-            .map((e) => sanitizeQualify(e));
+            .map((e) => sanitizeQualify(e))
+            .map((it) => it.split("/").pop()); // Show only last part of shape name for friendly UI;
           const shapeLabel = Array.isArray(shapeList) ? shapeList[0] : "";
 
           setShapeList(shapeList);
