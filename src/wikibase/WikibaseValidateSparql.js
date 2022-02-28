@@ -1,4 +1,3 @@
-import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
@@ -31,6 +30,7 @@ import {
   paramsFromStateShex,
   updateStateShex
 } from "../shex/Shex";
+import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 import { sanitizeQualify, showQualify } from "../utils/Utils";
 

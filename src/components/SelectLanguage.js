@@ -1,10 +1,10 @@
-import axios from "axios";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { Token, Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead-bs4.min.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import API from "../API";
+import axios from "../utils/networking/axiosConfig";
 
 const defaultLanguage = { label: "en", name: "English" };
 

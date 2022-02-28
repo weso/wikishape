@@ -1,4 +1,3 @@
-import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
@@ -13,6 +12,7 @@ import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong, params2Form } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
+import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";

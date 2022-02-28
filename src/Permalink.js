@@ -1,4 +1,3 @@
-import axios from "axios";
 import FormData from "form-data";
 import PropTypes from "prop-types";
 import qs from "query-string";
@@ -10,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReactTooltip from "react-tooltip";
 import API from "./API";
+import axios from "./utils/networking/axiosConfig";
 import { notificationSettings } from "./utils/Utils";
 
 // Returns a promise that will return a shortened permalink generated on the server

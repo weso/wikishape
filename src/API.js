@@ -1,49 +1,48 @@
 import React from "react";
-import environmentConfiguration from "./EnvironmentConfig";
+import { rootApi } from "./utils/networking/axiosConfig";
 class API {
-  static rootApi = environmentConfiguration.rdfShapeHost + "/api/";
   static routes = {
     server: {
-      root: this.rootApi,
-      health: this.rootApi + "health",
+      root: rootApi,
+      health: "health",
 
-      dataInfo: this.rootApi + "data/info",
-      dataConvert: this.rootApi + "data/convert",
-      dataQuery: this.rootApi + "data/query",
-      dataExtract: this.rootApi + "data/extract",
-      dataFormatsInput: this.rootApi + "data/formats/input",
-      dataFormatsOutput: this.rootApi + "data/formats/output",
-      dataVisualFormats: this.rootApi + "data/formats/visual",
-      dataOutgoing: this.rootApi + "endpoint/outgoing",
+      dataInfo: "data/info",
+      dataConvert: "data/convert",
+      dataQuery: "data/query",
+      dataExtract: "data/extract",
+      dataFormatsInput: "data/formats/input",
+      dataFormatsOutput: "data/formats/output",
+      dataVisualFormats: "data/formats/visual",
+      dataOutgoing: "endpoint/outgoing",
 
-      schemaInfo: this.rootApi + "schema/info",
-      schemaConvert: this.rootApi + "schema/convert",
-      schemaValidate: this.rootApi + "schema/validate",
-      shExFormats: this.rootApi + "schema/formats?schemaEngine=shex",
-      shaclFormats: this.rootApi + "schema/formats?schemaEngine=shaclex",
-      schemaShaclEngines: this.rootApi + "schema/engines/shacl",
+      schemaInfo: "schema/info",
+      schemaConvert: "schema/convert",
+      schemaValidate: "schema/validate",
+      shExFormats: "schema/formats?schemaEngine=shex",
+      shaclFormats: "schema/formats?schemaEngine=shaclex",
+      schemaShaclEngines: "schema/engines/shacl",
 
-      shapeMapInfo: this.rootApi + "shapemap/info",
-      shapeMapFormats: this.rootApi + "shapemap/formats",
+      shapeMapInfo: "shapemap/info",
+      shapeMapFormats: "shapemap/formats",
 
-      endpointInfo: this.rootApi + "endpoint/info",
-      endpointQuery: this.rootApi + "endpoint/query",
+      endpointInfo: "endpoint/info",
+      endpointQuery: "endpoint/query",
 
-      inferenceEngines: this.rootApi + "data/inferenceEngines",
+      inferenceEngines: "data/inferenceEngines",
 
-      serverPermalinkEndpoint: this.rootApi + "permalink/generate",
-      serverOriginalLinkEndpoint: this.rootApi + "permalink/get",
-      fetchUrl: this.rootApi + "fetch",
+      serverPermalinkEndpoint: "permalink/generate",
+      serverOriginalLinkEndpoint: "permalink/get",
+      fetchUrl: "fetch",
 
-      wikidataEntityLabel: this.rootApi + "wikibase/entityLabel",
-      wikibaseSearchEntity: this.rootApi + "wikibase/searchEntity",
-      wikibaseSearchProperty: this.rootApi + "wikibase/searchProperty",
-      wikibaseSchemaContent: this.rootApi + "wikibase/schemaContent",
-      wikibaseValidate: this.rootApi + "wikibase/validate",
-      wikibaseQuery: this.rootApi + "wikibase/query",
-      wikibaseExtract: this.rootApi + "wikibase/extract",
-      wikibaseExtractShexer: this.rootApi + "wikibase/shexer",
-      wikibaseLanguages: this.rootApi + "wikibase/languages",
+      wikidataEntityLabel: "wikibase/entityLabel",
+      wikibaseSearchEntity: "wikibase/searchEntity",
+      wikibaseSearchProperty: "wikibase/searchProperty",
+      wikibaseSchemaContent: "wikibase/schemaContent",
+      wikibaseValidate: "wikibase/validate",
+      wikibaseQuery: "wikibase/query",
+      wikibaseExtract: "wikibase/extract",
+      wikibaseExtractShexer: "wikibase/shexer",
+      wikibaseLanguages: "wikibase/languages",
     },
     client: {
       wikibaseItem: "/item",
@@ -192,6 +191,8 @@ class API {
       continue: "continue",
       node: "node",
       entities: "entities",
+
+      format: "wbFormat",
     },
 
     lang: "lang",

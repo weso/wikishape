@@ -1,8 +1,8 @@
-import axios from "axios";
 import React from "react";
 import API from "../API";
 import { params2Form } from "../Permalink";
 import { processDotData } from "../utils/dot/dotUtils";
+import axios from "../utils/networking/axiosConfig";
 import ShowVisualization, {
   visualizationTypes
 } from "../utils/visualization/ShowVisualization";

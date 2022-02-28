@@ -1,6 +1,6 @@
-import axios from "axios";
 import React from "react";
 import API from "../API";
+import axios from "../utils/networking/axiosConfig";
 import { getFileContents } from "../utils/Utils";
 import QueryTabs from "./QueryTabs";
 
@@ -99,7 +99,11 @@ export async function getQueryRaw(query) {
   if (query.activeSource === API.sources.byText) {
     return query.textArea.trim();
   } else if (query.activeSource === API.sources.byUrl) {
-    return (await axios.get(query.url.trim())).data;
+    // Ask the RDFShape server to fetch the contents for us (prevent CORS)
+    const { data: urlContent } = await axios.get(API.routes.server.fetchUrl, {
+      params: { url: query.url.trim() },
+    });
+    return urlContent;
   } else if (query.activeSource === API.sources.byFile) {
     return await getFileContents(query.file);
   }

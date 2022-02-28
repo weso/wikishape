@@ -1,6 +1,6 @@
-import axios from "axios";
 import shumlex from "shumlex";
 import API from "../../API";
+import axios from "../networking/axiosConfig";
 import { getFileContents } from "../Utils";
 
 // Some validations (shumlex, shapeforms) are done in the client, so the client must parse the input,

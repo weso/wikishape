@@ -1,4 +1,3 @@
-import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
@@ -20,6 +19,7 @@ import {
   updateStateQuery
 } from "../query/Query";
 import ResultSparqlQuery from "../results/ResultSparqlQuery";
+import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 import { validateUrl } from "../utils/Utils";
 

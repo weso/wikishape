@@ -1,9 +1,9 @@
-import axios from "axios";
 import React from "react";
 import shumlex from "shumlex";
 import API from "../API";
 import { params2Form } from "../Permalink";
 import { shumlexCytoscapeStyle } from "../utils/cytoscape/cytoUtils";
+import axios from "../utils/networking/axiosConfig";
 import ShowVisualization, {
   visualizationTypes
 } from "../utils/visualization/ShowVisualization";

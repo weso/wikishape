@@ -1,4 +1,3 @@
-import axios from "axios";
 import PropTypes from "prop-types";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
@@ -14,6 +13,7 @@ import InputPropertiesByText from "../components/InputPropertiesByText";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
 import ResultOutgoing from "../results/ResultOutgoing";
+import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 
 function WikibaseItem(props) {
