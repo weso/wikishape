@@ -24,7 +24,12 @@ function InputTabs(props) {
   return (
     <Form.Group>
       <Form.Label style={{ fontWeight: "bold" }}>{props.name}</Form.Label>
-      <Tabs activeKey={activeSource} id="dataTabs" onSelect={handleTabChange}>
+      <Tabs
+        activeKey={activeSource}
+        id="dataTabs"
+        onSelect={handleTabChange}
+        mountOnEnter={true}
+      >
         <Tab eventKey={API.sources.byText} title="Text">
           <ByText
             name={props.byTextName}

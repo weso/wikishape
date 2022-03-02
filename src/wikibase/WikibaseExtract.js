@@ -12,7 +12,7 @@ import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import PageHeader from "../components/PageHeader";
-import { mkPermalinkLong, params2Form } from "../Permalink";
+import { mkPermalinkLong } from "../Permalink";
 import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
@@ -104,14 +104,24 @@ function WikibaseExtract(props) {
   }
 
   // Given the server response to the extraction operation,
-  // make the schema parameters to be sent to the server for futher processing
+  // make the schema parameters to be sent to the server for further processing
   // the schema
-  function mkSchemaServerParams(extractResponse) {
+  function mkSchemaServerParams(extractedSchema) {
     return {
-      [API.queryParameters.schema.schema]: extractResponse?.result?.result,
-      [API.queryParameters.schema.source]: API.sources.byText,
-      [API.queryParameters.schema.format]: API.formats.shexc,
-      [API.queryParameters.schema.engine]: API.engines.shex,
+      [API.queryParameters.content]: extractedSchema,
+      [API.queryParameters.source]: API.sources.byText,
+      [API.queryParameters.format]: API.formats.shexc,
+      [API.queryParameters.engine]: API.engines.shex,
+    };
+  }
+
+  // Make the schema parameters to be sent to the server for extracting the schema
+  function mkExtractServerParams(pEntities = entities, pEndpoint = endpoint) {
+    return {
+      [API.queryParameters.wikibase.payload]: pEntities
+        .map((ent) => ent.uri)
+        .join("|"), // List of entities joined by "|"
+      // [API.queryParameters.wikibase.endpoint]: pEndpoint,
     };
   }
 
@@ -120,35 +130,36 @@ function WikibaseExtract(props) {
     setProgressPercent(15);
 
     try {
-      // 1. Exrtact schema
-      const extractParams = params2Form(params);
-      const { data: extractResponse } = await axios.post(
-        urlExtract,
-        extractParams
-      );
+      // 1. Extract schema
+      const extractParams = mkExtractServerParams();
+      const {
+        data: {
+          result: { schema: extractedSchemaStr },
+        },
+      } = await axios.post(urlExtract, extractParams);
       setProgressPercent(40);
 
       // 2. Schema info
-      const infoParams = mkSchemaServerParams(extractResponse);
-      const { data: resultInfo } = await axios.post(
-        urlInfo,
-        params2Form(infoParams)
-      );
+      const infoParams = {
+        [API.queryParameters.schema.schema]: mkSchemaServerParams(
+          extractedSchemaStr
+        ),
+      };
+      const { data: resultInfo } = await axios.post(urlInfo, infoParams);
       setProgressPercent(60);
 
       // 3. Schema SVG
       const convertParams = {
         ...infoParams,
-        [API.queryParameters.schema.targetFormat]: API.formats.svg,
+        [API.queryParameters.targetFormat]: API.formats.svg,
       };
-      const { data: resultSvg } = await axios.post(
-        urlVisualize,
-        params2Form(convertParams)
-      );
+      const { data: resultSvg } = await axios.post(urlVisualize, convertParams);
       setProgressPercent(80);
 
       // 4. Schema UML
-      const umlFromSchema = await shexToXmi(infoParams);
+      const umlFromSchema = await shexToXmi(
+        infoParams[API.queryParameters.schema.schema]
+      );
 
       // Merge all operation results for full information
       setResult({

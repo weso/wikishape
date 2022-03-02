@@ -1,8 +1,7 @@
-// import {Typeahead, Token} from 'react-bootstrap-typeahead';
-import axios from "axios";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
+import axios from "../utils/networking/axiosConfig";
 
 function SelectFormat(props) {
   const [formats, setFormats] = useState([]);
@@ -15,13 +14,15 @@ function SelectFormat(props) {
 
   useEffect(() => {
     const url = props.urlFormats;
-    axios
-      .get(url)
-      .then((response) => response.data)
-      .then((data) => {
-        setFormats(data);
-      })
-      .catch(() => console.error("Could not load formats from server"));
+    const fetchFormats = async () => {
+      try {
+        const { data: formatsFromServer } = await axios.get(url);
+        setFormats(formatsFromServer);
+      } catch (err) {
+        console.error(`Could not load formats from server: ${err}`);
+      }
+    };
+    url && fetchFormats();
   }, [props.urlFormats]);
 
   useEffect(() => {

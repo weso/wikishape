@@ -14,9 +14,8 @@ import API from "../API";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import InputShapeLabel from "../components/InputShapeLabel";
 import PageHeader from "../components/PageHeader";
-import { mkPermalinkLong, params2Form } from "../Permalink";
+import { mkPermalinkLong } from "../Permalink";
 import {
-  getQueryRaw,
   InitialQuery,
   mkQueryTabs,
   paramsFromStateQuery,
@@ -26,13 +25,14 @@ import { SchemaEntities } from "../resources/schemaEntities";
 import ResultValidate from "../results/ResultValidate";
 import {
   InitialShex,
+  mkShexServerParams,
   mkShexTabs,
   paramsFromStateShex,
   updateStateShex
 } from "../shex/Shex";
 import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
-import { sanitizeQualify, showQualify } from "../utils/Utils";
+import { getItemRaw, sanitizeQualify, showQualify } from "../utils/Utils";
 
 function WikibaseValidateSparql(props) {
   // User selected entity and schema (either from wikidata schemas or custom shex)
@@ -106,23 +106,14 @@ function WikibaseValidateSparql(props) {
         }
 
         // Set new params accordingly
-        const newParams = wdSchemaInUrl
-          ? mkParams(
-              finalQuery,
-              tab,
-              wdSchemaInUrl,
-              null,
-              pEndpoint,
-              pShapeLabel
-            )
-          : mkParams(
-              finalQuery,
-              tab,
-              null,
-              finalSchema,
-              pEndpoint,
-              pShapeLabel
-            );
+        const newParams = mkParams(
+          finalQuery,
+          tab,
+          wdSchemaInUrl,
+          finalSchema,
+          pEndpoint,
+          pShapeLabel
+        );
 
         setParams(newParams);
         setLastParams(newParams);
@@ -175,14 +166,16 @@ function WikibaseValidateSparql(props) {
 
       // Query the API for the schema info
       const params = {
-        [API.queryParameters.schema.schema]: schemaEntity.conceptUri,
-        [API.queryParameters.schema.source]: API.sources.byUrl,
-        [API.queryParameters.schema.format]: API.formats.shexc,
-        [API.queryParameters.schema.engine]: API.engines.shex,
+        [API.queryParameters.schema.schema]: {
+          [API.queryParameters.content]: schemaEntity.conceptUri,
+          [API.queryParameters.source]: API.sources.byUrl,
+          [API.queryParameters.format]: API.formats.shexc,
+          [API.queryParameters.engine]: API.engines.shex,
+        },
       };
 
       axios
-        .post(API.routes.server.schemaInfo, params2Form(params))
+        .post(API.routes.server.schemaInfo, params)
         .then((response) => response.data)
         .then(({ result: { prefixMap, shapes } }) => {
           const shapeList = shapes
@@ -221,6 +214,24 @@ function WikibaseValidateSparql(props) {
     };
   }
 
+  async function mkServerSchemaParams(
+    pSchema = schemaTab === API.tabs.wdSchema
+      ? wikidataSchemaEntity
+      : userSchema
+  ) {
+    // Make the schema differently for a Wikidata schema vs User manual schema
+    return schemaTab === API.tabs.wdSchema
+      ? {
+          [API.queryParameters.content]: pSchema.conceptUri,
+          [API.queryParameters.source]: API.sources.byUrl,
+          [API.queryParameters.format]: API.formats.shexc,
+          [API.queryParameters.engine]: API.engines.shex,
+        }
+      : {
+          ...(await mkShexServerParams(pSchema)),
+        };
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     setParams(mkParams());
@@ -253,22 +264,20 @@ function WikibaseValidateSparql(props) {
   async function postValidate() {
     setLoadingResult(true);
     setProgressPercent(15);
-    // Make server params
-    const reqParams = params2Form(params);
 
     try {
       // Query the server to perform the SPARQL query and get the results back.
       // Send only the necessary parameters.
-      const queryServerParams = params2Form({
-        [API.queryParameters.wikibase.endpoint]:
-          params[API.queryParameters.wikibase.endpoint],
-        [API.queryParameters.wikibase.payload]: await getQueryRaw(query),
-      });
+      const queryServerParams = {
+        [API.queryParameters.wikibase.endpoint]: endpoint,
+        [API.queryParameters.wikibase.payload]: await getItemRaw(query),
+      };
       const {
         data: {
           result: { results },
         },
       } = await axios.post(urlServerQuery, queryServerParams);
+      setProgressPercent(50);
 
       // Extract entities to be validated from query response.
       const queryResults = results.bindings;
@@ -283,14 +292,17 @@ function WikibaseValidateSparql(props) {
 
       // Query the server for validation data.
       // Set the payload to the data retrieved from the query.
-      const validateServerParams = params2Form({
-        ...params,
+      // Add the schema as well
+      const validateServerParams = {
+        [API.queryParameters.wikibase.endpoint]: endpoint,
         [API.queryParameters.wikibase.payload]: entities.join("|"),
-      });
+        [API.queryParameters.schema.schema]: await mkServerSchemaParams(),
+      };
       const { data: validationResponse } = await axios.post(
         urlServerValidate,
         validateServerParams
       );
+      setProgressPercent(80);
 
       setResult(validationResponse);
       // Create and set the permalink value on success
@@ -370,13 +382,15 @@ function WikibaseValidateSparql(props) {
                   onChange={handleWikidataSchemaChange}
                   entity={wikidataSchemaEntity}
                 />
-                {wikidataSchemaEntity && shapeList?.length != 0 && (
-                  <InputShapeLabel
-                    onChange={handleChangeShapeLabel}
-                    value={shapeLabel}
-                    shapeList={shapeList}
-                  />
-                )}
+                {wikidataSchemaEntity &&
+                  shapeList?.length != 0 &&
+                  schemaTab === API.tabs.wdSchema && (
+                    <InputShapeLabel
+                      onChange={handleChangeShapeLabel}
+                      value={shapeLabel}
+                      shapeList={shapeList}
+                    />
+                  )}
               </Tab>
               <Tab eventKey={API.tabs.shexSchema} title="ShEx">
                 {mkShexTabs(userSchema, setUserSchema, "")}

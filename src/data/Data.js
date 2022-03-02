@@ -1,8 +1,8 @@
 import React from "react";
 import API from "../API";
-import { params2Form } from "../Permalink";
 import { processDotData } from "../utils/dot/dotUtils";
 import axios from "../utils/networking/axiosConfig";
+import { getItemRaw } from "../utils/Utils";
 import ShowVisualization, {
   visualizationTypes
 } from "../utils/visualization/ShowVisualization";
@@ -92,11 +92,16 @@ export function mkDataTabs(
   function handleInferenceChange(value) {
     setData({ ...data, inference: value });
   }
+
+  function handleCodeMirrorChange(value) {
+    setData({ ...data, codeMirror: value });
+  }
   const resetParams = () => setData({ ...data, fromParams: false });
 
   return (
     <React.Fragment>
       <DataTabs
+        data={data}
         name={name}
         subname={subname}
         activeSource={data.activeSource}
@@ -108,11 +113,12 @@ export function mkDataTabs(
         handleFileUpload={handleDataFileUpload}
         selectedFormat={data.format}
         handleDataFormatChange={handleDataFormatChange}
-        setCodeMirror={(cm) => setData({ ...data, codeMirror: cm })}
+        setCodeMirror={handleCodeMirrorChange}
         fromParams={data.fromParams}
         resetFromParams={resetParams}
       />
       <SelectInferenceEngine
+        data={data}
         handleInferenceChange={handleInferenceChange}
         selectedInference={data.inference || InitialData.inference}
         fromParams={data.fromParams}
@@ -131,19 +137,34 @@ export function getDataText(data) {
   return "";
 }
 
+// Prepare basic server params for when data is sent to the server
+export async function mkDataServerParams(data) {
+  return {
+    // If by file, parse contents in client before sending
+    [API.queryParameters.content]:
+      data.activeSource === API.sources.byFile
+        ? await getItemRaw(data)
+        : data.activeSource === API.sources.byUrl
+        ? data.url
+        : data.textArea,
+    [API.queryParameters.source]: data.activeSource,
+    [API.queryParameters.format]: data.format,
+    [API.queryParameters.inference]: data.inference,
+  };
+}
+
 export async function mkDataVisualization(
   params,
   visualizationTarget,
   options = { controls: false }
 ) {
-  const uplinkParams = params2Form(params);
   switch (visualizationTarget) {
     case API.queryParameters.visualization.targets.svg:
       const { data: resultDot } = await axios.post(
         API.routes.server.dataConvert,
-        uplinkParams
+        params
       );
-      const dot = resultDot.result.data; // Get the DOT string from the axios data object
+      const dot = resultDot.result.content; // Get the DOT string from the axios data object
       const dotVisualization = await processDotData(dot);
 
       return (
@@ -156,9 +177,9 @@ export async function mkDataVisualization(
     case API.queryParameters.visualization.targets.cyto:
       const { data: resultCyto } = await axios.post(
         API.routes.server.dataConvert,
-        uplinkParams
+        params
       );
-      const cytoElements = JSON.parse(resultCyto.result.data);
+      const cytoElements = JSON.parse(resultCyto.result.content);
 
       return (
         <ShowVisualization

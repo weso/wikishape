@@ -16,11 +16,12 @@ import InputEntitiesByText from "../components/InputEntitiesByText";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import InputShapeLabel from "../components/InputShapeLabel";
 import PageHeader from "../components/PageHeader";
-import { mkPermalinkLong, params2Form } from "../Permalink";
+import { mkPermalinkLong } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
 import ResultValidate from "../results/ResultValidate";
 import {
   InitialShex,
+  mkShexServerParams,
   mkShexTabs,
   paramsFromStateShex,
   updateStateShex
@@ -102,16 +103,14 @@ function WikibaseValidate(props) {
         }
 
         // Set new params accordingly
-        const newParams = wdSchemaInUrl
-          ? mkParams(
-              pEntities,
-              tab,
-              wdSchemaInUrl,
-              null,
-              pEndpoint,
-              pShapeLabel
-            )
-          : mkParams(pEntities, tab, null, finalSchema, pEndpoint, pShapeLabel);
+        const newParams = mkParams(
+          pEntities,
+          tab,
+          wdSchemaInUrl,
+          finalSchema,
+          pEndpoint,
+          pShapeLabel
+        );
 
         setParams(newParams);
         setLastParams(newParams);
@@ -164,14 +163,16 @@ function WikibaseValidate(props) {
 
       // Query the API for the schema info
       const params = {
-        [API.queryParameters.schema.schema]: schemaEntity.conceptUri,
-        [API.queryParameters.schema.source]: API.sources.byUrl,
-        [API.queryParameters.schema.format]: API.formats.shexc,
-        [API.queryParameters.schema.engine]: API.engines.shex,
+        [API.queryParameters.schema.schema]: {
+          [API.queryParameters.content]: schemaEntity.conceptUri,
+          [API.queryParameters.source]: API.sources.byUrl,
+          [API.queryParameters.format]: API.formats.shexc,
+          [API.queryParameters.engine]: API.engines.shex,
+        },
       };
 
       axios
-        .post(API.routes.server.schemaInfo, params2Form(params))
+        .post(API.routes.server.schemaInfo, params)
         .then((response) => response.data)
         .then(({ result: { prefixMap, shapes } }) => {
           const shapeList = shapes
@@ -209,6 +210,24 @@ function WikibaseValidate(props) {
     };
   }
 
+  async function mkServerSchemaParams(
+    pSchema = schemaTab === API.tabs.wdSchema
+      ? wikidataSchemaEntity
+      : userSchema
+  ) {
+    // Make the schema differently for a Wikidata schema vs User manual schema
+    return schemaTab === API.tabs.wdSchema
+      ? {
+          [API.queryParameters.content]: pSchema.conceptUri,
+          [API.queryParameters.source]: API.sources.byUrl,
+          [API.queryParameters.format]: API.formats.shexc,
+          [API.queryParameters.engine]: API.engines.shex,
+        }
+      : {
+          ...(await mkShexServerParams(pSchema)),
+        };
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     setParams(mkParams());
@@ -243,12 +262,19 @@ function WikibaseValidate(props) {
   async function postValidate() {
     setLoading(true);
     setProgressPercent(15);
-    // Make server params
-    const reqParams = params2Form(params);
 
     try {
-      const { data: serverResponse } = await axios.post(urlServer, reqParams);
+      const postParams = {
+        [API.queryParameters.wikibase.endpoint]: endpoint,
+        [API.queryParameters.wikibase.payload]: entities
+          .map((ent) => ent.uri)
+          .join("|"),
+        [API.queryParameters.schema.schema]: await mkServerSchemaParams(),
+      };
+      setProgressPercent(30);
+      const { data: serverResponse } = await axios.post(urlServer, postParams);
 
+      setProgressPercent(70);
       setResult(serverResponse);
       // Create and set the permalink value on success
       setPermalink(mkPermalinkLong(API.routes.client.wikibaseValidate, params));
@@ -356,13 +382,15 @@ function WikibaseValidate(props) {
               {mkShexTabs(userSchema, setUserSchema, "")}
             </Tab>
           </Tabs>
-          {wikidataSchemaEntity && shapeList?.length != 0 && (
-            <InputShapeLabel
-              onChange={handleChangeShapeLabel}
-              value={shapeLabel}
-              shapeList={shapeList}
-            />
-          )}
+          {wikidataSchemaEntity &&
+            shapeList?.length != 0 &&
+            schemaTab === API.tabs.wdSchema && (
+              <InputShapeLabel
+                onChange={handleChangeShapeLabel}
+                value={shapeLabel}
+                shapeList={shapeList}
+              />
+            )}
           <Button
             className={"btn-with-icon " + (loading ? "disabled" : "")}
             variant="primary"

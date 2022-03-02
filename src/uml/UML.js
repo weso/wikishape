@@ -1,6 +1,7 @@
 import React from "react";
 import shumlex from "shumlex";
 import API from "../API";
+import { getItemRaw } from "../utils/Utils";
 import ShowVisualization, {
   visualizationTypes
 } from "../utils/visualization/ShowVisualization";
@@ -13,7 +14,7 @@ export const InitialUML = {
   textArea: "",
   url: "",
   file: null,
-  format: API.formats.xml,
+  format: API.formats.xmi,
   fromParams: false,
   codeMirror: null,
 };
@@ -79,6 +80,7 @@ export function mkUMLTabs(uml, setUml, name, subname) {
 
   return (
     <UMLTabs
+      uml={uml}
       name={name}
       subname={subname}
       activeSource={uml.activeSource}
@@ -127,6 +129,21 @@ export const mkSvgElement = (umlRaw) => {
 
   return inlineSvg;
 };
+
+// Prepare basic server params for when data is sent to the server
+export async function mkUmlServerParams(uml) {
+  return {
+    // If by file, parse contents in client before sending
+    [API.queryParameters.content]:
+      uml.activeSource === API.sources.byFile
+        ? await getItemRaw(uml)
+        : uml.activeSource === API.sources.byUrl
+        ? uml.url
+        : uml.textArea,
+    [API.queryParameters.source]: uml.activeSource,
+    [API.queryParameters.format]: uml.format,
+  };
+}
 
 export async function mkUmlVisualization(
   params,
