@@ -1,10 +1,10 @@
-import axios from "axios";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { Token, Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead-bs4.min.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import API from "../API";
+import axios from "../utils/networking/axiosConfig";
 
 const defaultLanguage = { label: "en", name: "English" };
 
@@ -14,9 +14,12 @@ function SelectLanguage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const LANGS_URI = `${API.routes.server.wikibaseLanguages}?${API.queryParameters.wikibase.endpoint}=${API.currentUrl()}`;
-      const result = await axios.get(LANGS_URI)
-      const {result: languages} = result.data
+      const {
+        data: { result: languages },
+      } = await axios.post(API.routes.server.wikibaseLanguages, {
+        [API.queryParameters.wikibase.endpoint]: API.currentUrl(),
+        [API.queryParameters.wikibase.payload]: "langs", // need a dummy payload
+      });
       setOptions(languages);
     };
     fetchData();

@@ -1,4 +1,3 @@
-import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
@@ -11,8 +10,9 @@ import { ExternalLinkIcon, ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import PageHeader from "../components/PageHeader";
-import { mkPermalinkLong, params2Form } from "../Permalink";
+import { mkPermalinkLong } from "../Permalink";
 import { SchemaEntities } from "../resources/schemaEntities";
+import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";
@@ -70,14 +70,14 @@ function WikibaseSchemaInfo(props) {
     const baseParams = await mkServerParams();
     try {
       // 1. Schema info
-      const infoParams = params2Form(baseParams);
+      const infoParams = baseParams;
       const { data: resultInfo } = await axios.post(urlServerInfo, infoParams);
       setProgressPercent(40);
       // 2. Schema SVG
-      const toSvgParams = params2Form({
+      const toSvgParams = {
         ...baseParams,
-        [API.queryParameters.schema.targetFormat]: API.formats.svg,
-      });
+        [API.queryParameters.targetFormat]: API.formats.svg,
+      };
       const { data: resultSvg } = await axios.post(
         urlServerVisual,
         toSvgParams
@@ -86,7 +86,9 @@ function WikibaseSchemaInfo(props) {
       setProgressPercent(60);
 
       // 3. Schema UML
-      const umlFromSchema = await shexToXmi(baseParams);
+      const umlFromSchema = await shexToXmi(
+        baseParams[API.queryParameters.schema.schema]
+      );
 
       const newResult = {
         resultInfo,
@@ -101,7 +103,7 @@ function WikibaseSchemaInfo(props) {
       setPermalink(
         mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
           [API.queryParameters.schema.schema]: schemaEntities[0].id,
-          [API.queryParameters.wikibase.lang]: schemaEntities[0].lang,
+          [API.queryParameters.wikibase.language]: schemaEntities[0].lang,
         })
       );
     } catch (error) {
@@ -116,25 +118,26 @@ function WikibaseSchemaInfo(props) {
     setParams(mkParams());
   }
 
-  // Make params to be sent to the server API endpoint
-  async function mkServerParams(pSchemaEntity = schemaEntities[0]) {
-    const { data: schemaRaw } = await axios.get(pSchemaEntity.conceptUri);
-    return {
-      [API.queryParameters.schema.schema]: schemaRaw,
-      [API.queryParameters.schema.source]: API.sources.byText,
-      [API.queryParameters.schema.format]: API.formats.shexc,
-      [API.queryParameters.schema.engine]: API.engines.shex,
-    };
-  }
-
   // Make params for client usage
   function mkParams(pSchemaEntity = schemaEntities[0]) {
     if (pSchemaEntity) {
       return {
         [API.queryParameters.id]: pSchemaEntity.id,
-        [API.queryParameters.wikibase.lang]: pSchemaEntity.lang,
+        [API.queryParameters.wikibase.language]: pSchemaEntity.language,
       };
     }
+  }
+
+  // Make params to be sent to the server API endpoint to perform operations on the schema
+  async function mkServerParams(pSchemaEntity = schemaEntities[0]) {
+    return {
+      [API.queryParameters.schema.schema]: {
+        [API.queryParameters.content]: pSchemaEntity.conceptUri,
+        [API.queryParameters.source]: API.sources.byUrl,
+        [API.queryParameters.format]: API.formats.shexc,
+        [API.queryParameters.engine]: API.engines.shex,
+      },
+    };
   }
 
   function setUpHistory() {
@@ -150,7 +153,6 @@ function WikibaseSchemaInfo(props) {
         document.title,
         mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
           [API.queryParameters.id]: lastParams.id,
-          [API.queryParameters.wikibase.lang]: lastParams.lang,
         })
       );
     }
@@ -161,7 +163,6 @@ function WikibaseSchemaInfo(props) {
       document.title,
       mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
         [API.queryParameters.id]: params.id,
-        [API.queryParameters.wikibase.lang]: params.lang,
       })
     );
 
@@ -250,9 +251,9 @@ export function paramsFromQueryParams(params) {
   params[API.queryParameters.schema.schema] &&
     (newParams[API.queryParameters.schema.schema] =
       params[API.queryParameters.schema.schema]);
-  params[API.queryParameters.wikibase.lang] &&
-    (newParams[API.queryParameters.wikibase.lang] =
-      params[API.queryParameters.wikibase.lang]);
+  params[API.queryParameters.wikibase.language] &&
+    (newParams[API.queryParameters.wikibase.language] =
+      params[API.queryParameters.wikibase.language]);
   return newParams;
 }
 
@@ -260,7 +261,7 @@ export function getSchemaEntity(params, setError) {
   const schemaId = params[API.queryParameters.id];
 
   // For parameter lang: default to "en" if needed
-  const lang = params[API.queryParameters.wikibase.lang] || "en";
+  const lang = params[API.queryParameters.wikibase.language] || "en";
   const e = SchemaEntities.find((e) => e.id === schemaId);
   if (e) {
     return mkSchemaEntity(e, lang);

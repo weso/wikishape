@@ -1,49 +1,155 @@
 import React from "react";
-import environmentConfiguration from "./EnvironmentConfig";
+import { rootApi } from "./utils/networking/axiosConfig";
 class API {
-  static rootApi = environmentConfiguration.rdfShapeHost + "/api/";
+  // Information sources / tabs
+  static sources = {
+    byText: "byText",
+    byUrl: "byUrl",
+    byFile: "byFile",
+    bySchema: "bySchema",
+
+    default: "byText",
+  };
+
+  static tabs = {
+    xmi: "XMI",
+    uml: "UML",
+    shex: "ShEx",
+    text: "text",
+    prefixMap: "prefixMap",
+
+    visualization: "visualization",
+    visualizations: "visualizations",
+    visualizationDot: "dot",
+    visualizationCyto: "cyto",
+
+    shaclValidationReportText: "shaclReportText",
+    shaclValidationReportNodes: "shaclReportNodes",
+
+    wdSchema: "bySchema",
+    shexSchema: "byShex",
+  };
+
+  // Formats (most formats come from server but we need defaults for data initialization)
+  static formats = {
+    turtle: "turtle",
+    triG: "TriG",
+    compact: "Compact",
+    shexc: "ShExC",
+    shexj: "ShExJ",
+    sparql: "SPARQL",
+    xml: "XML",
+    rdfXml: "RDF/XML",
+    rdfJson: "RDF/JSON",
+    svg: "SVG",
+    png: "PNG",
+    html: "HTML",
+    htmlMicrodata: "html-microdata",
+    htmlRdf: "html-rdfa11",
+    json: "JSON",
+    jsonld: "JSON-LD",
+    dot: "DOT",
+    ps: "PS",
+    uml: "UML",
+    txt: "txt",
+
+    defaultData: "turtle",
+    defaultShex: "ShExC",
+    defaultShacl: "turtle",
+    defaultShapeMap: "Compact",
+    defaultQuery: "SPARQL",
+    defaultGraphical: "SVG",
+  };
+
+  // Mime types
+  static mimeTypes = {
+    shex: "text/shex",
+    svg: "image/svg+xml",
+    png: "image/png",
+  };
+
+  // Inferences
+  static inferences = {
+    default: "None",
+
+    none: "None",
+  };
+
+  // Engines
+  static engines = {
+    default: "ShEx",
+    defaultShex: "ShEx",
+    defaultShacl: "SHACLex",
+
+    shex: "ShEx",
+    shaclex: "SHACLex",
+    jenaShacl: "JenaSHACL",
+    shacl_tq: "SHACL_TQ",
+    xml: "xml",
+  };
+
+  // Trigger modes
+  static triggerModes = {
+    default: "ShapeMap",
+
+    shapeMap: "ShapeMap",
+    targetDecls: "TargetDecls",
+  };
+
+  // Prop names
+  static propNames = {
+    useShexer: "useShexer",
+    // Wikibase entity types
+    wbEntityTypes: {
+      propName: "wbEntityType",
+
+      item: "item",
+      property: "property",
+      lexeme: "lexeme",
+    },
+  };
+
   static routes = {
     server: {
-      root: this.rootApi,
-      health: this.rootApi + "health",
+      root: rootApi,
+      health: "health",
 
-      dataInfo: this.rootApi + "data/info",
-      dataConvert: this.rootApi + "data/convert",
-      dataQuery: this.rootApi + "data/query",
-      dataExtract: this.rootApi + "data/extract",
-      dataFormatsInput: this.rootApi + "data/formats/input",
-      dataFormatsOutput: this.rootApi + "data/formats/output",
-      dataVisualFormats: this.rootApi + "data/formats/visual",
-      dataOutgoing: this.rootApi + "endpoint/outgoing",
+      dataInfo: "data/info",
+      dataConvert: "data/convert",
+      dataQuery: "data/query",
+      dataExtract: "data/extract",
+      dataFormatsInput: "data/formats/input",
+      dataFormatsOutput: "data/formats/output",
+      dataVisualFormats: "data/formats/visual",
 
-      schemaInfo: this.rootApi + "schema/info",
-      schemaConvert: this.rootApi + "schema/convert",
-      schemaValidate: this.rootApi + "schema/validate",
-      shExFormats: this.rootApi + "schema/formats?schemaEngine=shex",
-      shaclFormats: this.rootApi + "schema/formats?schemaEngine=shaclex",
-      schemaShaclEngines: this.rootApi + "schema/engines/shacl",
+      schemaInfo: "schema/info",
+      schemaConvert: "schema/convert",
+      schemaValidate: "schema/validate",
+      shExFormats: `schema/formats/${this.engines.shex}`,
+      shaclFormats: `schema/formats/${this.engines.shaclex}`,
+      schemaShaclEngines: `schema/engines/${this.engines.shacl}`,
 
-      shapeMapInfo: this.rootApi + "shapemap/info",
-      shapeMapFormats: this.rootApi + "shapemap/formats",
+      shapeMapInfo: "shapemap/info",
+      shapeMapFormats: "shapemap/formats",
 
-      endpointInfo: this.rootApi + "endpoint/info",
-      endpointQuery: this.rootApi + "endpoint/query",
+      endpointOutgoing: "endpoint/outgoing",
 
-      inferenceEngines: this.rootApi + "data/inferenceEngines",
+      inferenceEngines: "data/inferenceEngines",
 
-      serverPermalinkEndpoint: this.rootApi + "permalink/generate",
-      serverOriginalLinkEndpoint: this.rootApi + "permalink/get",
-      fetchUrl: this.rootApi + "fetch",
+      serverPermalinkEndpoint: "permalink/generate",
+      serverOriginalLinkEndpoint: "permalink/get",
+      fetchUrl: "fetch",
 
-      wikidataEntityLabel: this.rootApi + "wikibase/entityLabel",
-      wikibaseSearchEntity: this.rootApi + "wikibase/searchEntity",
-      wikibaseSearchProperty: this.rootApi + "wikibase/searchProperty",
-      wikibaseSchemaContent: this.rootApi + "wikibase/schemaContent",
-      wikibaseValidate: this.rootApi + "wikibase/validate",
-      wikibaseQuery: this.rootApi + "wikibase/query",
-      wikibaseExtract: this.rootApi + "wikibase/extract",
-      wikibaseExtractShexer: this.rootApi + "wikibase/shexer",
-      wikibaseLanguages: this.rootApi + "wikibase/languages",
+      wikidataEntityLabel: "wikibase/entityLabel",
+      wikibaseSearchEntity: `wikibase/search/${this.propNames.wbEntityTypes.item}`,
+      wikibaseSearchProperty: `wikibase/search/${this.propNames.wbEntityTypes.property}`,
+      wikibaseSearchLexeme: `wikibase/search/${this.propNames.wbEntityTypes.lexeme}`,
+      wikibaseSchemaContent: "wikibase/schemaContent",
+      wikibaseValidate: "wikibase/validate",
+      wikibaseQuery: "wikibase/query",
+      wikibaseExtract: "wikibase/extract",
+      wikibaseExtractShexer: "wikibase/shexer",
+      wikibaseLanguages: "wikibase/languages",
     },
     client: {
       wikibaseItem: "/item",
@@ -186,125 +292,27 @@ class API {
       payload: "payload",
       endpoint: "endpoint",
       language: "language",
-
       languages: "languages",
       limit: "limit",
       continue: "continue",
       node: "node",
       entities: "entities",
+
+      format: "wbFormat",
     },
 
     lang: "lang",
     tab: "tab",
     id: "id",
-  };
 
-  // Information sources / tabs
-  static sources = {
-    byText: "byText",
-    byUrl: "byUrl",
-    byFile: "byFile",
-    bySchema: "bySchema",
-
-    default: "byText",
-  };
-
-  static tabs = {
-    xmi: "XMI",
-    uml: "UML",
-    shex: "ShEx",
-    text: "text",
-    prefixMap: "prefixMap",
-
-    visualization: "visualization",
-    visualizations: "visualizations",
-    visualizationDot: "dot",
-    visualizationCyto: "cyto",
-
-    shaclValidationReportText: "shaclReportText",
-    shaclValidationReportNodes: "shaclReportNodes",
-
-    wdSchema: "bySchema",
-    shexSchema: "byShex",
-  };
-
-  // Formats (most formats come from server but we need defaults for data initialization)
-  static formats = {
-    turtle: "turtle",
-    triG: "TriG",
-    compact: "Compact",
-    shexc: "ShExC",
-    shexj: "ShExJ",
-    sparql: "SPARQL",
-    xml: "XML",
-    rdfXml: "RDF/XML",
-    rdfJson: "RDF/JSON",
-    svg: "SVG",
-    png: "PNG",
-    html: "HTML",
-    htmlMicrodata: "html-microdata",
-    htmlRdf: "html-rdfa11",
-    json: "JSON",
-    jsonld: "JSON-LD",
-    dot: "DOT",
-    ps: "PS",
-    uml: "UML",
-    txt: "txt",
-
-    defaultData: "turtle",
-    defaultShex: "ShExC",
-    defaultShacl: "turtle",
-    defaultShapeMap: "Compact",
-    defaultQuery: "SPARQL",
-    defaultGraphical: "SVG",
-  };
-
-  // Mime types
-  static mimeTypes = {
-    shex: "text/shex",
-    svg: "image/svg+xml",
-    png: "image/png",
-  };
-
-  // Inferences
-  static inferences = {
-    default: "None",
-
-    none: "None",
-  };
-
-  // Engines
-  static engines = {
-    default: "ShEx",
-    defaultShex: "ShEx",
-    defaultShacl: "SHACLex",
-
-    shex: "ShEx",
-    shaclex: "SHACLex",
-    jenaShacl: "JenaSHACL",
-    shacl_tq: "SHACL_TQ",
-    xml: "xml",
-  };
-
-  // Trigger modes
-  static triggerModes = {
-    default: "ShapeMap",
-
-    shapeMap: "ShapeMap",
-    targetDecls: "TargetDecls",
-  };
-
-  // Prop names
-  static propNames = {
-    useShexer: "useShexer",
-    // Wikibase entity types
-    wbEntityTypes: {
-      propName: "wbEntityType",
-
-      item: "item",
-      property: "property",
-      lexeme: "lexeme",
-    },
+    content: "content",
+    format: "format",
+    engine: "engine",
+    source: "source",
+    inference: "inference",
+    targetFormat: "targetFormat",
+    targetEngine: "targetEngine",
+    type: "type",
   };
 
   // Text constants
@@ -507,9 +515,12 @@ class API {
     networkError: "Network error",
     errorDetails: "Error details",
     errorParsingUrl: "Could not parse URL information",
+    errorFetchingQuery: "Could not fetch the query data",
     noProvidedRdf: "No RDF data provided",
     noProvidedSchema: "No schema provided",
     noProvidedEntity: "No entity provided",
+    noEmbeddedFile:
+      "Can't generate direct links to visualizations for file-based inputs, try inserting data by URL",
     invalidXmiSchema: "Invalid XMI schema",
     noProvidedShapeMap: "No shapeMap provided",
     noProvidedQuery: "No query provided",

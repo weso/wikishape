@@ -31,7 +31,7 @@ const WikibaseSchemaResults = ({
   // De-structure results
   const {
     schema: {
-      schema: schemaRaw,
+      content: schemaRaw,
       format: { name: schemaFormat },
       engine: schemaEngine,
     },
@@ -40,7 +40,7 @@ const WikibaseSchemaResults = ({
 
   const {
     targetSchemaFormat: { name: schemaSvgFormat },
-    result: { schema: schemaSvg },
+    result: { content: schemaSvg },
   } = resultSvg;
 
   const umlXmi = doUml ? resultUml : null;
@@ -179,7 +179,7 @@ const WikibaseSchemaResults = ({
                   </Tab>
                 )}
                 {/* Cytoscape visualization */}
-                {cytoElements?.length > 0 && (
+                {doCyto && cytoElements?.length > 0 && (
                   <Tab
                     eventKey={API.tabs.visualizationCyto}
                     title={API.texts.resultTabs.visualizationCyto}

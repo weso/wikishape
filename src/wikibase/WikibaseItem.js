@@ -1,4 +1,3 @@
-import axios from "axios";
 import PropTypes from "prop-types";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
@@ -14,6 +13,7 @@ import InputPropertiesByText from "../components/InputPropertiesByText";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
 import ResultOutgoing from "../results/ResultOutgoing";
+import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 
 function WikibaseItem(props) {
@@ -28,14 +28,14 @@ function WikibaseItem(props) {
   const [progressPercent, setProgressPercent] = useState(0);
 
   const itemType = props[API.propNames.wbEntityTypes.propName];
-  const urlServer = API.routes.server.dataOutgoing;
+  const urlServer = API.routes.server.endpointOutgoing;
 
   useEffect(() => {
     if (props.location.search) {
       const queryParams = qs.parse(props.location.search);
-      if (queryParams[API.queryParameters.wikibase.endpoint]) {
-        setEndpoint(queryParams[API.queryParameters.wikibase.endpoint]);
-      }
+      setEndpoint(
+        queryParams[API.queryParameters.wikibase.endpoint] || endpoint
+      );
       if (queryParams[API.queryParameters.wikibase.entities]) {
         let entitiesFromUrl = [];
         try {

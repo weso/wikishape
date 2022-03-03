@@ -9,7 +9,9 @@ import Code from "./Code";
 
 function ByText(props) {
   // Pre-process the text sent down to the text container
-  const textContent = props.textAreaValue?.trim();
+  const textContent = props.fromParams
+    ? props.textAreaValue?.trim()
+    : props.textAreaValue;
 
   function handleChange(value, y, change) {
     props.handleByTextChange && props.handleByTextChange(value, y, change);

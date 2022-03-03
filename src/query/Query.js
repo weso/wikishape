@@ -1,7 +1,6 @@
-import axios from "axios";
 import React from "react";
 import API from "../API";
-import { getFileContents } from "../utils/Utils";
+import { getItemRaw } from "../utils/Utils";
 import QueryTabs from "./QueryTabs";
 
 export const InitialQuery = {
@@ -70,6 +69,7 @@ export function mkQueryTabs(query, setQuery, name, subname) {
 
   return (
     <QueryTabs
+      query={query}
       name={name}
       subname={subname}
       activeSource={query.activeSource}
@@ -86,22 +86,26 @@ export function mkQueryTabs(query, setQuery, name, subname) {
   );
 }
 
+// Prepare basic server params for when shex is sent to server
+export async function mkQueryServerParams(query) {
+  return {
+    // If by file, parse contents in client before sending
+    [API.queryParameters.content]:
+      query.activeSource === API.sources.byFile
+        ? await getItemRaw(query)
+        : query.activeSource === API.sources.byUrl
+        ? query.url
+        : query.textArea,
+    [API.queryParameters.source]: query.activeSource,
+  };
+}
+
+// Get the text input by the user that forms the query
 export function getQueryText(query) {
   if (query.activeSource === API.sources.byText) {
     return encodeURI(query.textArea.trim());
   } else if (query.activeSource === API.sources.byUrl) {
     return encodeURI(query.textArea.trim());
-  }
-  return "";
-}
-
-export async function getQueryRaw(query) {
-  if (query.activeSource === API.sources.byText) {
-    return query.textArea.trim();
-  } else if (query.activeSource === API.sources.byUrl) {
-    return (await axios.get(query.url.trim())).data;
-  } else if (query.activeSource === API.sources.byFile) {
-    return await getFileContents(query.file);
   }
   return "";
 }

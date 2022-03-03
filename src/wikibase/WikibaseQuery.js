@@ -1,4 +1,3 @@
-import axios from "axios";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
@@ -10,9 +9,8 @@ import Row from "react-bootstrap/Row";
 import Spinner from "react-bootstrap/Spinner";
 import API from "../API";
 import PageHeader from "../components/PageHeader";
-import { mkPermalinkLong, params2Form } from "../Permalink";
+import { mkPermalinkLong } from "../Permalink";
 import {
-  getQueryRaw,
   getQueryText,
   InitialQuery,
   mkQueryTabs,
@@ -20,8 +18,9 @@ import {
   updateStateQuery
 } from "../query/Query";
 import ResultSparqlQuery from "../results/ResultSparqlQuery";
+import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
-import { validateUrl } from "../utils/Utils";
+import { getItemRaw, validateUrl } from "../utils/Utils";
 
 function WikibaseQuery(props) {
   const serverUrl = API.routes.server.wikibaseQuery;
@@ -105,6 +104,34 @@ function WikibaseQuery(props) {
     };
   }
 
+  async function mkServerParams(pEndpoint = endpoint, pQuery = query) {
+    return {
+      [API.queryParameters.wikibase.endpoint]: pEndpoint,
+      [API.queryParameters.wikibase.payload]: await getItemRaw(pQuery),
+    };
+  }
+
+  async function postQuery() {
+    setLoading(true);
+
+    try {
+      // Get the query text to be sent as payload
+      const postData = await mkServerParams();
+      if (!postData) throw API.texts.errorFetchingQuery;
+
+      const { data: queryResponse } = await axios.post(serverUrl, postData);
+
+      // If successful, set result and permalink
+      setResult(queryResponse);
+
+      setPermalink(mkPermalinkLong(API.routes.client.wikibaseQuery, params));
+    } catch (err) {
+      setError(mkError(err, serverUrl));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function setUpHistory() {
     // Store the last query in the browser history
     if (
@@ -128,34 +155,6 @@ function WikibaseQuery(props) {
     );
 
     setLastParams(params);
-  }
-
-  async function postQuery() {
-    setLoading(true);
-
-    try {
-      // Get the query text to be sent as payload
-      const queryRaw = await getQueryRaw(query);
-      if (!queryRaw) throw "Could not fetch the query data";
-
-      const reqParams = {
-        [API.queryParameters.wikibase.endpoint]: endpoint,
-        [API.queryParameters.wikibase.payload]: queryRaw,
-      };
-      const { data: queryResult } = await axios.post(
-        serverUrl,
-        params2Form(reqParams)
-      );
-
-      // If successful, set result and permalink
-      setResult(queryResult);
-
-      setPermalink(mkPermalinkLong(API.routes.client.wikibaseQuery, params));
-    } catch (err) {
-      setError(mkError(err, serverUrl));
-    } finally {
-      setLoading(false);
-    }
   }
 
   // Place the current URL to the resulting items

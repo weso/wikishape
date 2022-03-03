@@ -14,7 +14,7 @@ import SelectLanguage from "./SelectLanguage";
 const defaultLanguage = [{ label: "en", name: "English" }];
 
 function InputSchemaEntityByText(props) {
-  const [language, setLanguage] = useState(defaultLanguage);
+  const [language, setLanguage] = useState(props.language || defaultLanguage);
   const [options, setOptions] = useState([]);
 
   // To be used when mediaWiki's API accepts searching for schemas
@@ -22,7 +22,7 @@ function InputSchemaEntityByText(props) {
 
   useEffect(() => {
     if (language[0]) {
-      setOptions(optionsFromSchemaEntities(language[0].label));
+      setOptions(optionsFromSchemaEntities(language[0]?.label || language[0]));
     }
   }, [language]);
 
@@ -85,6 +85,7 @@ function InputSchemaEntityByText(props) {
             useCache={false}
             selected={props.entities}
             onChange={(selected) => {
+              console.info(selected);
               props.onChange(selected);
             }}
           />
@@ -96,7 +97,7 @@ function InputSchemaEntityByText(props) {
             </InputGroup.Prepend>
             <SelectLanguage
               id="SelectLanguage"
-              language={[{ label: "en", name: "English" }]}
+              language={props.language || defaultLanguage}
               onChange={setLanguage}
             />
           </InputGroup>

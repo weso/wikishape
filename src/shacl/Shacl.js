@@ -1,9 +1,10 @@
-import axios from "axios";
 import React from "react";
 import API from "../API";
 import { SelectSHACLEngine } from "../components/SelectEngine";
 import SelectInferenceEngine from "../data/SelectInferenceEngine";
 import { params2Form } from "../Permalink";
+import axios from "../utils/networking/axiosConfig";
+import { getItemRaw } from "../utils/Utils";
 import ShowVisualization, {
   visualizationTypes
 } from "../utils/visualization/ShowVisualization";
@@ -51,7 +52,7 @@ export function paramsFromStateShacl(shacl) {
   params[API.queryParameters.schema.format] = shacl.format;
   params[API.queryParameters.schema.engine] = shacl.engine;
   params[API.queryParameters.schema.inference] = shacl.inference;
-  params[API.queryParameters.schema.triggerMode] = shacl.triggerMode;
+  params[API.queryParameters.schema.triggerMode] = API.triggerModes.targetDecls;
 
   switch (shacl.activeSource) {
     case API.sources.byText:
@@ -98,6 +99,7 @@ export function mkShaclTabs(shacl, setShacl, name, subname) {
   return (
     <React.Fragment>
       <ShaclTabs
+        shacl={shacl}
         name={name}
         subname={subname}
         activeSource={shacl.activeSource}
@@ -115,6 +117,7 @@ export function mkShaclTabs(shacl, setShacl, name, subname) {
         resetFromParams={resetParams}
       />
       <SelectSHACLEngine
+        shacl={shacl}
         handleEngineChange={handleSHACLEngineChange}
         selectedEngine={shacl.engine}
         fromParams={shacl.fromParams}
@@ -122,6 +125,7 @@ export function mkShaclTabs(shacl, setShacl, name, subname) {
       />
 
       <SelectInferenceEngine
+        shacl={shacl}
         handleInferenceChange={handleInferenceChange}
         selectedInference={shacl.inference}
         fromParams={shacl.fromParams}
@@ -138,6 +142,23 @@ export function getShaclText(shacl) {
     return encodeURI(shacl.url.trim());
   }
   return "";
+}
+
+// Prepare basic server params for when shex is sent to server
+export async function mkShaclServerParams(shacl) {
+  return {
+    // If by file, parse contents in client before sending
+    [API.queryParameters.content]:
+      shacl.activeSource === API.sources.byFile
+        ? await getItemRaw(shacl)
+        : shacl.activeSource === API.sources.byUrl
+        ? shacl.url
+        : shacl.textArea,
+    [API.queryParameters.source]: shacl.activeSource,
+    [API.queryParameters.format]: shacl.format,
+    [API.queryParameters.engine]: shacl.engine,
+    [API.queryParameters.inference]: shacl.inference,
+  };
 }
 
 export async function mkShaclVisualization(
