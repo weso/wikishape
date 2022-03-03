@@ -22,7 +22,7 @@ function InputWikibaseSchema(props) {
     const fetchData = async () => {
       dispatch({ type: "setLoading" });
 
-      const result = axios
+      axios
         .get(API.wikibaseSchemaContent, {
           params: { wdSchema: status.number },
         })

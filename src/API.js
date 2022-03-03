@@ -121,7 +121,6 @@ class API {
       dataFormatsInput: "data/formats/input",
       dataFormatsOutput: "data/formats/output",
       dataVisualFormats: "data/formats/visual",
-      dataOutgoing: "endpoint/outgoing",
 
       schemaInfo: "schema/info",
       schemaConvert: "schema/convert",
@@ -133,8 +132,7 @@ class API {
       shapeMapInfo: "shapemap/info",
       shapeMapFormats: "shapemap/formats",
 
-      endpointInfo: "endpoint/info",
-      endpointQuery: "endpoint/query",
+      endpointOutgoing: "endpoint/outgoing",
 
       inferenceEngines: "data/inferenceEngines",
 
@@ -143,9 +141,9 @@ class API {
       fetchUrl: "fetch",
 
       wikidataEntityLabel: "wikibase/entityLabel",
-      wikibaseSearchEntity: "wikibase/search/item",
-      wikibaseSearchProperty: "wikibase/search/property",
-      wikibaseSearchLexeme: "wikibase/search/lexeme",
+      wikibaseSearchEntity: `wikibase/search/${this.propNames.wbEntityTypes.item}`,
+      wikibaseSearchProperty: `wikibase/search/${this.propNames.wbEntityTypes.property}`,
+      wikibaseSearchLexeme: `wikibase/search/${this.propNames.wbEntityTypes.lexeme}`,
       wikibaseSchemaContent: "wikibase/schemaContent",
       wikibaseValidate: "wikibase/validate",
       wikibaseQuery: "wikibase/query",
@@ -521,6 +519,8 @@ class API {
     noProvidedRdf: "No RDF data provided",
     noProvidedSchema: "No schema provided",
     noProvidedEntity: "No entity provided",
+    noEmbeddedFile:
+      "Can't generate direct links to visualizations for file-based inputs, try inserting data by URL",
     invalidXmiSchema: "Invalid XMI schema",
     noProvidedShapeMap: "No shapeMap provided",
     noProvidedQuery: "No query provided",

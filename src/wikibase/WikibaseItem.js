@@ -28,7 +28,7 @@ function WikibaseItem(props) {
   const [progressPercent, setProgressPercent] = useState(0);
 
   const itemType = props[API.propNames.wbEntityTypes.propName];
-  const urlServer = API.routes.server.dataOutgoing;
+  const urlServer = API.routes.server.endpointOutgoing;
 
   useEffect(() => {
     if (props.location.search) {
