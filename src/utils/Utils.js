@@ -166,16 +166,8 @@ export function showQualified(qualified, prefixes) {
       if (Object.keys(prefixes).includes(qualified.prefix)) {
         return (
           <>
-            <a
-              href={
-                API.wikidataOutgoingRoute +
-                "?node=" +
-                encodeURIComponent(qualified.uri)
-              }
-            >
+            <a href={qualified.uri} target="_blank">
               {qualified.str}
-            </a>
-            <a href={qualified.uri}>
               <ExternalLinkIcon />
             </a>
           </>
