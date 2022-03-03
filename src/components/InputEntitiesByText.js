@@ -111,11 +111,7 @@ function InputEntitiesByText(props) {
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">Language</InputGroup.Text>
             </InputGroup.Prepend>
-            <SelectLanguage
-              id="SelectLanguage"
-              language={[{ label: "en", name: "English" }]}
-              onChange={setLanguage}
-            />
+            <SelectLanguage language={defaultLanguage} onChange={setLanguage} />
           </InputGroup>
         </Col>
       </Row>

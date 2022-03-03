@@ -103,10 +103,7 @@ function InputPropertiesByText(props) {
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">Language</InputGroup.Text>
             </InputGroup.Prepend>
-            <SelectLanguage
-              language={[{ label: "en", name: "English" }]}
-              onChange={setLanguage}
-            />
+            <SelectLanguage language={defaultLanguage} onChange={setLanguage} />
           </InputGroup>
         </Col>
       </Row>

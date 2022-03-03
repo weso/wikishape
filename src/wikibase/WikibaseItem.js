@@ -33,9 +33,9 @@ function WikibaseItem(props) {
   useEffect(() => {
     if (props.location.search) {
       const queryParams = qs.parse(props.location.search);
-      if (queryParams[API.queryParameters.wikibase.endpoint]) {
-        setEndpoint(queryParams[API.queryParameters.wikibase.endpoint]);
-      }
+      setEndpoint(
+        queryParams[API.queryParameters.wikibase.endpoint] || endpoint
+      );
       if (queryParams[API.queryParameters.wikibase.entities]) {
         let entitiesFromUrl = [];
         try {

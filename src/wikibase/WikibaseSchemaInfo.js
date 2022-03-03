@@ -103,7 +103,7 @@ function WikibaseSchemaInfo(props) {
       setPermalink(
         mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
           [API.queryParameters.schema.schema]: schemaEntities[0].id,
-          [API.queryParameters.wikibase.lang]: schemaEntities[0].lang,
+          [API.queryParameters.wikibase.language]: schemaEntities[0].lang,
         })
       );
     } catch (error) {
@@ -123,7 +123,7 @@ function WikibaseSchemaInfo(props) {
     if (pSchemaEntity) {
       return {
         [API.queryParameters.id]: pSchemaEntity.id,
-        [API.queryParameters.wikibase.lang]: pSchemaEntity.lang,
+        [API.queryParameters.wikibase.language]: pSchemaEntity.language,
       };
     }
   }
@@ -153,7 +153,6 @@ function WikibaseSchemaInfo(props) {
         document.title,
         mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
           [API.queryParameters.id]: lastParams.id,
-          [API.queryParameters.wikibase.lang]: lastParams.lang,
         })
       );
     }
@@ -164,7 +163,6 @@ function WikibaseSchemaInfo(props) {
       document.title,
       mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
         [API.queryParameters.id]: params.id,
-        [API.queryParameters.wikibase.lang]: params.lang,
       })
     );
 
@@ -253,9 +251,9 @@ export function paramsFromQueryParams(params) {
   params[API.queryParameters.schema.schema] &&
     (newParams[API.queryParameters.schema.schema] =
       params[API.queryParameters.schema.schema]);
-  params[API.queryParameters.wikibase.lang] &&
-    (newParams[API.queryParameters.wikibase.lang] =
-      params[API.queryParameters.wikibase.lang]);
+  params[API.queryParameters.wikibase.language] &&
+    (newParams[API.queryParameters.wikibase.language] =
+      params[API.queryParameters.wikibase.language]);
   return newParams;
 }
 
@@ -263,7 +261,7 @@ export function getSchemaEntity(params, setError) {
   const schemaId = params[API.queryParameters.id];
 
   // For parameter lang: default to "en" if needed
-  const lang = params[API.queryParameters.wikibase.lang] || "en";
+  const lang = params[API.queryParameters.wikibase.language] || "en";
   const e = SchemaEntities.find((e) => e.id === schemaId);
   if (e) {
     return mkSchemaEntity(e, lang);
