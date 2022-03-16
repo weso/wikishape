@@ -293,7 +293,7 @@ function WikibaseValidateSparql(props) {
       const queryResults = results.bindings;
       // Abort if no results
       if (!Array.isArray(queryResults) || queryResults.length == 0) {
-        throw { message: `No results obtained from the SPARQL query` };
+        throw { message: "No results obtained from the SPARQL query" };
       }
       // Else extract entity URIs to be validated
       const entitiesToValidate = getValidationItemsFromQueryResults(
