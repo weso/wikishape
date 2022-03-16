@@ -155,12 +155,6 @@ function WikibaseItem(props) {
             : API.texts.pageExplanations.propertyInfo
         }
       />
-      <h4>
-        Target Wikibase:{" "}
-        <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
-          {API.currentUrl()}
-        </a>
-      </h4>
 
       {itemType === API.propNames.wbEntityTypes.item ? (
         <InputEntitiesByText

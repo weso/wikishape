@@ -180,14 +180,8 @@ function WikibaseSchemaInfo(props) {
       <PageHeader
         title={API.texts.pageHeaders.schemaInfo}
         details={API.texts.pageExplanations.schemaInfo}
+        showTargetWikibase={false} // Limited to wikidata until mediaWiki allows seaching for schemas
       />
-      {/* Limited to wikidata until mediaWiki allows seaching for schemas */}
-      {/* <h4>
-        Target Wikibase:{" "}
-        <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
-          {API.currentUrl()}
-        </a>
-      </h4> */}
       <InputSchemaEntityByText
         endpoint={endpoint}
         onChange={setSchemaEntities}

@@ -168,7 +168,7 @@ function ChangeWikibaseURL(props) {
         details={API.texts.pageExplanations.changeWikibase}
       />
       <Form.Group>
-        <Form.Label>Custom Wikibase URL</Form.Label>
+        <Form.Label>{API.texts.customWikibaseUrlInput}</Form.Label>
         <Form.Control
           as="input"
           type="url"
@@ -179,7 +179,7 @@ function ChangeWikibaseURL(props) {
         <span style={messageUrlStyle}>{messageUrl}</span>
         <br />
 
-        <Form.Label>Custom Wikibase SPARQL Endpoint</Form.Label>
+        <Form.Label>{API.texts.customWikibaseQueryUrlInput}</Form.Label>
         <div
           // Style div to position the dropdown along with the form
           style={{

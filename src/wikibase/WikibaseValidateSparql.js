@@ -37,7 +37,9 @@ import { getItemRaw, sanitizeQualify, showQualify } from "../utils/Utils";
 function WikibaseValidateSparql(props) {
   // User selected entity and schema (either from wikidata schemas or custom shex)
   const [query, setQuery] = useState(InitialQuery);
+  // This tool needs both the base Wikibase URL and its SPARQL endpoint
   const [endpoint, setEndpoint] = useState(API.currentUrl());
+  const [sparqlEndpoint, setSparqlEndpoint] = useState(API.currentEndpoint());
   const [wikidataSchemaEntity, setWikidataSchemaEntity] = useState(null);
   const [userSchema, setUserSchema] = useState(InitialShex);
   const [schemaTab, setSchemaTab] = useState(API.tabs.wdSchema); // Source of user schema: wikidata or custom ShEx
@@ -71,8 +73,7 @@ function WikibaseValidateSparql(props) {
       const urlParams = qs.parse(props.location.search);
       if (
         urlParams[API.queryParameters.query.query] &&
-        urlParams[API.queryParameters.schema.schema] &&
-        urlParams[API.queryParameters.wikibase.endpoint]
+        urlParams[API.queryParameters.schema.schema]
       ) {
         const tab = urlParams[API.queryParameters.tab] || schemaTab;
 
@@ -85,6 +86,12 @@ function WikibaseValidateSparql(props) {
         const pEndpoint =
           urlParams[API.queryParameters.wikibase.endpoint || endpoint];
         setEndpoint(pEndpoint);
+
+        const pSparqlEndpoint =
+          urlParams[
+            API.queryParameters.wikibase.sparqlEndpoint || sparqlEndpoint
+          ];
+        setSparqlEndpoint(pSparqlEndpoint);
 
         const pShapeLabel =
           urlParams[API.queryParameters.schema.label || shapeLabel];
@@ -112,6 +119,7 @@ function WikibaseValidateSparql(props) {
           wdSchemaInUrl,
           finalSchema,
           pEndpoint,
+          pSparqlEndpoint,
           pShapeLabel
         );
 
@@ -244,6 +252,7 @@ function WikibaseValidateSparql(props) {
     wdSchema = wikidataSchemaEntity,
     uSchema = userSchema,
     pEndpoint = endpoint,
+    pSparqlEndpoint = sparqlEndpoint,
     pShapeLabel = shapeLabel
   ) {
     const paramsSchema =
@@ -252,8 +261,8 @@ function WikibaseValidateSparql(props) {
         : paramsFromStateShex(uSchema);
 
     return {
-      [API.queryParameters.wikibase.endpoint]:
-        pEndpoint || API.wikidataContact.url,
+      [API.queryParameters.wikibase.endpoint]: pEndpoint,
+      [API.queryParameters.wikibase.sparqlEndpoint]: pSparqlEndpoint,
       [API.queryParameters.tab]: pSchemaTab,
       [API.queryParameters.schema.label]: pShapeLabel,
       ...paramsFromStateQuery(pQuery),
@@ -269,7 +278,8 @@ function WikibaseValidateSparql(props) {
       // Query the server to perform the SPARQL query and get the results back.
       // Send only the necessary parameters.
       const queryServerParams = {
-        [API.queryParameters.wikibase.endpoint]: endpoint,
+        [API.queryParameters.wikibase.endpoint]:
+          params[API.queryParameters.wikibase.sparqlEndpoint],
         [API.queryParameters.wikibase.payload]: await getItemRaw(query),
       };
       const {
@@ -283,19 +293,29 @@ function WikibaseValidateSparql(props) {
       const queryResults = results.bindings;
       // Abort if no results
       if (!Array.isArray(queryResults) || queryResults.length == 0) {
-        throw { message: "No results obtained from query" };
+        throw { message: "No results obtained from the SPARQL query" };
       }
       // Else extract entity URIs to be validated
-      const entities = queryResults.map(
-        (entityObject) => entityObject.item.value
+      const entitiesToValidate = getValidationItemsFromQueryResults(
+        queryResults
       );
+
+      // Abort if no valid URIs pointing to entities to be validated were returned
+      if (entitiesToValidate.length == 0) {
+        throw {
+          message: `The SPARQL query was successful but did not return any node item to be validated.
+             Make your query return the entities you want to validate in one of the output variables.
+            `,
+        };
+      }
 
       // Query the server for validation data.
       // Set the payload to the data retrieved from the query.
       // Add the schema as well
       const validateServerParams = {
-        [API.queryParameters.wikibase.endpoint]: endpoint,
-        [API.queryParameters.wikibase.payload]: entities.join("|"),
+        [API.queryParameters.wikibase.endpoint]:
+          params[API.queryParameters.wikibase.endpoint],
+        [API.queryParameters.wikibase.payload]: entitiesToValidate.join("|"),
         [API.queryParameters.schema.schema]: await mkServerSchemaParams(),
       };
       const { data: validationResponse } = await axios.post(
@@ -306,7 +326,9 @@ function WikibaseValidateSparql(props) {
 
       setResult(validationResponse);
       // Create and set the permalink value on success
-      setPermalink(mkPermalinkLong(API.routes.client.wikibaseValidateSparql, params));
+      setPermalink(
+        mkPermalinkLong(API.routes.client.wikibaseValidateSparql, params)
+      );
     } catch (err) {
       setError(mkError(err, urlServerValidate));
     } finally {
@@ -347,6 +369,28 @@ function WikibaseValidateSparql(props) {
     );
   };
 
+  // When validating the entities returned from a SPARQL query, the query may not return any valid
+  // item for validation (i.e.: it may just return integer literals, etc.)
+  // This function tries to sanitize the query results and search for the items to be validated
+  // without bothering the user
+  function getValidationItemsFromQueryResults(queryResults) {
+    return queryResults
+      .reduce((acc, currentResultObject) => {
+        const newEntities = Object.keys(currentResultObject).map(
+          (key) =>
+            // Only select URIs for validationg, not literals, etc.
+            currentResultObject[key]?.type === "uri" &&
+            // Only select URIs beloging to the current target
+            API.currentUrl().includes(
+              new URL(currentResultObject[key].value).host
+            ) &&
+            currentResultObject[key].value
+        );
+        return [...acc, ...newEntities];
+      }, [])
+      .filter(Boolean); // Remove falsy leftovers
+  }
+
   function resetState() {
     setResult(null);
     setPermalink(null);
@@ -360,12 +404,7 @@ function WikibaseValidateSparql(props) {
         title={API.texts.pageHeaders.validateWbEntitiesSparql}
         details={API.texts.pageExplanations.validateWbEntitiesSparql}
       />
-      <h4>
-        Target Wikibase:{" "}
-        <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
-          {API.currentUrl()}
-        </a>
-      </h4>
+
       <Row>
         <Col className={"half-col border-right"}>
           <Form onSubmit={handleSubmit}>
