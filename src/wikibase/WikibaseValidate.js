@@ -248,8 +248,7 @@ function WikibaseValidate(props) {
         : paramsFromStateShex(uSchema);
 
     return {
-      [API.queryParameters.wikibase.endpoint]:
-        pEndpoint || API.wikidataContact.url,
+      [API.queryParameters.wikibase.endpoint]: pEndpoint,
       [API.queryParameters.wikibase.payload]: pEntities
         .map((ent) => ent.uri)
         .join("|"), // List of entities joined by "|"
@@ -327,17 +326,12 @@ function WikibaseValidate(props) {
 
   return (
     <Container>
-      <PageHeader
-        title={API.texts.pageHeaders.validateWbEntities}
-        details={API.texts.pageExplanations.validateWbEntities}
-      />
-      <h4>
-        Target Wikibase:{" "}
-        <a target="_blank" rel="noopener noreferrer" href={API.currentUrl()}>
-          {API.currentUrl()}
-        </a>
-      </h4>
       <Row>
+        <PageHeader
+          title={API.texts.pageHeaders.validateWbEntities}
+          details={API.texts.pageExplanations.validateWbEntities}
+        />
+
         <Form className="width-100" onSubmit={handleSubmit}>
           <InputEntitiesByText
             onChange={handleChangeEntities}

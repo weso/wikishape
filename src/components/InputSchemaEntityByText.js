@@ -85,7 +85,6 @@ function InputSchemaEntityByText(props) {
             useCache={false}
             selected={props.entities}
             onChange={(selected) => {
-              console.info(selected);
               props.onChange(selected);
             }}
           />

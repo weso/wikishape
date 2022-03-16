@@ -21,7 +21,7 @@ import WikibaseSchemaResults from "./WikibaseSchemaResults";
 function WikibaseExtract(props) {
   // User selected entity and schema (either from wikidata schemas or custom shex)
   const [entities, setEntities] = useState([]);
-  const [endpoint, setEndpoint] = useState(API.wikidataContact.endpoint); // Only available for Wikidata
+  const [endpoint, setEndpoint] = useState(API.currentUrl()); // Only available for Wikidata
 
   // Params to be formatted and sent to the server
   const [params, setParams] = useState(null);
@@ -62,8 +62,12 @@ function WikibaseExtract(props) {
           }));
         setEntities(pEntities);
 
+        const pEndpoint =
+          urlParams[API.queryParameters.wikibase.endpoint || endpoint];
+        setEndpoint(pEndpoint);
+
         // Set new params accordingly
-        const newParams = mkParams(pEntities);
+        const newParams = mkParams(pEntities, pEndpoint);
 
         setParams(newParams);
         setLastParams(newParams);
@@ -99,7 +103,7 @@ function WikibaseExtract(props) {
       [API.queryParameters.wikibase.payload]: pEntities
         .map((ent) => ent.uri)
         .join("|"), // List of entities joined by "|"
-      // [API.queryParameters.wikibase.endpoint]: pEndpoint,
+      [API.queryParameters.wikibase.endpoint]: pEndpoint,
     };
   }
 
@@ -116,12 +120,15 @@ function WikibaseExtract(props) {
   }
 
   // Make the schema parameters to be sent to the server for extracting the schema
-  function mkExtractServerParams(pEntities = entities, pEndpoint = endpoint) {
+  function mkExtractServerParams(
+    pEntities = entities,
+    pEndpoint = endpoint || params[API.queryParameters.wikibase.endpoint]
+  ) {
     return {
       [API.queryParameters.wikibase.payload]: pEntities
         .map((ent) => ent.uri)
         .join("|"), // List of entities joined by "|"
-      // [API.queryParameters.wikibase.endpoint]: pEndpoint,
+      [API.queryParameters.wikibase.endpoint]: pEndpoint,
     };
   }
 
@@ -209,19 +216,20 @@ function WikibaseExtract(props) {
 
   return (
     <Container>
-      <PageHeader
-        title={
-          useShexer
-            ? API.texts.pageHeaders.schemaExtractShexer
-            : API.texts.pageHeaders.schemaExtractDefault
-        }
-        details={
-          useShexer
-            ? API.texts.pageExplanations.schemaExtractShexer
-            : API.texts.pageExplanations.schemaExtractDefault
-        }
-      />
       <Row>
+        <PageHeader
+          title={
+            useShexer
+              ? API.texts.pageHeaders.schemaExtractShexer
+              : API.texts.pageHeaders.schemaExtractDefault
+          }
+          details={
+            useShexer
+              ? API.texts.pageExplanations.schemaExtractShexer
+              : API.texts.pageExplanations.schemaExtractDefault
+          }
+        />
+
         <Form className="width-100" onSubmit={handleSubmit}>
           <InputEntitiesByText
             onChange={handleChangeEntities}

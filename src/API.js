@@ -174,7 +174,8 @@ class API {
       apiDocs: "https://app.swaggerhub.com/apis/weso/RDFShape",
       projectSite: "https://www.weso.es/rdfshape-api/",
       rdfShapeClient: "https://rdfshape.weso.es/",
-      wikidataUrl: "https://query.wikidata.org/sparql",
+      wikidataUrl: "https://www.wikidata.org/",
+      wikidataSparqlUrl: "https://query.wikidata.org/sparql",
       wikidataBase: "https://www.wikidata.org/",
       dbpediaUrl: "https://dbpedia.org/sparql",
       dbpediaBase: "https://dbpedia.org/",
@@ -201,9 +202,6 @@ class API {
   static serverPermalinkEndpoint = API.rootApi + "permalink/generate";
   static serverOriginalLinkEndpoint = API.rootApi + "permalink/get";
   static fetchUrl = API.rootApi + "fetch";
-
-  static wikidataSparqlUrl = "https://query.wikidata.org/sparql";
-  // static wikidataUrlFetch =  "https://www.wikidata.org/sparql";
 
   static dbpediaSparqlUrl = "http://dbpedia.org/sparql";
   static localWikibaseUrl =
@@ -291,6 +289,7 @@ class API {
     wikibase: {
       payload: "payload",
       endpoint: "endpoint",
+      sparqlEndpoint: "sparqlEndpoint", // Aux
       language: "language",
       languages: "languages",
       limit: "limit",
@@ -340,6 +339,8 @@ class API {
       schemaExtractDefault: "Extract schema from Wikidata entities",
       schemaExtractShexer: "Extract schema from Wikidata entities (Shexer)",
       changeWikibase: "Set target Wikibase instance",
+
+      targetWikibase: "Target Wikibase",
     },
 
     pageExplanations: {
@@ -349,7 +350,7 @@ class API {
         "Select a set of properties to see a list of all the outgoing relationships to other entities/properties",
       schemaInfo:
         "Type in and select any Wikidata schema to see its contents and different visualizations of it, " +
-        "including: ShEx text, SVG and Cytoscape visuals and a UML-equivalent of the schema",
+        "including: ShEx text, SVG and Cytoscape visuals and a UML-equivalent of the schema (limited to Wikidata)",
       querySparql:
         "Input a query (by text, by pointing to a URL with the contents or by file) and execute it against the current SPARQL endpoint",
       validateWbEntities:
@@ -460,6 +461,11 @@ class API {
         "Validation was completed but no results were obtained, check if the input data is coherent",
     },
 
+    queryResults: {
+      noData:
+        "The query was executed but no results were obtained, check if the input data is coherent",
+    },
+
     targetUrlChanges: {
       okUrl: "Valid wikibase URL, URL updated",
       badUrl: "Invalid wikibase URL",
@@ -560,6 +566,9 @@ class API {
 
     enableFullscreen: "Show at fullscreen",
     leaveFullscreen: "✖ Leave fullscreen",
+
+    customWikibaseUrlInput: "Custom Wikibase URL",
+    customWikibaseQueryUrlInput: "Custom Wikibase SPARQL Endpoint",
   };
 
   // ID of the results container for any operation
