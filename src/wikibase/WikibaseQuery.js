@@ -29,7 +29,7 @@ function WikibaseQuery(props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState(InitialQuery);
-  const [endpoint, setEndpoint] = useState(API.currentEndpoint);
+  const [endpoint, setEndpoint] = useState(API.currentEndpoint());
   const [result, setResult] = useState(null);
   const [controlPressed, setControlPressed] = useState(false);
 
@@ -186,12 +186,7 @@ function WikibaseQuery(props) {
         title={API.texts.pageHeaders.querySparql}
         details={API.texts.pageExplanations.querySparql}
       />
-      <h4>
-        Target endpoint:{" "}
-        <a target="_blank" href={endpoint}>
-          {endpoint}
-        </a>
-      </h4>
+
       <Row>
         <Col>
           <Form onSubmit={handleSubmit} onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
