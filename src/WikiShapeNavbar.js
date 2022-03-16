@@ -74,8 +74,12 @@ function WikishapeNavbar() {
               href={`${API.routes.client.wikibaseItem}?${
                 API.queryParameters.wikibase.endpoint
               }=${encodeURIComponent(Examples.showEntityExampleEndpoint)}&${
-                API.queryParameters.wikibase.entities
-              }=${encodeURIComponent(Examples.showEntityExampleEntities)}`}
+                API.queryParameters.wikibase.sparqlEndpoint
+              }=${encodeURIComponent(
+                Examples.showEntityExampleSparqlEndpoint
+              )}&${API.queryParameters.wikibase.entities}=${encodeURIComponent(
+                Examples.showEntityExampleEntities
+              )}`}
             >
               Show entity - Q42
             </NavDropdown.Item>
@@ -90,10 +94,12 @@ function WikishapeNavbar() {
               href={`${API.routes.client.wikibaseValidateSparql}?${
                 API.queryParameters.wikibase.endpoint
               }=${encodeURIComponent(Examples.validateSparqlExampleEndpoint)}&${
-                API.queryParameters.query.query
-              }=${encodeURIComponent(Examples.validateSparqlExampleQuery)}&${
-                API.queryParameters.query.source
-              }=byText&${
+                API.queryParameters.wikibase.sparqlEndpoint
+              }=${encodeURIComponent(
+                Examples.validateSparqlExampleSparqlEndpoint
+              )}&${API.queryParameters.query.query}=${encodeURIComponent(
+                Examples.validateSparqlExampleQuery
+              )}&${API.queryParameters.query.source}=byText&${
                 API.queryParameters.schema.schema
               }=${encodeURIComponent(Examples.validateSparqlExampleSchema)}&${
                 API.queryParameters.schema.engine
@@ -110,7 +116,9 @@ function WikishapeNavbar() {
             <NavDropdown.Item
               href={`${API.routes.client.wikibaseExtract}?${
                 API.queryParameters.wikibase.payload
-              }=${encodeURIComponent(Examples.extractSchemaExamplePayload)}`}
+              }=${encodeURIComponent(Examples.extractSchemaExamplePayload)}&${
+                API.queryParameters.wikibase.endpoint
+              }=${encodeURIComponent(Examples.extractSchemaExampleEndpoint)}`}
             >
               Extract schema from entities - EII
             </NavDropdown.Item>

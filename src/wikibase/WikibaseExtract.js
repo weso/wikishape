@@ -62,8 +62,12 @@ function WikibaseExtract(props) {
           }));
         setEntities(pEntities);
 
+        const pEndpoint =
+          urlParams[API.queryParameters.wikibase.endpoint || endpoint];
+        setEndpoint(pEndpoint);
+
         // Set new params accordingly
-        const newParams = mkParams(pEntities);
+        const newParams = mkParams(pEntities, pEndpoint);
 
         setParams(newParams);
         setLastParams(newParams);
@@ -116,7 +120,10 @@ function WikibaseExtract(props) {
   }
 
   // Make the schema parameters to be sent to the server for extracting the schema
-  function mkExtractServerParams(pEntities = entities, pEndpoint = endpoint) {
+  function mkExtractServerParams(
+    pEntities = entities,
+    pEndpoint = endpoint || params[API.queryParameters.wikibase.endpoint]
+  ) {
     return {
       [API.queryParameters.wikibase.payload]: pEntities
         .map((ent) => ent.uri)

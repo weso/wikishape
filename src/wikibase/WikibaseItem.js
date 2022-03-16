@@ -20,7 +20,8 @@ function WikibaseItem(props) {
   const [entities, setEntities] = useState([]);
   const [lastEntities, setLastEntities] = useState([]);
   const [node, setNode] = useState("");
-  const [endpoint, setEndpoint] = useState(API.currentEndpoint());
+  const [endpoint, setEndpoint] = useState(API.currentUrl());
+  const [sparqlEndpoint, setSparqlEndpoint] = useState(API.currentEndpoint());
   const [permalink, setPermalink] = useState("");
   const [result, setResult] = useState("");
   const [error, setError] = useState(null);
@@ -35,6 +36,10 @@ function WikibaseItem(props) {
       const queryParams = qs.parse(props.location.search);
       setEndpoint(
         queryParams[API.queryParameters.wikibase.endpoint] || endpoint
+      );
+      setSparqlEndpoint(
+        queryParams[API.queryParameters.wikibase.sparqlEndpoint] ||
+          sparqlEndpoint
       );
       if (queryParams[API.queryParameters.wikibase.entities]) {
         let entitiesFromUrl = [];
@@ -79,7 +84,7 @@ function WikibaseItem(props) {
   async function getOutgoing(cb) {
     setLoading(true);
     const params = {
-      [API.queryParameters.wikibase.endpoint]: endpoint,
+      [API.queryParameters.wikibase.endpoint]: sparqlEndpoint,
       [API.queryParameters.wikibase.node]: node,
     };
 
@@ -116,6 +121,7 @@ function WikibaseItem(props) {
         mkPermalinkLong(API.routes.client.wikibaseItem, {
           [API.queryParameters.wikibase.entities]: JSON.stringify(lastEntities),
           [API.queryParameters.wikibase.endpoint]: endpoint,
+          [API.queryParameters.wikibase.sparqlEndpoint]: sparqlEndpoint,
         })
       );
     }
@@ -125,8 +131,9 @@ function WikibaseItem(props) {
       null,
       document.title,
       mkPermalinkLong(API.routes.client.wikibaseItem, {
-        entities: JSON.stringify(entities),
-        endpoint: endpoint,
+        [API.queryParameters.wikibase.entities]: JSON.stringify(entities),
+        [API.queryParameters.wikibase.endpoint]: endpoint,
+        [API.queryParameters.wikibase.sparqlEndpoint]: sparqlEndpoint,
       })
     );
 
@@ -161,12 +168,14 @@ function WikibaseItem(props) {
           onChange={handleChange}
           multiple={false}
           entities={entities}
+          endpoint={endpoint}
         />
       ) : (
         <InputPropertiesByText
           onChange={handleChange}
           multiple={false}
           entities={entities}
+          endpoint={endpoint}
         />
       )}
 

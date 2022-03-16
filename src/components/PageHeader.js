@@ -7,7 +7,7 @@ import API from "../API";
 // Meant to be used in page headers to explain each page to users
 const PageHeader = ({ title, details, showTargetWikibase }) => {
   return (
-    <>
+    <div>
       <div className="page-header">
         <h1>{title}</h1>
         {/* Show, close to the title, the additional information (if any) */}
@@ -47,7 +47,7 @@ const PageHeader = ({ title, details, showTargetWikibase }) => {
           </h4>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

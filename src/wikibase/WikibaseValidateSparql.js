@@ -381,9 +381,7 @@ function WikibaseValidateSparql(props) {
             // Only select URIs for validationg, not literals, etc.
             currentResultObject[key]?.type === "uri" &&
             // Only select URIs beloging to the current target
-            API.currentUrl().includes(
-              new URL(currentResultObject[key].value).host
-            ) &&
+            endpoint.includes(new URL(currentResultObject[key].value).host) &&
             currentResultObject[key].value
         );
         return [...acc, ...newEntities];
