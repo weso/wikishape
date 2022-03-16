@@ -306,7 +306,7 @@ function WikibaseValidateSparql(props) {
 
       setResult(validationResponse);
       // Create and set the permalink value on success
-      setPermalink(mkPermalinkLong(API.routes.client.wikibaseValidate, params));
+      setPermalink(mkPermalinkLong(API.routes.client.wikibaseValidateSparql, params));
     } catch (err) {
       setError(mkError(err, urlServerValidate));
     } finally {
