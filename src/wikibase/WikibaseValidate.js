@@ -13,11 +13,9 @@ import { ReloadIcon } from "react-open-iconic-svg";
 import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
-import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
 import InputShapeLabel from "../components/InputShapeLabel";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
-import { SchemaEntities } from "../resources/schemaEntities";
 import ResultValidate from "../results/ResultValidate";
 import {
   InitialShex,
@@ -28,7 +26,7 @@ import {
 } from "../shex/Shex";
 import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
-import { sanitizeQualify, showQualify } from "../utils/Utils";
+import { getSchemaFromId, sanitizeQualify, showQualify } from "../utils/Utils";
 
 function WikibaseValidate(props) {
   // User selected entity and schema (either from wikidata schemas or custom shex)
@@ -61,61 +59,72 @@ function WikibaseValidate(props) {
 
   // URL-based loading
   useEffect(() => {
-    if (props.location?.search) {
-      const urlParams = qs.parse(props.location.search);
-      if (
-        urlParams[API.queryParameters.wikibase.payload] &&
-        urlParams[API.queryParameters.schema.schema] &&
-        urlParams[API.queryParameters.wikibase.endpoint]
-      ) {
-        const tab = urlParams[API.queryParameters.tab] || schemaTab;
-        const pEntities = urlParams[API.queryParameters.wikibase.payload]
-          .split("|")
-          .map((ent) => ({
-            uri: ent,
-          }));
-        setEntities(pEntities);
+    const mkInitialDataFromUrl = async () => {
+      if (props.location?.search) {
+        const urlParams = qs.parse(props.location.search);
+        if (
+          urlParams[API.queryParameters.wikibase.payload] &&
+          urlParams[API.queryParameters.schema.schema] &&
+          urlParams[API.queryParameters.wikibase.endpoint]
+        ) {
+          const tab = urlParams[API.queryParameters.tab] || schemaTab;
+          const pEntities = urlParams[API.queryParameters.wikibase.payload]
+            .split("|")
+            .map((ent) => ({
+              uri: ent,
+            }));
+          setEntities(pEntities);
 
-        const finalSchema =
-          updateStateShex(urlParams, userSchema) || userSchema;
+          const finalSchema =
+            updateStateShex(urlParams, userSchema) || userSchema;
 
-        const pEndpoint =
-          urlParams[API.queryParameters.wikibase.endpoint || endpoint];
-        setEndpoint(pEndpoint);
+          const pEndpoint =
+            urlParams[API.queryParameters.wikibase.endpoint || endpoint];
+          setEndpoint(pEndpoint);
 
-        const pShapeLabel =
-          urlParams[API.queryParameters.schema.label || shapeLabel];
-        setShapeLabel(pShapeLabel);
+          const pShapeLabel =
+            urlParams[API.queryParameters.schema.label || shapeLabel];
+          setShapeLabel(pShapeLabel);
 
-        const wdSchemaInUrl = SchemaEntities.find(
-          (e) => e.conceptUri === finalSchema.url
-        );
+          // Quickfix to check if the schema used in the validation is a Wikidata schema
+          const wdSchemaInUrl = await getSchemaFromId({
+            // Separate the last part of the schema
+            schemaId: finalSchema.url
+              ?.split(":")
+              ?.pop()
+              ?.split("/")
+              ?.pop(),
+            endpoint: API.wikidataContact.url,
+          });
 
-        if (wdSchemaInUrl) {
-          // 1) If "finalSchema" is one of the Wikidata schemas, set the Wikidata schema tab,
-          // and the wikidataSchemaEntity
-          setWikidataSchemaEntity(wdSchemaInUrl);
-          setSchemaTab(API.tabs.wdSchema);
-        } else {
-          // 2) Else, set the ShEx schema tab with the appropiate data in the "userSchema"
-          setUserSchema(finalSchema);
-          setSchemaTab(API.tabs.shexSchema);
-        }
+          if (wdSchemaInUrl) {
+            // 1) If "finalSchema" is one of the Wikidata schemas, set the Wikidata schema tab,
+            // and the wikidataSchemaEntity
+            setWikidataSchemaEntity(wdSchemaInUrl);
+            setSchemaTab(API.tabs.wdSchema);
+          } else {
+            // 2) Else, set the ShEx schema tab with the appropiate data in the "userSchema"
+            setUserSchema(finalSchema);
+            setSchemaTab(API.tabs.shexSchema);
+          }
 
-        // Set new params accordingly
-        const newParams = mkParams(
-          pEntities,
-          tab,
-          wdSchemaInUrl,
-          finalSchema,
-          pEndpoint,
-          pShapeLabel
-        );
+          // Set new params accordingly
+          const newParams = mkParams(
+            pEntities,
+            tab,
+            wdSchemaInUrl,
+            finalSchema,
+            pEndpoint,
+            pShapeLabel
+          );
 
-        setParams(newParams);
-        setLastParams(newParams);
-      } else setError(API.texts.errorParsingUrl);
-    }
+          setParams(newParams);
+          setLastParams(newParams);
+        } else setError(API.texts.errorParsingUrl);
+      }
+    };
+
+    mkInitialDataFromUrl();
   }, [props.location.search]);
 
   // On params changed, submit request
@@ -335,8 +344,13 @@ function WikibaseValidate(props) {
         <Form className="width-100" onSubmit={handleSubmit}>
           <InputEntitiesByText
             onChange={handleChangeEntities}
-            multiple={true}
             entities={entities}
+            multiple={true}
+            endpoint={endpoint}
+            {...{
+              [API.propNames.wbEntityTypes.propName]:
+                API.propNames.wbEntityTypes.item,
+            }}
           />
           {/* Table with the entities being validated. Information for the user */}
           <Table>
@@ -367,9 +381,15 @@ function WikibaseValidate(props) {
             mountOnEnter={true}
           >
             <Tab eventKey={API.tabs.wdSchema} title="Wikidata schema">
-              <InputSchemaEntityByText
+              <InputEntitiesByText
                 onChange={handleWikidataSchemaChange}
-                entity={wikidataSchemaEntity}
+                entities={wikidataSchemaEntity && [wikidataSchemaEntity]}
+                multiple={false}
+                endpoint={endpoint}
+                {...{
+                  [API.propNames.wbEntityTypes.propName]:
+                    API.propNames.wbEntityTypes.schema,
+                }}
               />
             </Tab>
             <Tab eventKey={API.tabs.shexSchema} title="ShEx">

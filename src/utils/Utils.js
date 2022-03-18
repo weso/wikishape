@@ -406,3 +406,34 @@ export const scrollToItem = (
 ) => {
   element.scrollIntoView(config);
 };
+
+/*
+  Given an schema ID and a target wikibase, fetch the schema information
+  Params must include "id" and "endpoint"
+  An error management function is also accepted
+*/
+export const getSchemaFromId = async (params, errorCb) => {
+  const { schemaId, endpoint } = params;
+
+  if (!schemaId) return null; // Return early if no id
+
+  // Configure the request to search for the schema ID in the given endpoint and
+  // return 1 result maximum
+  const serverParams = {
+    [API.queryParameters.wikibase.endpoint]: endpoint,
+    [API.queryParameters.wikibase.payload]: schemaId,
+    [API.queryParameters.wikibase.limit]: 1,
+  };
+
+  try {
+    const {
+      data: {
+        result: [firstResult],
+      },
+    } = await axios.post(API.routes.server.wikibaseSearchSchema, serverParams);
+    return firstResult;
+  } catch (err) {
+    if (errorCb) errorCb(`Entity with supplied ID '${schemaId}' not found`);
+    return null;
+  }
+};

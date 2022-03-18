@@ -8,12 +8,12 @@ import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { ExternalLinkIcon, ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
-import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
+import InputEntitiesByText from "../components/InputEntitiesByText";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
-import { SchemaEntities } from "../resources/schemaEntities";
 import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
+import { getSchemaFromId } from "../utils/Utils";
 import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";
 
@@ -21,7 +21,7 @@ function WikibaseSchemaInfo(props) {
   const urlServerInfo = API.routes.server.schemaInfo;
   const urlServerVisual = API.routes.server.schemaConvert;
 
-  const [endpoint, setEndpoint] = useState(API.currentEndpoint());
+  const [endpoint, setEndpoint] = useState(API.currentUrl());
 
   const [permalink, setPermalink] = useState(null);
   const [error, setError] = useState(null);
@@ -36,21 +36,33 @@ function WikibaseSchemaInfo(props) {
   const [progressPercent, setProgressPercent] = useState(0);
 
   useEffect(() => {
-    if (props.location?.search) {
-      const urlParams = qs.parse(props.location.search);
-      if (urlParams[API.queryParameters.wikibase.endpoint]) {
-        setEndpoint(urlParams[API.queryParameters.wikibase.endpoint]);
-      }
-      // If parameter ID is present: go, else error
-      if (urlParams[API.queryParameters.id]) {
-        const entity = getSchemaEntity(urlParams, setError);
-        setSchemaEntities([entity]);
+    const setInitialDataFromUrl = async () => {
+      if (props.location?.search) {
+        const urlParams = qs.parse(props.location.search);
+        const pEndpoint =
+          urlParams[API.queryParameters.wikibase.endpoint] || endpoint;
+        setEndpoint(pEndpoint);
+        if (urlParams[API.queryParameters.wikibase.endpoint]) {
+          setEndpoint(urlParams[API.queryParameters.wikibase.endpoint]);
+        }
+        // If parameter ID is present: go, else error
+        if (urlParams[API.queryParameters.id]) {
+          const entity = await getSchemaFromId(
+            {
+              schemaId: urlParams[API.queryParameters.id],
+              endpoint: pEndpoint,
+            },
+            setError
+          );
+          setSchemaEntities([entity]);
 
-        const newParams = mkParams(entity);
-        setParams(newParams);
-        setLastParams(newParams);
-      } else setError(API.texts.errorParsingUrl);
-    }
+          const newParams = mkParams(entity);
+          setParams(newParams);
+          setLastParams(newParams);
+        } else setError(API.texts.errorParsingUrl);
+      }
+    };
+    setInitialDataFromUrl();
   }, [props.location.search]);
 
   useEffect(() => {
@@ -182,11 +194,18 @@ function WikibaseSchemaInfo(props) {
         details={API.texts.pageExplanations.schemaInfo}
         showTargetWikibase={false} // Limited to wikidata until mediaWiki allows seaching for schemas
       />
-      <InputSchemaEntityByText
-        endpoint={endpoint}
+
+      <InputEntitiesByText
         onChange={setSchemaEntities}
-        entity={schemaEntities}
+        entities={[]}
+        multiple={false}
+        endpoint={endpoint}
+        {...{
+          [API.propNames.wbEntityTypes.propName]:
+            API.propNames.wbEntityTypes.schema,
+        }}
       />
+
       {schemaEntities && (
         <Table>
           <tbody>
@@ -251,29 +270,3 @@ export function paramsFromQueryParams(params) {
   return newParams;
 }
 
-export function getSchemaEntity(params, setError) {
-  const schemaId = params[API.queryParameters.id];
-
-  // For parameter lang: default to "en" if needed
-  const lang = params[API.queryParameters.wikibase.language] || "en";
-  const e = SchemaEntities.find((e) => e.id === schemaId);
-  if (e) {
-    return mkSchemaEntity(e, lang);
-  } else {
-    setError(`Entity with supplied ID '${schemaId}' not found`);
-  }
-}
-
-export function mkSchemaEntity(e, lang) {
-  if (e && e.labels) {
-    const labelRecord = e.labels[lang] || e.labels["en"];
-    return {
-      id: e.id,
-      label: labelRecord.label,
-      descr: labelRecord.descr,
-      conceptUri: e.conceptUri,
-      webUri: e.webUri,
-      lang: lang,
-    };
-  } else return null;
-}

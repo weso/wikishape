@@ -106,6 +106,7 @@ class API {
       item: "item",
       property: "property",
       lexeme: "lexeme",
+      schema: "schema",
     },
   };
 
@@ -144,6 +145,7 @@ class API {
       wikibaseSearchEntity: `wikibase/search/${this.propNames.wbEntityTypes.item}`,
       wikibaseSearchProperty: `wikibase/search/${this.propNames.wbEntityTypes.property}`,
       wikibaseSearchLexeme: `wikibase/search/${this.propNames.wbEntityTypes.lexeme}`,
+      wikibaseSearchSchema: `wikibase/search/${this.propNames.wbEntityTypes.schema}`,
       wikibaseSchemaContent: "wikibase/schemaContent",
       wikibaseValidate: "wikibase/validate",
       wikibaseQuery: "wikibase/query",
@@ -332,7 +334,7 @@ class API {
     pageHeaders: {
       entityInfo: "Outgoing arcs from entity",
       propertyInfo: "Outgoing arcs from property",
-      schemaInfo: "Analyze Wikidata schema",
+      schemaInfo: "Analyze Wikibase schema",
       querySparql: "Query SPARQL endpoint",
       validateWbEntities: "Validate Wikibase entities",
       validateWbEntitiesSparql: "Validate Wikibase entities (from SPARQL)",
@@ -349,8 +351,8 @@ class API {
       propertyInfo:
         "Select a set of properties to see a list of all the outgoing relationships to other entities/properties",
       schemaInfo:
-        "Type in and select any Wikidata schema to see its contents and different visualizations of it, " +
-        "including: ShEx text, SVG and Cytoscape visuals and a UML-equivalent of the schema (limited to Wikidata)",
+        "Type in and select any Wikibase schema to see its contents and different visualizations of it, " +
+        "including: ShEx text, SVG and Cytoscape visuals and a UML-equivalent of the schema (schema search in beta)",
       querySparql:
         "Input a query (by text, by pointing to a URL with the contents or by file) and execute it against the current SPARQL endpoint",
       validateWbEntities:
