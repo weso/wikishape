@@ -74,6 +74,7 @@ function InputSchemaEntityByText(props) {
             id="InputSchemaEntityByText"
             filterBy={["id", "label", "descr"]}
             labelKey="label"
+            multiple={props.multiple}
             options={options}
             maxResults={10}
             minLength={2}
@@ -109,6 +110,11 @@ function InputSchemaEntityByText(props) {
 InputSchemaEntityByText.propTypes = {
   entities: PropTypes.array,
   onChange: PropTypes.func.isRequired,
+  multiple: PropTypes.bool,
+};
+
+InputSchemaEntityByText.defaultProps = {
+  multiple: false,
 };
 
 export default InputSchemaEntityByText;

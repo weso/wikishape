@@ -11,7 +11,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
-import InputSchemaEntityByText from "../components/InputSchemaEntityByText";
+import InputEntitiesByText from "../components/InputEntitiesByText";
 import InputShapeLabel from "../components/InputShapeLabel";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
@@ -21,7 +21,6 @@ import {
   paramsFromStateQuery,
   updateStateQuery
 } from "../query/Query";
-import { SchemaEntities } from "../resources/schemaEntities";
 import ResultValidate from "../results/ResultValidate";
 import {
   InitialShex,
@@ -32,7 +31,12 @@ import {
 } from "../shex/Shex";
 import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
-import { getItemRaw, sanitizeQualify, showQualify } from "../utils/Utils";
+import {
+  getItemRaw,
+  getSchemaFromId,
+  sanitizeQualify,
+  showQualify
+} from "../utils/Utils";
 
 function WikibaseValidateSparql(props) {
   // User selected entity and schema (either from wikidata schemas or custom shex)
@@ -69,64 +73,74 @@ function WikibaseValidateSparql(props) {
 
   // URL-based loading
   useEffect(() => {
-    if (props.location?.search) {
-      const urlParams = qs.parse(props.location.search);
-      if (
-        urlParams[API.queryParameters.query.query] &&
-        urlParams[API.queryParameters.schema.schema]
-      ) {
-        const tab = urlParams[API.queryParameters.tab] || schemaTab;
+    const mkInitialDataFromUrl = async () => {
+      if (props.location?.search) {
+        const urlParams = qs.parse(props.location.search);
+        if (
+          urlParams[API.queryParameters.query.query] &&
+          urlParams[API.queryParameters.schema.schema]
+        ) {
+          const tab = urlParams[API.queryParameters.tab] || schemaTab;
 
-        const finalQuery = updateStateQuery(urlParams, query) || query;
-        setQuery(finalQuery);
+          const finalQuery = updateStateQuery(urlParams, query) || query;
+          setQuery(finalQuery);
 
-        const finalSchema =
-          updateStateShex(urlParams, userSchema) || userSchema;
+          const finalSchema =
+            updateStateShex(urlParams, userSchema) || userSchema;
 
-        const pEndpoint =
-          urlParams[API.queryParameters.wikibase.endpoint || endpoint];
-        setEndpoint(pEndpoint);
+          const pEndpoint =
+            urlParams[API.queryParameters.wikibase.endpoint || endpoint];
+          setEndpoint(pEndpoint);
 
-        const pSparqlEndpoint =
-          urlParams[
-            API.queryParameters.wikibase.sparqlEndpoint || sparqlEndpoint
-          ];
-        setSparqlEndpoint(pSparqlEndpoint);
+          const pSparqlEndpoint =
+            urlParams[
+              API.queryParameters.wikibase.sparqlEndpoint || sparqlEndpoint
+            ];
+          setSparqlEndpoint(pSparqlEndpoint);
 
-        const pShapeLabel =
-          urlParams[API.queryParameters.schema.label || shapeLabel];
-        setShapeLabel(pShapeLabel);
+          const pShapeLabel =
+            urlParams[API.queryParameters.schema.label || shapeLabel];
+          setShapeLabel(pShapeLabel);
 
-        const wdSchemaInUrl = SchemaEntities.find(
-          (e) => e.conceptUri === finalSchema.url
-        );
+          // Quickfix to check if the schema used in the validation is a Wikidata schema
+          const wdSchemaInUrl = await getSchemaFromId({
+            // Separate the last part of the schema
+            schemaId: finalSchema.url
+              ?.split(":")
+              ?.pop()
+              ?.split("/")
+              ?.pop(),
+            endpoint: API.wikidataContact.url,
+          });
 
-        if (wdSchemaInUrl) {
-          // 1) If "finalSchema" is one of the Wikidata schemas, set the Wikidata schema tab,
-          // and the wikidataSchemaEntity
-          setWikidataSchemaEntity(wdSchemaInUrl);
-          setSchemaTab(API.tabs.wdSchema);
-        } else {
-          // 2) Else, set the ShEx schema tab with the appropiate data in the "userSchema"
-          setUserSchema(finalSchema);
-          setSchemaTab(API.tabs.shexSchema);
-        }
+          if (wdSchemaInUrl) {
+            // 1) If "finalSchema" is one of the Wikidata schemas, set the Wikidata schema tab,
+            // and the wikidataSchemaEntity
+            setWikidataSchemaEntity(wdSchemaInUrl);
+            setSchemaTab(API.tabs.wdSchema);
+          } else {
+            // 2) Else, set the ShEx schema tab with the appropiate data in the "userSchema"
+            setUserSchema(finalSchema);
+            setSchemaTab(API.tabs.shexSchema);
+          }
 
-        // Set new params accordingly
-        const newParams = mkParams(
-          finalQuery,
-          tab,
-          wdSchemaInUrl,
-          finalSchema,
-          pEndpoint,
-          pSparqlEndpoint,
-          pShapeLabel
-        );
+          // Set new params accordingly
+          const newParams = mkParams(
+            finalQuery,
+            tab,
+            wdSchemaInUrl,
+            finalSchema,
+            pEndpoint,
+            pSparqlEndpoint,
+            pShapeLabel
+          );
 
-        setParams(newParams);
-        setLastParams(newParams);
-      } else setError(API.texts.errorParsingUrl);
-    }
+          setParams(newParams);
+          setLastParams(newParams);
+        } else setError(API.texts.errorParsingUrl);
+      }
+    };
+    mkInitialDataFromUrl();
   }, [props.location.search]);
 
   // On params changed, submit request
@@ -415,9 +429,15 @@ function WikibaseValidateSparql(props) {
               mountOnEnter={true}
             >
               <Tab eventKey={API.tabs.wdSchema} title="Wikidata schema">
-                <InputSchemaEntityByText
+                <InputEntitiesByText
                   onChange={handleWikidataSchemaChange}
-                  entity={wikidataSchemaEntity}
+                  entities={wikidataSchemaEntity && [wikidataSchemaEntity]}
+                  multiple={false}
+                  endpoint={endpoint}
+                  {...{
+                    [API.propNames.wbEntityTypes.propName]:
+                      API.propNames.wbEntityTypes.schema,
+                  }}
                 />
                 {wikidataSchemaEntity &&
                   shapeList?.length != 0 &&

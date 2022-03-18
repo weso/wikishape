@@ -19,9 +19,15 @@ import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";
 
 function WikibaseExtract(props) {
+  // Choose to use SheXer or not to perform the extraction in the server
+  const { useShexer } = props;
+
   // User selected entity and schema (either from wikidata schemas or custom shex)
   const [entities, setEntities] = useState([]);
-  const [endpoint, setEndpoint] = useState(API.currentUrl()); // Only available for Wikidata
+  // When using SheXer, we send the Wikibase's SPARQL endpoint instead of the base URL
+  const [endpoint, setEndpoint] = useState(
+    !useShexer ? API.currentUrl() : API.currentEndpoint()
+  );
 
   // Params to be formatted and sent to the server
   const [params, setParams] = useState(null);
@@ -37,8 +43,7 @@ function WikibaseExtract(props) {
   const [progressPercent, setProgressPercent] = useState(0);
 
   // Target API endpoint.
-  // Choose to use SheXer or not to perform the extraction in the server
-  const { useShexer } = props;
+
   const urlExtract = useShexer
     ? API.routes.server.wikibaseExtractShexer
     : API.routes.server.wikibaseExtract;

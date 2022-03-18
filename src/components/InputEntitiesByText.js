@@ -11,20 +11,34 @@ import API from "../API";
 import axios from "../utils/networking/axiosConfig";
 import SelectLanguage from "./SelectLanguage";
 
-const urlSearch = API.routes.server.wikibaseSearchEntity;
-export const perPage = 20;
-export const defaultLanguage = [{ label: "en", name: "English" }];
-
+// Typeahead component to input wikibase items and have them suggested as you type
+// Customizable via props to look for Entities, Properties or Schemas
 function InputEntitiesByText(props) {
+  // Type of item being searched (entity, property...)
+  const itemType = props[API.propNames.wbEntityTypes.propName];
+  // Adjust the API target depending of the item searched
+  const urlSearch =
+    itemType === API.propNames.wbEntityTypes.item
+      ? API.routes.server.wikibaseSearchEntity
+      : itemType === API.propNames.wbEntityTypes.property
+      ? API.routes.server.wikibaseSearchProperty
+      : API.routes.server.wikibaseSearchSchema;
+
+  // Max items to be asked at a time to MediaWiki's API
+  const perPage = 20;
+  // Default language in which to request results
+  const defaultLanguage = [{ label: "en", name: "English" }];
+
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState(props.entities);
-  const [endpoint] = useState(props.endpoint || API.currentUrl());
+  const [endpoint] = useState(props.endpoint || API.currentUrl()); // Target wikibase
   const [language, setLanguage] = useState(defaultLanguage);
 
   // Make request to the server to get entities
   async function makeAndHandleRequest(label, language, page = 0) {
-    const lang = language[0] ? language[0].label : "en";
+    // Use given language, fallback to default
+    const lang = language[0] ? language[0].label : defaultLanguage[0].label;
 
     try {
       const {
@@ -38,7 +52,7 @@ function InputEntitiesByText(props) {
       });
       return entities;
     } catch (error) {
-      // Log error and return no entities
+      // If error: log it and return no entities
       console.error(error);
       return [];
     }
@@ -84,7 +98,11 @@ function InputEntitiesByText(props) {
         <Col>
           <AsyncTypeahead
             id="InputEntitiesByText"
-            filterBy={["id", "label", "descr"]}
+            filterBy={
+              itemType !== API.propNames.wbEntityTypes.schema
+                ? ["id", "label", "descr"]
+                : () => true
+            } // Filtering disabled for schemas since Wikibase responses can be erratic still
             labelKey="id"
             multiple={props.multiple}
             isLoading={isLoading}
@@ -94,7 +112,13 @@ function InputEntitiesByText(props) {
             minLength={2}
             onSearch={handleSearch}
             renderToken={customRenderToken}
-            placeholder="Q.. or label"
+            placeholder={`${
+              itemType === API.propNames.wbEntityTypes.item
+                ? "Q"
+                : itemType === API.propNames.wbEntityTypes.property
+                ? "P"
+                : "E"
+            }.. or label`}
             renderMenuItemChildren={(option, props) => (
               <MenuItem key={option.id} item={option} />
             )}
@@ -123,10 +147,14 @@ InputEntitiesByText.propTypes = {
   entities: PropTypes.array,
   multiple: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  // Whether to search for items, properties, etc.
+  [API.propNames.wbEntityTypes.propName]: PropTypes.string.isRequired,
 };
 
 InputEntitiesByText.defaultProps = {
   multiple: true,
+  // By default, search entities
+  [API.propNames.wbEntityTypes.propName]: API.propNames.wbEntityTypes.item,
 };
 
 export default InputEntitiesByText;

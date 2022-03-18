@@ -9,7 +9,6 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { ReloadIcon } from "react-open-iconic-svg";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
-import InputPropertiesByText from "../components/InputPropertiesByText";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
 import ResultOutgoing from "../results/ResultOutgoing";
@@ -28,6 +27,7 @@ function WikibaseItem(props) {
   const [loading, setLoading] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
 
+  // Type of wikibase item (entity, property, schema...being dealt with)
   const itemType = props[API.propNames.wbEntityTypes.propName];
   const urlServer = API.routes.server.endpointOutgoing;
 
@@ -163,21 +163,13 @@ function WikibaseItem(props) {
         }
       />
 
-      {itemType === API.propNames.wbEntityTypes.item ? (
-        <InputEntitiesByText
-          onChange={handleChange}
-          multiple={false}
-          entities={entities}
-          endpoint={endpoint}
-        />
-      ) : (
-        <InputPropertiesByText
-          onChange={handleChange}
-          multiple={false}
-          entities={entities}
-          endpoint={endpoint}
-        />
-      )}
+      <InputEntitiesByText
+        onChange={handleChange}
+        entities={entities}
+        multiple={false}
+        endpoint={endpoint}
+        {...{ [API.propNames.wbEntityTypes.propName]: itemType }}
+      />
 
       <Form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
         <Button
