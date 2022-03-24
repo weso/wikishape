@@ -3,13 +3,24 @@ import React from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { NavLink, useHistory } from "react-router-dom";
 import API from "./API.js";
 import Examples from "./utils/examples.js";
 
 function WikishapeNavbar() {
+  const history = useHistory();
   function mkHash(route) {
     return route;
   }
+
+  // Make a custom navbar dropdown link, given its destination and test
+  const mkNavbarLink = (href, text) => (
+    <NavDropdown.Item as={"li"}>
+      <Nav.Link className="custom-dropdown-link" as={NavLink} to={href}>
+        {text}
+      </Nav.Link>
+    </NavDropdown.Item>
+  );
 
   return (
     <Navbar
@@ -20,58 +31,82 @@ function WikishapeNavbar() {
       filled="true"
       variant="dark"
     >
-      <Navbar.Brand href="/">WikiShape</Navbar.Brand>
+      <Navbar.Brand className="pointable" onClick={() => history.push("/")}>
+        WikiShape
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <NavDropdown title="Entities" id="basic-nav-dropdown">
-            <NavDropdown.Item href={mkHash(API.routes.client.wikibaseItem)}>
-              Entity info
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href={mkHash(API.routes.client.wikibasePropertyInfo)}
-            >
-              Property info
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href={mkHash(API.routes.client.wikibaseSchemaInfo)}
-            >
-              Schema info
-            </NavDropdown.Item>
+          <NavDropdown
+            title={API.texts.navbarHeaders.entities}
+            id="nav-dropdown-wikidataItems"
+          >
+            {mkNavbarLink(
+              API.routes.client.wikibaseItem,
+              API.texts.navbarHeaders.entityInfo
+            )}
+            {mkNavbarLink(
+              API.routes.client.wikibasePropertyInfo,
+              API.texts.navbarHeaders.propertyInfo
+            )}
+            {mkNavbarLink(
+              API.routes.client.wikibaseSchemaInfo,
+              API.texts.navbarHeaders.schemaInfo
+            )}
           </NavDropdown>
 
-          <NavDropdown title="Query" id="basic-nav-dropdown">
-            <NavDropdown.Item href={mkHash(API.routes.client.wikibaseQuery)}>
-              Query SPARQL endpoint
-            </NavDropdown.Item>
+          <NavDropdown
+            title={API.texts.navbarHeaders.query}
+            id="nav-dropdown-query"
+          >
+            {mkNavbarLink(
+              API.routes.client.wikibaseQuery,
+              API.texts.navbarHeaders.queryEndpoint
+            )}
           </NavDropdown>
-          <NavDropdown title="Validate" id="basic-nav-dropdown">
-            <NavDropdown.Item href={mkHash(API.routes.client.wikibaseValidate)}>
-              Validate entity (user input)
-            </NavDropdown.Item>
-
-            <NavDropdown.Item
-              href={mkHash(API.routes.client.wikibaseValidateSparql)}
-            >
-              Validate entity (SPARQL)
-            </NavDropdown.Item>
+          <NavDropdown
+            title={API.texts.navbarHeaders.validate}
+            id="nav-dropdown-validate"
+          >
+            {mkNavbarLink(
+              API.routes.client.wikibaseValidate,
+              API.texts.navbarHeaders.validateUser
+            )}
+            {mkNavbarLink(
+              API.routes.client.wikibaseValidateSparql,
+              API.texts.navbarHeaders.validateSparql
+            )}
           </NavDropdown>
-          <NavDropdown title="Extract" id="basic-nav-dropdown">
-            <NavDropdown.Item href={mkHash(API.routes.client.wikibaseExtract)}>
-              Extract schema from entity (simple)
-            </NavDropdown.Item>
-            <NavDropdown.Item href={mkHash(API.routes.client.wikibaseSheXer)}>
-              Extract schema from entity (sheXer)
-            </NavDropdown.Item>
+          <NavDropdown
+            title={API.texts.navbarHeaders.extract}
+            id="nav-dropdown-extract"
+          >
+            {mkNavbarLink(
+              API.routes.client.wikibaseExtract,
+              API.texts.navbarHeaders.extractSimple
+            )}
+            {mkNavbarLink(
+              API.routes.client.wikibaseSheXer,
+              API.texts.navbarHeaders.extractShexer
+            )}
           </NavDropdown>
         </Nav>
         <Nav>
           <NavDropdown
-            title={API.texts.navbarHeaders.examples}
-            id="basic-nav-dropdown"
+            title={API.texts.navbarHeaders.settings}
+            id="nav-dropdown-settings"
           >
-            <NavDropdown.Item
-              href={`${API.routes.client.wikibaseItem}?${
+            {mkNavbarLink(
+              API.routes.client.changeWikibaseInputUrl,
+              API.texts.navbarHeaders.changeWikibase
+            )}
+          </NavDropdown>
+          <NavDropdown
+            title={API.texts.navbarHeaders.examples}
+            id="nav-dropdown-examples"
+          >
+            {mkNavbarLink(
+              `${API.routes.client.wikibaseItem}?${
                 API.queryParameters.wikibase.endpoint
               }=${encodeURIComponent(Examples.showEntityExampleEndpoint)}&${
                 API.queryParameters.wikibase.sparqlEndpoint
@@ -79,19 +114,17 @@ function WikishapeNavbar() {
                 Examples.showEntityExampleSparqlEndpoint
               )}&${API.queryParameters.wikibase.entities}=${encodeURIComponent(
                 Examples.showEntityExampleEntities
-              )}`}
-            >
-              Show entity - Q42
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href={`${API.routes.client.wikibaseSchemaInfo}?${
+              )}`,
+              API.texts.navbarExamples.showEntity
+            )}
+            {mkNavbarLink(
+              `${API.routes.client.wikibaseSchemaInfo}?${
                 API.queryParameters.id
-              }=${encodeURIComponent(Examples.showSchemaExampleSchema)}`}
-            >
-              Inspect schema - E42
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href={`${API.routes.client.wikibaseValidateSparql}?${
+              }=${encodeURIComponent(Examples.showSchemaExampleSchema)}`,
+              API.texts.navbarExamples.showSchema
+            )}
+            {mkNavbarLink(
+              `${API.routes.client.wikibaseValidateSparql}?${
                 API.queryParameters.wikibase.endpoint
               }=${encodeURIComponent(Examples.validateSparqlExampleEndpoint)}&${
                 API.queryParameters.wikibase.sparqlEndpoint
@@ -109,31 +142,20 @@ function WikishapeNavbar() {
                 Examples.validateSparqlExampleLabel
               )}&${API.queryParameters.schema.source}=${API.sources.byUrl}&${
                 API.queryParameters.tab
-              }=${API.tabs.wdSchema}`}
-            >
-              Validate entities (SPARQL) - Hospitals
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href={`${API.routes.client.wikibaseExtract}?${
+              }=${API.tabs.wdSchema}`,
+              API.texts.navbarExamples.validateEntities
+            )}
+            {mkNavbarLink(
+              `${API.routes.client.wikibaseExtract}?${
                 API.queryParameters.wikibase.payload
               }=${encodeURIComponent(Examples.extractSchemaExamplePayload)}&${
                 API.queryParameters.wikibase.endpoint
-              }=${encodeURIComponent(Examples.extractSchemaExampleEndpoint)}`}
-            >
-              Extract schema from entities - EII
-            </NavDropdown.Item>
+              }=${encodeURIComponent(Examples.extractSchemaExampleEndpoint)}`,
+              API.texts.navbarExamples.extractSchema
+            )}
           </NavDropdown>
-          <NavDropdown
-            title={API.texts.navbarHeaders.settings}
-            id="basic-nav-dropdown"
-          >
-            <NavDropdown.Item
-              href={mkHash(API.routes.client.changeWikibaseInputUrl)}
-            >
-              {API.texts.navbarHeaders.changeWikibase}
-            </NavDropdown.Item>
-          </NavDropdown>
-          <NavDropdown title="Help" id="basic-nav-dropdown" className="mr-sm-2">
+
+          <NavDropdown title="Help" id="nav-dropdown-help" className="mr-sm-2">
             <NavDropdown.Item
               target="_blank"
               href={API.routes.utils.projectSite}
@@ -143,9 +165,10 @@ function WikishapeNavbar() {
             <NavDropdown.Item href={API.routes.utils.apiDocs}>
               {API.texts.navbarHeaders.apiDocs}
             </NavDropdown.Item>
-            <NavDropdown.Item href={mkHash(API.routes.client.about)}>
-              {API.texts.navbarHeaders.about}
-            </NavDropdown.Item>
+            {mkNavbarLink(
+              API.routes.client.about,
+              API.texts.navbarHeaders.about
+            )}
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>

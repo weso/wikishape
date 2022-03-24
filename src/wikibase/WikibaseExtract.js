@@ -9,6 +9,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Row from "react-bootstrap/Row";
 import { ReloadIcon } from "react-open-iconic-svg";
 import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
+import { useHistory } from "react-router";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import PageHeader from "../components/PageHeader";
@@ -19,6 +20,7 @@ import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";
 
 function WikibaseExtract(props) {
+  const history = useHistory();
   // Choose to use SheXer or not to perform the extraction in the server
   const { useShexer } = props;
 
@@ -180,7 +182,7 @@ function WikibaseExtract(props) {
         resultUml: umlFromSchema,
       });
       // Create and set the permalink value on success
-      setPermalink(mkPermalinkLong(urlClient, params));
+      setPermalink(mkPermalinkLong(urlClient, params, true));
     } catch (err) {
       setError(mkError(err, urlExtract));
     } finally {
@@ -195,20 +197,10 @@ function WikibaseExtract(props) {
       params &&
       JSON.stringify(lastParams) !== JSON.stringify(params)
     ) {
-      // eslint-disable-next-line no-restricted-globals
-      history.pushState(
-        null,
-        document.title,
-        mkPermalinkLong(urlClient, lastParams)
-      );
+      history.push(mkPermalinkLong(urlClient, lastParams));
     }
     // Change current url for shareable links
-    // eslint-disable-next-line no-restricted-globals
-    history.replaceState(
-      null,
-      document.title,
-      mkPermalinkLong(urlClient, params)
-    );
+    history.replace(mkPermalinkLong(urlClient, params));
 
     setLastParams(params);
   }

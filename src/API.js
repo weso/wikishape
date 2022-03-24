@@ -22,6 +22,7 @@ class API {
     visualizations: "visualizations",
     visualizationDot: "dot",
     visualizationCyto: "cyto",
+    visualization3d: "3d",
 
     shaclValidationReportText: "shaclReportText",
     shaclValidationReportNodes: "shaclReportNodes",
@@ -319,6 +320,18 @@ class API {
   // Text constants
   static texts = {
     navbarHeaders: {
+      entities: "Entities",
+      entityInfo: "Entity information",
+      propertyInfo: "Property information",
+      schemaInfo: "Schema information",
+      query: "Query",
+      queryEndpoint: "Query SPARQL endpoint",
+      validate: "Validate",
+      validateUser: "Validate entities (user input)",
+      validateSparql: "Validate entities (SPARQL)",
+      extract: "Extract",
+      extractSimple: "Schema from entity (simple)",
+      extractShexer: "Schema from entity (sheXer)",
       examples: "Examples",
       help: "Help",
       wikishape: "Wikishape",
@@ -326,9 +339,15 @@ class API {
       apiDocs: "API Docs",
       about: "About",
       settings: "Settings",
-      examples: "Examples",
       changeWikibase: "Set target Wikibase",
       projectSite: "Project site",
+    },
+
+    navbarExamples: {
+      showEntity: "Show entity - Q42",
+      showSchema: "Inspect schema - E42",
+      validateEntities: "Validate entities (SPARQL) - Hospitals",
+      extractSchema: "Extract schema from entities - EII",
     },
 
     pageHeaders: {
@@ -489,6 +508,7 @@ class API {
       visualizationCyto: "Cytoscape",
       uml: "UML",
       xmi: "XMI",
+      graph3d: "3D Graph",
     },
 
     selectors: {

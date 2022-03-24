@@ -11,6 +11,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { ReloadIcon } from "react-open-iconic-svg";
 import ExternalLinkIcon from "react-open-iconic-svg/dist/ExternalLinkIcon";
+import { useHistory } from "react-router";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import InputShapeLabel from "../components/InputShapeLabel";
@@ -29,6 +30,7 @@ import { mkError } from "../utils/ResponseError";
 import { getSchemaFromId, sanitizeQualify, showQualify } from "../utils/Utils";
 
 function WikibaseValidate(props) {
+  const history = useHistory();
   // User selected entity and schema (either from wikidata schemas or custom shex)
   const [entities, setEntities] = useState([]);
   const [endpoint, setEndpoint] = useState(API.currentUrl());
@@ -285,7 +287,9 @@ function WikibaseValidate(props) {
       setProgressPercent(70);
       setResult(serverResponse);
       // Create and set the permalink value on success
-      setPermalink(mkPermalinkLong(API.routes.client.wikibaseValidate, params));
+      setPermalink(
+        mkPermalinkLong(API.routes.client.wikibaseValidate, params, true)
+      );
     } catch (err) {
       setError(mkError(err, urlServer));
     } finally {
@@ -300,18 +304,12 @@ function WikibaseValidate(props) {
       params &&
       JSON.stringify(lastParams) !== JSON.stringify(params)
     ) {
-      // eslint-disable-next-line no-restricted-globals
-      history.pushState(
-        null,
-        document.title,
+      history.push(
         mkPermalinkLong(API.routes.client.wikibaseValidate, lastParams)
       );
     }
     // Change current url for shareable links
-    // eslint-disable-next-line no-restricted-globals
-    history.replaceState(
-      null,
-      document.title,
+    history.replace(
       mkPermalinkLong(API.routes.client.wikibaseValidate, params)
     );
 

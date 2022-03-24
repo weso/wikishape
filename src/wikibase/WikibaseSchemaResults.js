@@ -27,6 +27,7 @@ const WikibaseSchemaResults = ({
   disabled,
   doUml,
   doCyto,
+  do3D,
 }) => {
   // De-structure results
   const {
@@ -55,11 +56,21 @@ const WikibaseSchemaResults = ({
   // For cases where Cytoscape visuals are created, have their data in state
   const [cytoElements, setCytoElements] = useState([]);
   const [cytoVisual, setCytoVisual] = useState(null);
+  const [threedVisual, setThreedVisual] = useState(null);
 
   // Create cyto elements from results
   useEffect(() => {
-    if (schemaEngine === API.engines.shex)
-      setCytoElements(shumlex.crearGrafo(schemaRaw));
+    // If using ShEx, to to create CytoVisual and 3D visual
+    if (schemaEngine === API.engines.shex) {
+      try {
+        // We used shumlex to create CytoVisuals for ShEx
+        // Does "crearGrafo" keep existing?
+        setCytoElements(shumlex.crearGrafo(schemaRaw));
+      } catch (err) {
+        console.warn(err);
+        setCytoElements([]);
+      }
+    }
   }, []);
 
   // Forcibly render the cyto when entering the tab for accurate dimensions
@@ -75,6 +86,17 @@ const WikibaseSchemaResults = ({
           visualizationType: embedLinkType,
           visualizationTarget: API.queryParameters.visualization.targets.cyto,
         })}
+      />
+    );
+  }
+
+  // Forcibly render the 3D when entering the tab for accurate dimensions
+  function render3DVisual() {
+    setThreedVisual(
+      <ShowVisualization
+        data={schemaRaw}
+        type={visualizationTypes.threeD}
+        // No embed link for 3D for now
       />
     );
   }
@@ -121,7 +143,12 @@ const WikibaseSchemaResults = ({
           <hr />
           {/* Return visualization, form and prefix map */}
 
-          <Tabs activeKey={resultTab} id="resultTabs" onSelect={setResultTab}>
+          <Tabs
+            activeKey={resultTab}
+            id="resultTabs"
+            onSelect={setResultTab}
+            mountOnEnter={true}
+          >
             {/* Schema text */}
             {schemaRaw && (
               <Tab eventKey={API.tabs.text} title={API.texts.resultTabs.schema}>
@@ -159,6 +186,7 @@ const WikibaseSchemaResults = ({
                 activeKey={visualTab}
                 id="visualizationTabs"
                 onSelect={setVisualTab}
+                mountOnEnter={true}
               >
                 {/* SVG visualize */}
                 {schemaSvg && (
@@ -186,6 +214,16 @@ const WikibaseSchemaResults = ({
                     onEnter={renderCytoVisual}
                   >
                     {cytoVisual}
+                  </Tab>
+                )}
+                {/* 3D visualization */}
+                {do3D && schemaRaw && schemaEngine === API.engines.shex && (
+                  <Tab
+                    eventKey={API.tabs.visualization3d}
+                    title={API.texts.resultTabs.graph3d}
+                    onEnter={render3DVisual}
+                  >
+                    {threedVisual}
                   </Tab>
                 )}
               </Tabs>
@@ -248,12 +286,14 @@ WikibaseSchemaResults.propTypes = {
   disabled: PropTypes.bool.isRequired,
   doUml: PropTypes.bool.isRequired,
   doCyto: PropTypes.bool.isRequired,
+  do3D: PropTypes.bool.isRequired,
 };
 
 WikibaseSchemaResults.defaultProps = {
   disabled: false,
   doUml: true,
   doCyto: true,
+  do3D: true,
 };
 
 export default WikibaseSchemaResults;

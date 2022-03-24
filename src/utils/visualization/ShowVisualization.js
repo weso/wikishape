@@ -9,6 +9,7 @@ import { breadthfirst } from "../cytoscape/cytoUtils";
 import PrintJson from "../PrintJson";
 import PrintSVG from "../PrintSVG";
 import PrintXml from "../PrintXml";
+import ThreeContainer from "../three/ThreeContainer";
 import {
   randomInt,
   visualizationMaxZoom,
@@ -21,7 +22,7 @@ import VisualizationLinks from "./VisualizationLinks";
 // https://www.npmjs.com/package/cytoscape-svg
 cytoscape.use(svg);
 
-export const visualizationTypes = {
+export const visualizationTypes = Object.freeze({
   svgObject: "svg",
   svgRaw: "svgRaw",
   image: "image",
@@ -29,7 +30,8 @@ export const visualizationTypes = {
   cytoscape: "cyto",
   text: "text",
   object: "object",
-};
+  threeD: "3D",
+});
 
 // Unified class for showing data visualizations
 function ShowVisualization({
@@ -43,6 +45,7 @@ function ShowVisualization({
 }) {
   // Visualization ID and the ID of te html container of the visualization
   const id = randomInt();
+
   const htmlId = `visualization-container-${id}`;
 
   // CSS-applied zoom on the element (via transform scale). Not needed for cyto
@@ -140,6 +143,9 @@ function ShowVisualization({
       case visualizationTypes.object:
         return <PrintJson json={vData} overflow={false}></PrintJson>;
 
+      case visualizationTypes.threeD:
+        return <ThreeContainer data={vData}></ThreeContainer>;
+
       // DOT, PS, (String)
       case visualizationTypes.text:
       default:
@@ -184,6 +190,10 @@ function ShowVisualization({
           type: API.formats.png.toLowerCase(),
         });
 
+      // No download link for 3D visuals
+      case visualizationTypes.threeD:
+        return () => {};
+
       case visualizationTypes.json:
       case visualizationTypes.object:
         return () => ({
@@ -219,8 +229,17 @@ function ShowVisualization({
         style={{ position: "relative" }}
         className={`width-100 height-100 ${!raw && "border"}`}
       >
+        {/* Special overflow for some visuals */}
         <div
-          style={{ overflow: raw ? "inherit" : "auto" }}
+          style={{
+            overflow:
+              type === visualizationTypes.threeD ||
+              type === visualizationTypes.cytoscape
+                ? "hidden"
+                : raw
+                ? "inherit"
+                : "auto",
+          }}
           className={raw ? "width-100v height-100v" : "width-100 height-100"}
         >
           {/* // Basic div changing with the zoom level with the final contents */}
