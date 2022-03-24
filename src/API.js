@@ -22,6 +22,7 @@ class API {
     visualizations: "visualizations",
     visualizationDot: "dot",
     visualizationCyto: "cyto",
+    visualization3d: "3d",
 
     shaclValidationReportText: "shaclReportText",
     shaclValidationReportNodes: "shaclReportNodes",
@@ -507,6 +508,7 @@ class API {
       visualizationCyto: "Cytoscape",
       uml: "UML",
       xmi: "XMI",
+      graph3d: "3D Graph",
     },
 
     selectors: {

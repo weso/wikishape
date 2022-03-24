@@ -27,6 +27,7 @@ const WikibaseSchemaResults = ({
   disabled,
   doUml,
   doCyto,
+  do3D,
 }) => {
   // De-structure results
   const {
@@ -55,6 +56,7 @@ const WikibaseSchemaResults = ({
   // For cases where Cytoscape visuals are created, have their data in state
   const [cytoElements, setCytoElements] = useState([]);
   const [cytoVisual, setCytoVisual] = useState(null);
+  const [threedVisual, setThreedVisual] = useState(null);
 
   // Create cyto elements from results
   useEffect(() => {
@@ -84,6 +86,17 @@ const WikibaseSchemaResults = ({
           visualizationType: embedLinkType,
           visualizationTarget: API.queryParameters.visualization.targets.cyto,
         })}
+      />
+    );
+  }
+
+  // Forcibly render the 3D when entering the tab for accurate dimensions
+  function render3DVisual() {
+    setThreedVisual(
+      <ShowVisualization
+        data={schemaRaw}
+        type={visualizationTypes.threeD}
+        // No embed link for 3D for now
       />
     );
   }
@@ -203,6 +216,16 @@ const WikibaseSchemaResults = ({
                     {cytoVisual}
                   </Tab>
                 )}
+                {/* 3D visualization */}
+                {do3D && schemaRaw && schemaEngine === API.engines.shex && (
+                  <Tab
+                    eventKey={API.tabs.visualization3d}
+                    title={API.texts.resultTabs.graph3d}
+                    onEnter={render3DVisual}
+                  >
+                    {threedVisual}
+                  </Tab>
+                )}
               </Tabs>
             </Tab>
 
@@ -263,12 +286,14 @@ WikibaseSchemaResults.propTypes = {
   disabled: PropTypes.bool.isRequired,
   doUml: PropTypes.bool.isRequired,
   doCyto: PropTypes.bool.isRequired,
+  do3D: PropTypes.bool.isRequired,
 };
 
 WikibaseSchemaResults.defaultProps = {
   disabled: false,
   doUml: true,
   doCyto: true,
+  do3D: true,
 };
 
 export default WikibaseSchemaResults;
