@@ -7,6 +7,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { ExternalLinkIcon, ReloadIcon } from "react-open-iconic-svg";
+import { useHistory } from "react-router";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import PageHeader from "../components/PageHeader";
@@ -18,6 +19,7 @@ import { shexToXmi } from "../utils/xmiUtils/shumlexUtils";
 import WikibaseSchemaResults from "./WikibaseSchemaResults";
 
 function WikibaseSchemaInfo(props) {
+  const history = useHistory();
   const urlServerInfo = API.routes.server.schemaInfo;
   const urlServerVisual = API.routes.server.schemaConvert;
 
@@ -113,10 +115,14 @@ function WikibaseSchemaInfo(props) {
 
       // Create and set the permalink value on success
       setPermalink(
-        mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
-          [API.queryParameters.schema.schema]: schemaEntities[0].id,
-          [API.queryParameters.wikibase.language]: schemaEntities[0].lang,
-        })
+        mkPermalinkLong(
+          API.routes.client.wikibaseSchemaInfo,
+          {
+            [API.queryParameters.schema.schema]: schemaEntities[0].id,
+            [API.queryParameters.wikibase.language]: schemaEntities[0].lang,
+          },
+          true
+        )
       );
     } catch (error) {
       setError(mkError(error, urlServerInfo));
@@ -159,20 +165,14 @@ function WikibaseSchemaInfo(props) {
       lastParams &&
       JSON.stringify(params) !== JSON.stringify(lastParams)
     ) {
-      // eslint-disable-next-line no-restricted-globals
-      history.pushState(
-        null,
-        document.title,
+      history.push(
         mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
           [API.queryParameters.id]: lastParams.id,
         })
       );
     }
     // Change current url for shareable links
-    // eslint-disable-next-line no-restricted-globals
-    history.replaceState(
-      null,
-      document.title,
+    history.replace(
       mkPermalinkLong(API.routes.client.wikibaseSchemaInfo, {
         [API.queryParameters.id]: params.id,
       })
@@ -269,4 +269,3 @@ export function paramsFromQueryParams(params) {
       params[API.queryParameters.wikibase.language]);
   return newParams;
 }
-

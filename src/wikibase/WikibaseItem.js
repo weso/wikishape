@@ -7,6 +7,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { ReloadIcon } from "react-open-iconic-svg";
+import { useHistory } from "react-router";
 import API from "../API";
 import InputEntitiesByText from "../components/InputEntitiesByText";
 import PageHeader from "../components/PageHeader";
@@ -16,6 +17,7 @@ import axios from "../utils/networking/axiosConfig";
 import { mkError } from "../utils/ResponseError";
 
 function WikibaseItem(props) {
+  const history = useHistory();
   const [entities, setEntities] = useState([]);
   const [lastEntities, setLastEntities] = useState([]);
   const [node, setNode] = useState("");
@@ -95,10 +97,14 @@ function WikibaseItem(props) {
       setProgressPercent(80);
       setResult(entityOutgoing);
       setPermalink(
-        mkPermalinkLong(API.routes.client.wikibaseItem, {
-          ...params,
-          entities: JSON.stringify(entities),
-        })
+        mkPermalinkLong(
+          API.routes.client.wikibaseItem,
+          {
+            ...params,
+            entities: JSON.stringify(entities),
+          },
+          true
+        )
       );
     } catch (err) {
       setError(mkError(err, urlServer));
@@ -114,10 +120,7 @@ function WikibaseItem(props) {
       entities &&
       JSON.stringify(lastEntities) !== JSON.stringify(entities)
     ) {
-      // eslint-disable-next-line no-restricted-globals
-      history.pushState(
-        null,
-        document.title,
+      history.push(
         mkPermalinkLong(API.routes.client.wikibaseItem, {
           [API.queryParameters.wikibase.entities]: JSON.stringify(lastEntities),
           [API.queryParameters.wikibase.endpoint]: endpoint,
@@ -126,10 +129,7 @@ function WikibaseItem(props) {
       );
     }
     // Change current url for shareable links
-    // eslint-disable-next-line no-restricted-globals
-    history.replaceState(
-      null,
-      document.title,
+    history.replace(
       mkPermalinkLong(API.routes.client.wikibaseItem, {
         [API.queryParameters.wikibase.entities]: JSON.stringify(entities),
         [API.queryParameters.wikibase.endpoint]: endpoint,

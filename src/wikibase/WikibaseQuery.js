@@ -7,6 +7,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Spinner from "react-bootstrap/Spinner";
+import { useHistory } from "react-router";
 import API from "../API";
 import PageHeader from "../components/PageHeader";
 import { mkPermalinkLong } from "../Permalink";
@@ -24,6 +25,8 @@ import { getItemRaw, validateUrl } from "../utils/Utils";
 
 function WikibaseQuery(props) {
   const serverUrl = API.routes.server.wikibaseQuery;
+
+  const history = useHistory();
 
   const [permalink, setPermalink] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -124,7 +127,9 @@ function WikibaseQuery(props) {
       // If successful, set result and permalink
       setResult(queryResponse);
 
-      setPermalink(mkPermalinkLong(API.routes.client.wikibaseQuery, params));
+      setPermalink(
+        mkPermalinkLong(API.routes.client.wikibaseQuery, params, true)
+      );
     } catch (err) {
       setError(mkError(err, serverUrl));
     } finally {
@@ -139,20 +144,12 @@ function WikibaseQuery(props) {
       lastParams &&
       JSON.stringify(params) !== JSON.stringify(lastParams)
     ) {
-      // eslint-disable-next-line no-restricted-globals
-      history.pushState(
-        null,
-        document.title,
+      history.push(
         mkPermalinkLong(API.routes.client.wikibaseQuery, lastParams)
       );
     }
     // Change url for shareable links
-    // eslint-disable-next-line no-restricted-globals
-    history.replaceState(
-      null,
-      document.title,
-      mkPermalinkLong(API.routes.client.wikibaseQuery, params)
-    );
+    history.replace(mkPermalinkLong(API.routes.client.wikibaseQuery, params));
 
     setLastParams(params);
   }

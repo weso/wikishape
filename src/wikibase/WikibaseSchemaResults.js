@@ -58,8 +58,17 @@ const WikibaseSchemaResults = ({
 
   // Create cyto elements from results
   useEffect(() => {
-    if (schemaEngine === API.engines.shex)
-      setCytoElements(shumlex.crearGrafo(schemaRaw));
+    // If using ShEx, to to create CytoVisual and 3D visual
+    if (schemaEngine === API.engines.shex) {
+      try {
+        // We used shumlex to create CytoVisuals for ShEx
+        // Does "crearGrafo" keep existing?
+        setCytoElements(shumlex.crearGrafo(schemaRaw));
+      } catch (err) {
+        console.warn(err);
+        setCytoElements([]);
+      }
+    }
   }, []);
 
   // Forcibly render the cyto when entering the tab for accurate dimensions
@@ -121,7 +130,12 @@ const WikibaseSchemaResults = ({
           <hr />
           {/* Return visualization, form and prefix map */}
 
-          <Tabs activeKey={resultTab} id="resultTabs" onSelect={setResultTab}>
+          <Tabs
+            activeKey={resultTab}
+            id="resultTabs"
+            onSelect={setResultTab}
+            mountOnEnter={true}
+          >
             {/* Schema text */}
             {schemaRaw && (
               <Tab eventKey={API.tabs.text} title={API.texts.resultTabs.schema}>
@@ -159,6 +173,7 @@ const WikibaseSchemaResults = ({
                 activeKey={visualTab}
                 id="visualizationTabs"
                 onSelect={setVisualTab}
+                mountOnEnter={true}
               >
                 {/* SVG visualize */}
                 {schemaSvg && (
