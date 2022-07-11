@@ -78,15 +78,15 @@ function Routes() {
             })
           }
         />
-        <Route
+        {/* Omitted SheXer functionality */}
+        {/* <Route
           path={API.routes.client.wikibaseSheXer}
           render={() =>
             renderWithNavbar(WikibaseExtract, {
               [API.propNames.useShexer]: true,
             })
           }
-        />
-
+        /> */}
         <Route
           path={API.routes.client.wikibaseValidateSparql}
           render={() => renderWithNavbar(WikibaseValidateSparql)}

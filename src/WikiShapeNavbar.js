@@ -85,10 +85,11 @@ function WikishapeNavbar() {
               API.routes.client.wikibaseExtract,
               API.texts.navbarHeaders.extractSimple
             )}
-            {mkNavbarLink(
+            {/* Omitted SheXer functionality */}
+            {/* {mkNavbarLink(
               API.routes.client.wikibaseSheXer,
               API.texts.navbarHeaders.extractShexer
-            )}
+            )} */}
           </NavDropdown>
         </Nav>
         <Nav>
